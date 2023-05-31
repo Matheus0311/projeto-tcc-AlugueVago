@@ -1,10 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MulterModule } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
-import { extname } from 'path';
-import { BadRequestException } from '@nestjs/common';
 import { diskStorage } from 'multer';
 
 
@@ -17,7 +14,30 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+
   @Post()
+  @UseInterceptors(FileInterceptor('imagemPerfil', {
+    storage: diskStorage({
+      destination: './uploads', // Diretório de destino para salvar a imagem
+      filename: (req, file, cb) => {
+        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+        const fileExtension = file.originalname.split('.').pop(); // Obter a extensão do arquivo
+        const filename = `${uniqueSuffix}.${fileExtension}`; // Nome do arquivo com base em um valor único
+        cb(null, filename);
+      },
+    }),
+  }))
+  async create(@Body() user: User, @UploadedFile() file): Promise<User> {
+    if (file) {
+      const imagePath = `uploads/perfil/${file.filename}`;
+      user.imagemPerfil = imagePath;
+    }
+  
+    return this.usersService.create(user);
+  }
+
+
+  /* @Post()
   @UseInterceptors(FileInterceptor('imagemPerfil', {
     fileFilter: (req, file, cb) => {
       if (file.mimetype.startsWith('image/')) {
@@ -40,7 +60,7 @@ export class UsersController {
       user.imagemPerfil = file.filename;
     }
     return this.usersService.create(user);
-  }
+  } */
   
   @Put(':id')
   async update(@Param('id') id: string, @Body() user: User): Promise<User> {

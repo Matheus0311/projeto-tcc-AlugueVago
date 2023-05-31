@@ -29,12 +29,7 @@ import { Endereco } from './enderecos/enderecos/endereco.entity';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User, Estado, Cidade, Endereco]),
-    MulterModule.register({
-      dest: path.join(__dirname, '..', 'uploads/perfil'), // Caminho absoluto para o diretório de destino
-      limits: {
-        fileSize: 3 * 1024 * 1024, // Limite de 3MB
-      },
-    }),
+    
   ],
   controllers: [UsersController, EstadosController, CidadesController, EnderecosController],
   providers: [UsersService, EstadosService, CidadesService, EnderecosService],

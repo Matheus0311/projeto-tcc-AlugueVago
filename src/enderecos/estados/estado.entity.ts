@@ -1,4 +1,3 @@
-// enderecos/estados/estado.entity.ts
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Cidade } from '../cidades/cidade.entity';
 
