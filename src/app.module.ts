@@ -6,15 +6,19 @@ import { UsersService } from './users/users.service';
 import { User } from './users/user.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import * as path from 'path';
-import { EstadosController } from './enderecos/estados/estados.controller';
-import { EstadosService } from './enderecos/estados/estados.service';
-import { Estado } from './enderecos/estados/estado.entity';
-import { CidadesController } from './enderecos/cidades/cidades.controller';
-import { CidadesService } from './enderecos/cidades/cidades.service';
-import { Cidade } from './enderecos/cidades/cidade.entity';
-import { EnderecosController } from './enderecos/enderecos/enderecos.controller';
-import { EnderecosService } from './enderecos/enderecos/enderecos.service';
-import { Endereco } from './enderecos/enderecos/endereco.entity';
+import { Endereco } from './enderecos/endereco.entity';
+import { EnderecoController } from './enderecos/enderecos.controller';
+import { EnderecoService } from './enderecos/enderecos.service';
+import { Estado } from './estados/estado.entity';
+import { Imovel } from './imoveis/imovel.entity';
+import { ImovelController } from './imoveis/imoveis.controller';
+import { ImovelService } from './imoveis/imoveis.service';
+import { EstadoController } from './estados/estados.controller';
+import { EstadoService } from './estados/estados.service';
+import { Avaliacao } from './avaliacoes/avaliacao.entity';
+import { AvaliacaoController } from './avaliacoes/avaliacoes.controller';
+import { AvaliacaoService } from './avaliacoes/avaliacoes.service';
+
 
 @Module({
   imports: [
@@ -28,11 +32,11 @@ import { Endereco } from './enderecos/enderecos/endereco.entity';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, Estado, Cidade, Endereco]),
+    TypeOrmModule.forFeature([User, Estado, Endereco, Imovel, Avaliacao]),
     
   ],
-  controllers: [UsersController, EstadosController, CidadesController, EnderecosController],
-  providers: [UsersService, EstadosService, CidadesService, EnderecosService],
+  controllers: [UsersController, EstadoController, EnderecoController, ImovelController, AvaliacaoController],
+  providers: [UsersService, EstadoService, EnderecoService, ImovelService, AvaliacaoService],
 })
 export class AppModule {}
 

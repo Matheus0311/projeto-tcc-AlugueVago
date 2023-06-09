@@ -35,32 +35,6 @@ export class UsersController {
   
     return this.usersService.create(user);
   }
-
-
-  /* @Post()
-  @UseInterceptors(FileInterceptor('imagemPerfil', {
-    fileFilter: (req, file, cb) => {
-      if (file.mimetype.startsWith('image/')) {
-        cb(null, true);
-      } else {
-        cb(new BadRequestException('O arquivo enviado não é uma imagem válida.'), false);
-      }
-    },
-    storage: diskStorage({
-      destination: './uploads/perfil',
-      filename: (req, file, cb) => {
-        const fileExt = extname(file.originalname); // Obter a extensão do arquivo
-        const fileName = `perfil_${Date.now()}${fileExt}`; // Gerar o nome do arquivo com a extensão
-        cb(null, fileName);
-      },
-    }),
-  }))
-  async create(@Body() user: User, @UploadedFile() file): Promise<User> {
-    if (file) {
-      user.imagemPerfil = file.filename;
-    }
-    return this.usersService.create(user);
-  } */
   
   @Put(':id')
   async update(@Param('id') id: string, @Body() user: User): Promise<User> {

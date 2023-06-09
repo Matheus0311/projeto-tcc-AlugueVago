@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Imovel } from '../imoveis/imovel.entity';
+import { Avaliacao } from '../avaliacoes/avaliacao.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -25,4 +27,10 @@ export class User {
 
   @Column()
   cpfUsuario: string;
+
+  @OneToMany(() => Imovel, imovel => imovel.usuario)
+  imoveis: Imovel[];
+
+  @OneToMany(() => Avaliacao, avaliacao => avaliacao.usuario)
+  avaliacoes: Avaliacao[];
 }
