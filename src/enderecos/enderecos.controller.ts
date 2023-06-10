@@ -32,7 +32,7 @@ export class EnderecosController {
   }
 } */
 
-import { Controller, Post, Body, Get, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { EnderecoService } from './enderecos.service';
 import { Endereco } from './endereco.entity';
 
@@ -41,6 +41,7 @@ export class EnderecoController {
   constructor(private readonly enderecoService: EnderecoService) {}
 
   @Post()
+  @UsePipes(new ValidationPipe())
   async create(@Body() endereco: Endereco): Promise<Endereco> {
     return this.enderecoService.create(endereco);
   }
@@ -56,6 +57,7 @@ export class EnderecoController {
   }
 
   @Put(':id')
+  @UsePipes(new ValidationPipe())
   async update(@Param('id') id: number, @Body() endereco: Endereco): Promise<Endereco> {
     return this.enderecoService.update(id, endereco);
   }

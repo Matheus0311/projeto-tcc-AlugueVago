@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { EstadoService } from './estados.service';
 import { Estado } from './estado.entity';
 
@@ -12,6 +12,7 @@ export class EstadoController {
   }
 
   @Post()
+  @UsePipes(new ValidationPipe())
   async create(@Body() estado: Estado): Promise<Estado> {
     return this.estadoService.create(estado);
   }
@@ -22,6 +23,7 @@ export class EstadoController {
   }
 
   @Put(':id')
+  @UsePipes(new ValidationPipe())
   async update(@Param('id') id: number, @Body() estado: Estado): Promise<Estado> {
     return this.estadoService.update(id, estado);
   }

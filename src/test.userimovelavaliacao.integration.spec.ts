@@ -49,6 +49,7 @@ describe('Integration Test: User, Imovel, Avaliacao', () => {
     endereco.bairro = 'Bairro A';
     endereco.estado = null;
     endereco.cep = '12345-678';
+    endereco.numero = '123-b'
   
     const createdUser = new User();
     createdUser.imagemPerfil = 'imagem.png';
@@ -88,12 +89,4 @@ describe('Integration Test: User, Imovel, Avaliacao', () => {
     expect(createdImovelWithEndereco.id).toBeDefined();
     expect(createdAvaliacao.id).toBeDefined();
   });
-  
-  
-  
-  
-  
-  
-
-  
 });

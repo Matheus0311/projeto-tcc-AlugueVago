@@ -35,7 +35,7 @@ import { AvaliacaoService } from './avaliacoes/avaliacoes.service';
     TypeOrmModule.forFeature([User, Estado, Endereco, Imovel, Avaliacao]),
     
   ],
-  controllers: [UsersController, EstadoController, EnderecoController, ImovelController, AvaliacaoController],
+  controllers: [UsersController, EstadoController, EnderecoController, ImovelController, AvaliacaoController, ],
   providers: [UsersService, EstadoService, EnderecoService, ImovelService, AvaliacaoService],
 })
 export class AppModule {}

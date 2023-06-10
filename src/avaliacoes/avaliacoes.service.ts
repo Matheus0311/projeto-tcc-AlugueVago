@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, UsePipes, ValidationPipe, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Avaliacao } from './avaliacao.entity';
@@ -12,6 +12,7 @@ export class AvaliacaoService {
     private readonly avaliacaoRepository: Repository<Avaliacao>,
   ) {}
 
+  @UsePipes(new ValidationPipe())
   async createAvaliacao(avaliacao: Avaliacao, userId: number, imovelId: number): Promise<Avaliacao> {
     const user = new User();
     user.id = userId;
@@ -26,6 +27,11 @@ export class AvaliacaoService {
 
     if (existingAvaliacao) {
       throw new ConflictException('Usuário já fez uma avaliação para esse imóvel');
+    }
+
+    // Validar a nota da avaliação
+    if (avaliacao.nota < 1 || avaliacao.nota > 5) {
+      throw new BadRequestException('A nota deve estar entre 1 e 5');
     }
 
     avaliacao.usuario = user;
