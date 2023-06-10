@@ -7,7 +7,7 @@ import { Endereco } from './enderecos/endereco.entity';
 import { Estado } from './estados/estado.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-describe('Endereco and Estado Integration', () => {
+describe('Endereco e Estado Integração', () => {
   let enderecoService: EnderecoService;
   let estadoService: EstadoService;
   let createdEstado: Estado;
@@ -39,7 +39,7 @@ describe('Endereco and Estado Integration', () => {
     createdEstado = await estadoService.create(estadoData as Estado);
   });
 
-  it('should create Endereco with associated Estado', async () => {
+  it('Deve criar um Endereco com o Estado associado', async () => {
     const enderecoData = {
       rua: 'Rua Exemplo',
       bairro: 'Bairro Exemplo',

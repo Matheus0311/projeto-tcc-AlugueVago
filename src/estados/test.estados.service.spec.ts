@@ -24,7 +24,7 @@ describe('EstadoService', () => {
   });
 
   describe('findAll', () => {
-    it('should return an array of estados', async () => {
+    it('Deve retornar um array de estados', async () => {
       const mockEstados: Estado[] = [
         { id: 1, nome: 'Estado 1', enderecos: [] },
         { id: 2, nome: 'Estado 2', enderecos: [] },
@@ -42,7 +42,7 @@ describe('EstadoService', () => {
   });
 
   describe('create', () => {
-    it('should create a new estado', async () => {
+    it('Deve criar um novo estado', async () => {
       const mockEstado: Estado = {
         id: 1,
         nome: 'Estado 1',
@@ -59,7 +59,7 @@ describe('EstadoService', () => {
   });
 
   describe('findOne', () => {
-    it('should return a estado with the given id', async () => {
+    it('Deve retornar um estado com o id fornecido', async () => {
       const mockEstado: Estado = {
         id: 1,
         nome: 'Estado 1',
@@ -78,7 +78,7 @@ describe('EstadoService', () => {
   });
 
   describe('update', () => {
-    it('should update a estado with the given id', async () => {
+    it('Deve atualizar o estado com o id fornecido', async () => {
       const mockEstado: Estado = {
         id: 1,
         nome: 'Estado 1',
@@ -99,7 +99,7 @@ describe('EstadoService', () => {
   });
 
   describe('delete', () => {
-    it('should delete a estado with the given id', async () => {
+    it('Deve deletar um estado com o id fornecido', async () => {
       jest.spyOn(estadoRepository, 'delete').mockResolvedValue(undefined);
 
       await estadoService.delete(1);

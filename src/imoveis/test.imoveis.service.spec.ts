@@ -21,12 +21,12 @@ describe('Imovel', () => {
     imovel.cpfProprietario = '1234321232';
   });
 
-  it('should create an instance of Imovel', () => {
+  it('Deve criar uma instância de Imovel', () => {
     expect(imovel).toBeDefined();
     expect(imovel).toBeInstanceOf(Imovel);
   });
 
-  it('should have all properties set correctly', () => {
+  it('Deve ter todas as propriedades definidas corretamente', () => {
     expect(imovel.id).toEqual(1);
     expect(imovel.tamanho).toEqual(100);
     expect(imovel.quantidadeComodos).toEqual(4);

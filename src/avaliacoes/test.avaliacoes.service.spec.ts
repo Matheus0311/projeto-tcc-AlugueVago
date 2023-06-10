@@ -30,7 +30,7 @@ describe('AvaliacaoService', () => {
   });
 
   describe('createAvaliacao', () => {
-    it('should create and return a new Avaliacao', async () => {
+    it('deve criar e retornar uma nova Avaliacao', async () => {
       const user = new User(); 
       const imovel = new Imovel();
 
@@ -55,7 +55,7 @@ describe('AvaliacaoService', () => {
       expect(avaliacaoRepositoryMock.save).toHaveBeenCalledWith(avaliacaoData);
     });
 
-    it('should throw ConflictException when user has already made an Avaliacao for the property', async () => {
+    it('Deve lançar uma ConflictException quando o usuário já fez uma Avaliação para o imóvel', async () => {
       const userId = 1;
       const imovelId = 1;
       const avaliacaoData = {

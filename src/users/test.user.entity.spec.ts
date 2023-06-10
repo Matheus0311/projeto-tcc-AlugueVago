@@ -1,7 +1,7 @@
 import { User } from './user.entity';
 
 describe('User', () => {
-  it('should create a new user', () => {
+  it('Deve criar um novo usuario', () => {
     const user = new User();
     user.id = 1;
     user.nomeUsuario = 'João';

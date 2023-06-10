@@ -25,7 +25,7 @@ describe('UsersService', () => {
   });
 
   describe('findAll', () => {
-    it('should return an array of users', async () => {
+    it('Deve retornar um array de usuários', async () => {
       const mockUsers: User[] = [
         {
           id: 1,
@@ -63,7 +63,7 @@ describe('UsersService', () => {
   });
 
   describe('create', () => {
-    it('should create a new user', async () => {
+    it('Deve criar um novo usuário', async () => {
       const mockUser: User = {
         id: 1,
         nomeUsuario: 'User 1',
@@ -89,7 +89,7 @@ describe('UsersService', () => {
   });
 
   describe('update', () => {
-    it('should update a user with the given id', async () => {
+    it('Deve atualizar um usuário com o id fornecido', async () => {
       const mockUser: User = {
         id: 1,
         nomeUsuario: 'User 1',
@@ -115,7 +115,7 @@ describe('UsersService', () => {
   });
 
   describe('delete', () => {
-    it('should delete a user with the given id', async () => {
+    it('Deve deletar um usuário com o id fornecido', async () => {
       jest.spyOn(userRepository, 'delete').mockResolvedValue(undefined);
 
       await usersService.delete(1);

@@ -41,7 +41,7 @@ describe('Integration Test: User, Imovel, Avaliacao', () => {
     await app.close();
   });
 
-  it('should create a user, an imovel, and an avaliacao', async () => {
+  it('Deve criar um usuario, um imovel, e uma avaliacao', async () => {
     const endereco = new Endereco();
     endereco.id = 1;
     endereco.rua = 'Rua A';

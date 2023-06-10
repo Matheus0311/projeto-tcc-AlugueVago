@@ -7,7 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { ImovelService } from './imoveis/imoveis.service';
 import { EnderecoService } from './enderecos/enderecos.service';
 
-describe('Integration Test: Imovel and Endereco', () => {
+describe('Integration Test: Imovel e Endereco', () => {
   let app: TestingModule;
   let connection: Connection;
   let imovelService: ImovelService;
@@ -34,7 +34,7 @@ describe('Integration Test: Imovel and Endereco', () => {
     await app.close();
   });
 
-  it('should create an Imovel with an Endereco', async () => {
+  it('Deve criar um Imóvel com um Endereço', async () => {
     const endereco = new Endereco();
     endereco.rua = 'Rua A';
     endereco.bairro = 'Bairro A';
