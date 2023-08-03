@@ -1,44 +1,7 @@
-/*import { Imovel } from '../imoveis/imovel.entity';
-import { Avaliacao } from '../avaliacoes/avaliacao.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ nullable: true })
-  imagemPerfil: string;
-
-  @Column()
-  nomeUsuario: string;
-
-  @Column()
-  senhaUsuario: string;
-
-  @Column()
-  emailUsuario: string;
-
-  @Column()
-  rendaMensalUsuario: number;
-
-  @Column()
-  rgUsuario: string;
-
-  @Column()
-  cpfUsuario: string;
-
-  @OneToMany(() => Imovel, imovel => imovel.usuario)
-  imoveis: Imovel[];
-
-  @OneToMany(() => Avaliacao, avaliacao => avaliacao.usuario)
-  avaliacoes: Avaliacao[];
-}*/
-
 import { Imovel } from '../imoveis/imovel.entity';
 import { Avaliacao } from '../avaliacoes/avaliacao.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { IsEmail, MinLength, IsPhoneNumber, IsNotEmpty, IsNumberString, Length, Matches } from 'class-validator';
+import { IsEmail, MinLength, IsNotEmpty, IsNumberString, Length, Matches } from 'class-validator';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -60,10 +23,6 @@ export class User {
 
   @Column()
   rendaMensalUsuario: number;
-
-  // @Column()
-  // @IsPhoneNumber('BR', { message: 'O telefone fornecido não é válido.' })
-  // telefoneUsuario: string;
 
   @Column()
   @IsNotEmpty({ message: 'O RG é obrigatório.' })

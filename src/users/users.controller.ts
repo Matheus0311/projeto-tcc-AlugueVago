@@ -48,7 +48,7 @@ export class UsersController {
 } */
 
 
-import { Controller, Get, Post, Put, Delete, Body, Param, UseInterceptors, UploadedFile, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseInterceptors, UploadedFile, UsePipes, ValidationPipe, Render } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
@@ -96,5 +96,11 @@ export class UsersController {
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
     return this.usersService.delete(Number(id));
+  }
+
+  @Get('cadastro') // Rota para exibir a página de cadastro
+  @Render('cadastro') // Nome da visualização (sem a extensão)
+  showCadastroPage() {
+    return {};
   }
 }

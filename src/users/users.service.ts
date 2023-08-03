@@ -75,6 +75,14 @@ export class UsersService {
     await this.userRepository.delete(id);
   }
 
+  async findByEmail(email: string): Promise<User | undefined> {
+    return this.userRepository.findOne({ where: { emailUsuario: email } });
+  } 
+  
+  async findById(id: number): Promise<User | undefined> {
+    return this.userRepository.findOne({ where: { id: id } });
+  }  
+
   private async hashPassword(password: string): Promise<string> {
     const saltRounds = 10;
     return bcrypt.hash(password, saltRounds);
