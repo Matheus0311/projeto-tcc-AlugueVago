@@ -17,6 +17,7 @@ import { AvaliacaoController } from './avaliacoes/avaliacoes.controller';
 import { AvaliacaoService } from './avaliacoes/avaliacoes.service';
 
 
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({

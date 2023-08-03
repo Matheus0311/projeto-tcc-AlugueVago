@@ -14,6 +14,7 @@ async function bootstrap() {
 
   // Configurar o mecanismo de visualização para 'html'
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.engine('html', require('ejs').renderFile);
   app.setViewEngine('html');
 
   await app.listen(3000);
