@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcryptjs';
 import { ConflictException } from '@nestjs/common';
-
+import { UnauthorizedException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class UsersService {
@@ -66,7 +66,7 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
-    return this.userRepository.findOne({ where: { emailUsuario: email } });
+    return await this.userRepository.findOne({ where: { emailUsuario: email } });
   } 
   
   async findById(id: number): Promise<User | undefined> {
@@ -78,11 +78,10 @@ export class UsersService {
     return bcrypt.hash(password, saltRounds);
   }
 
-  async comparePasswords(
+  comparePasswords(
     plainPassword: string,
     hashedPassword: string,
-  ): Promise<boolean> {
+  ) {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
-
 }

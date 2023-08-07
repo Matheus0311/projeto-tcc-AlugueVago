@@ -15,6 +15,8 @@ import { EstadoService } from './estados/estados.service';
 import { Avaliacao } from './avaliacoes/avaliacao.entity';
 import { AvaliacaoController } from './avaliacoes/avaliacoes.controller';
 import { AvaliacaoService } from './avaliacoes/avaliacoes.service';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 
 
@@ -31,6 +33,7 @@ import { AvaliacaoService } from './avaliacoes/avaliacoes.service';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User, Estado, Endereco, Imovel, Avaliacao]),
+    AuthModule, UsersModule,
   ],
   controllers: [UsersController, EstadoController, EnderecoController, ImovelController, AvaliacaoController],
   providers: [UsersService, EstadoService, EnderecoService, ImovelService, AvaliacaoService],

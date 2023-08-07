@@ -1,8 +1,27 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseInterceptors, UploadedFile, UsePipes, ValidationPipe, Render, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseInterceptors,
+  UploadedFile,
+  UsePipes,
+  ValidationPipe,
+  Render,
+  Res,
+  UseGuards,
+  Request,
+  Logger,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { diskStorage } from 'multer';
+import { LocalAuthGuard } from 'src/auth/local.auth.guard';
+import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 
 @Controller('users')
 export class UsersController {
@@ -62,5 +81,43 @@ export class UsersController {
   @Render('cadastro.html') // Renderiza a página 'cadastro.html'
   showCadastroPage() {
     return {};
+  }
+
+  @Get('login')
+  @Render('login.html') // Renderiza a página 'cadastro.html'
+  showLogin() {
+    return {};
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('/login')
+  async login(@Request() req) {
+    try {
+      const user = await (req.body.email, req.body.senha);
+      if (user) {
+        return { message: 'Login bem-sucedido', user };
+      } else {
+        return { message: 'Credenciais inválidas' };
+      }
+    } catch (error) {
+      return { message: 'Erro durante o login' };
+    }
+  }
+  // login(@Request() req): any {
+  //   console.log("entrou");
+  //   return { User: req.user, msg: 'User loggin in' }
+  // }
+
+  @UseGuards(AuthenticatedGuard)
+  @Get('/protected')
+  getHello(@Request() req): string {
+    return req.user;
+  }
+
+  @Get('/logout')
+  logout(@Request() req): any {
+    req.session.destroy();
+    console.log("saiu");
+    return { msg: 'The user session has ended' }
   }
 }
