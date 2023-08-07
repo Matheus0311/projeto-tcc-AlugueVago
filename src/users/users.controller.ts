@@ -15,6 +15,8 @@ import {
   UseGuards,
   Request,
   Logger,
+  Patch,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
@@ -56,7 +58,7 @@ export class UsersController {
     try {
       const createdUser = await this.usersService.create(user);
       // Redirect to a success page or display a success message if needed
-      res.redirect('/users');
+      res.redirect('/users/login');
       return createdUser;
     } catch (error) {
       const errorMessages = error instanceof Array ? error : [error.message];
@@ -66,11 +68,11 @@ export class UsersController {
     //return this.usersService.create(user);
   }
 
-  @Put(':id')
-  @UsePipes(new ValidationPipe())
-  async update(@Param('id') id: string, @Body() user: User): Promise<User> {
-    return this.usersService.update(Number(id), user);
-  }
+  // @Put(':id')
+  // @UsePipes(new ValidationPipe())
+  // async update(@Param('id') id: string, @Body() user: User): Promise<User> {
+  //   return this.usersService.update(Number(id), user);
+  // }
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
@@ -83,6 +85,70 @@ export class UsersController {
     return {};
   }
 
+
+  @Get('/edit')
+  @Render('edit-user.html')
+  async showEditUserPage(@Request() req): Promise<{ user: User }> {
+    const userId = req.user.id;
+    const user = await this.usersService.findById(userId);
+    return { user: user };
+  }
+
+
+  @Post('/edit/:id')
+  @UseInterceptors(
+    FileInterceptor('imagemPerfil', {
+      storage: diskStorage({
+        destination: './uploads/perfil', // Diretório de destino para salvar a imagem na pasta "perfil"
+        filename: (req, file, cb) => {
+          const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+          const fileExtension = file.originalname.split('.').pop(); // Obter a extensão do arquivo
+          const filename = `${uniqueSuffix}.${fileExtension}`; // Nome do arquivo com base em um valor único
+          cb(null, filename);
+        },
+      }),
+    }),
+  )
+  async update(
+    @Param('id') id: string,
+    @UploadedFile() file,
+    @Res() res,
+    @Req() req
+  ): Promise<void> {
+    console.log('Dados recebidos do formulário:', req.body);
+    const userId = parseInt(id);
+  
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      const errorMessages = ['Usuário não encontrado.'];
+      console.log('Usuário não encontrado.');
+      return res.render('edit-user.html', { user, errorMessages });
+    }
+  
+    // Atualiza os campos do usuário com os dados do formulário
+    user.nomeUsuario = req.body.nomeUsuario || user.nomeUsuario;
+    user.emailUsuario = req.body.emailUsuario || user.emailUsuario;
+    user.senhaUsuario = req.body.senhaUsuario.hashedPassword || user.senhaUsuario;
+    user.rendaMensalUsuario = req.body.rendaMensalUsuario || user.rendaMensalUsuario;
+    user.rgUsuario = req.body.rgUsuario || user.rgUsuario;
+    user.cpfUsuario = req.body.cpfUsuario || user.cpfUsuario;
+  
+    if (file) {
+      const imagePath = `uploads/perfil/${file.filename}`;
+      user.imagemPerfil = imagePath;
+    }
+  
+    // Atualiza o usuário no banco de dados
+    const updated = await this.usersService.update(userId, user);
+  
+    if(updated){
+      // Redireciona para a página de edição novamente
+      res.redirect('/users/edit');
+      console.log('Depois da atualização:', user);
+      console.log('Dados do usuário atualizados com sucesso.');
+    }
+  }
+  
   @Get('login')
   @Render('login.html') // Renderiza a página 'cadastro.html'
   showLogin() {
@@ -91,13 +157,14 @@ export class UsersController {
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  async login(@Request() req) {
+  async login(@Request() req, @Res() res) {
     try {
       const user = await (req.body.email, req.body.senha);
+
       if (user) {
-        return { message: 'Login bem-sucedido', user };
+        res.redirect('/');
       } else {
-        return { message: 'Credenciais inválidas' };
+        return { message: 'Credenciais inválidas', user };
       }
     } catch (error) {
       return { message: 'Erro durante o login' };

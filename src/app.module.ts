@@ -17,6 +17,7 @@ import { AvaliacaoController } from './avaliacoes/avaliacoes.controller';
 import { AvaliacaoService } from './avaliacoes/avaliacoes.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { HomeController } from './users/home.controller';
 
 
 
@@ -35,7 +36,7 @@ import { UsersModule } from './users/users.module';
     TypeOrmModule.forFeature([User, Estado, Endereco, Imovel, Avaliacao]),
     AuthModule, UsersModule,
   ],
-  controllers: [UsersController, EstadoController, EnderecoController, ImovelController, AvaliacaoController],
+  controllers: [UsersController, EstadoController, EnderecoController, ImovelController, AvaliacaoController, HomeController],
   providers: [UsersService, EstadoService, EnderecoService, ImovelService, AvaliacaoService],
 })
 export class AppModule {}

@@ -56,10 +56,11 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-  async update(id: number, user: User): Promise<User> {
+  async update(id: number, user: User): Promise<User | undefined> {
     await this.userRepository.update(id, user);
-    return this.userRepository.findOne({ where: { id } });
+    return this.findById(id); // Recupera o usuário atualizado após a atualização
   }
+  
 
   async delete(id: number): Promise<void> {
     await this.userRepository.delete(id);
