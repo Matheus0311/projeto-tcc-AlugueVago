@@ -187,4 +187,51 @@ export class UsersController {
     console.log("saiu");
     return { msg: 'The user session has ended' }
   }
+
+  @Get('/delete-account')
+  @Render('delete-account.html')
+  async showDeleteAccountPage(@Request() req): Promise<{ user: User, deleteCode: string }> {
+    const userId = req.user.id;
+    const user = await this.usersService.findById(userId);
+  
+    // Gere um código aleatório (pode ser um número aleatório de 6 dígitos, por exemplo)
+    const deleteCode = Math.floor(100000 + Math.random() * 900000).toString();
+    req.session.deleteCode = deleteCode;
+  
+    return { user: user, deleteCode: deleteCode };
+  }
+  
+  @Post('/delete-account')
+  async deleteAccount(
+    @Body() formData: { email: string, senha: string, deleteCode: string },
+    @Request() req,
+    @Res() res
+  ): Promise<void> {
+    const userId = req.user.id;
+    const user = await this.usersService.findById(userId);
+  
+    if (!user) {
+      const errorMessages = ['Usuário não encontrado.'];
+      return res.render('delete-account.html');
+    }
+  
+    // Verifique se o email e a senha estão corretos
+    const passwordsMatch = await this.usersService.comparePasswords(formData.senha, user.senhaUsuario);
+    if (!passwordsMatch || formData.email !== user.emailUsuario) {
+      const errorMessages = ['Credenciais incorretas.'];
+      return res.render('delete-account.html');
+    }
+  
+    // Verifique se o código de exclusão está correto
+    if (formData.deleteCode !== req.session.deleteCode) {
+      const errorMessages = ['Código de exclusão incorreto.'];
+      return res.render('delete-account.html');
+    }
+  
+    // Se tudo estiver correto, exclua a conta e redirecione para a página de login
+    await this.usersService.delete(userId);
+    req.session.destroy();
+    res.redirect('/users/login');
+  }
+
 }

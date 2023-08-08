@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcryptjs';
 import { ConflictException } from '@nestjs/common';
-import { UnauthorizedException } from '@nestjs/common/exceptions';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -85,4 +85,5 @@ export class UsersService {
   ) {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
+
 }

@@ -34,6 +34,7 @@ export class User {
   @Length(11, 11, { message: 'O CPF deve ter 11 dígitos.' })
   @Matches(/^[0-9]{11}$/, { message: 'O CPF fornecido não é válido.' })
   cpfUsuario: string;
+  
 
   @OneToMany(() => Imovel, imovel => imovel.usuario)
   imoveis: Imovel[];

@@ -13,6 +13,8 @@ async function bootstrap() {
 
   // Configure o módulo ServeStatic para servir arquivos estáticos
   app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.useStaticAssets(join(__dirname, '..', 'uploads', 'perfil'));
+
 
   // Configurar o mecanismo de visualização para 'html'
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
