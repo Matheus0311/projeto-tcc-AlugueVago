@@ -182,10 +182,11 @@ export class UsersController {
   }
 
   @Get('/logout')
-  logout(@Request() req): any {
+  logout(@Request() req,  @Res() res): any {
     req.session.destroy();
     console.log("saiu");
-    return { msg: 'The user session has ended' }
+    res.redirect('/');
+    //return { msg: 'The user session has ended' }
   }
 
   @Get('/delete-account')
@@ -232,6 +233,14 @@ export class UsersController {
     await this.usersService.delete(userId);
     req.session.destroy();
     res.redirect('/users/login');
+  }
+
+  @Get('/uploads/perfil/:imageName')
+  async serveProfileImage(@Param('imageName') imageName, @Res() res) {
+    // Construa o caminho completo da imagem a partir do nome recebido
+    const imagePath = `./uploads/perfil/${imageName}`;
+    // Envie o arquivo como resposta
+    res.sendFile(imagePath, { root: '.' });
   }
 
 }
