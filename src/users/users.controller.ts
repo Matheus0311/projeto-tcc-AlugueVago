@@ -24,12 +24,14 @@ import { User } from './user.entity';
 import { diskStorage } from 'multer';
 import { LocalAuthGuard } from 'src/auth/local.auth.guard';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+import { AdminGuard } from 'src/auth/admin.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @UseGuards(AuthenticatedGuard, AdminGuard)
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
@@ -57,7 +59,6 @@ export class UsersController {
 
     try {
       const createdUser = await this.usersService.create(user);
-      // Redirect to a success page or display a success message if needed
       res.redirect('/users/login');
       return createdUser;
     } catch (error) {
@@ -65,16 +66,10 @@ export class UsersController {
       return res.render('cadastro.html', { errorMessages });
   }
 
-    //return this.usersService.create(user);
   }
 
-  // @Put(':id')
-  // @UsePipes(new ValidationPipe())
-  // async update(@Param('id') id: string, @Body() user: User): Promise<User> {
-  //   return this.usersService.update(Number(id), user);
-  // }
-
   @Delete(':id')
+  @UseGuards(AuthenticatedGuard, AdminGuard)
   async delete(@Param('id') id: string): Promise<void> {
     return this.usersService.delete(Number(id));
   }
@@ -88,10 +83,11 @@ export class UsersController {
 
   @Get('/edit')
   @Render('edit-user.html')
-  async showEditUserPage(@Request() req): Promise<{ user: User }> {
-    const userId = req.user.id;
-    const user = await this.usersService.findById(userId);
-    return { user: user };
+  async showEditUserPage(@Request() req, @Res() res): Promise<{ user: User, userIsLoggedIn: boolean }> {
+    const userIsLoggedIn = req.isAuthenticated();
+    const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+    if(!user){res.redirect('/');}
+    return { user: user, userIsLoggedIn };
   }
 
 
@@ -120,10 +116,10 @@ export class UsersController {
   
     const user = await this.usersService.findById(userId);
     if (!user) {
-      const errorMessages = ['Usuário não encontrado.'];
       console.log('Usuário não encontrado.');
-      return res.render('edit-user.html', { user, errorMessages });
+      res.redirect('/');
     }
+    
   
     // Atualiza os campos do usuário com os dados do formulário
     user.nomeUsuario = req.body.nomeUsuario || user.nomeUsuario;
@@ -142,15 +138,14 @@ export class UsersController {
     const updated = await this.usersService.update(userId, user);
   
     if(updated){
-      // Redireciona para a página de edição novamente
-      res.redirect('/users/edit');
+      res.redirect('/users/account-config');
       console.log('Depois da atualização:', user);
       console.log('Dados do usuário atualizados com sucesso.');
     }
   }
   
   @Get('login')
-  @Render('login.html') // Renderiza a página 'cadastro.html'
+  @Render('login.html') // Renderiza a página 'login.html'
   showLogin() {
     return {};
   }
@@ -159,50 +154,51 @@ export class UsersController {
   @Post('/login')
   async login(@Request() req, @Res() res) {
     try {
-      const user = await (req.body.email, req.body.senha);
-
-      if (user) {
-        res.redirect('/');
-      } else {
-        return { message: 'Credenciais inválidas', user };
-      }
+      // O LocalAuthGuard já fez a validação e autenticação
+      // Se chegou aqui, o usuário é válido
+      res.redirect('/');
     } catch (error) {
-      return { message: 'Erro durante o login' };
+      res.redirect('/users/login');
     }
-  }
-  // login(@Request() req): any {
-  //   console.log("entrou");
-  //   return { User: req.user, msg: 'User loggin in' }
-  // }
 
-  @UseGuards(AuthenticatedGuard)
+  }
+
   @Get('/protected')
+  @UseGuards(AuthenticatedGuard, AdminGuard)
   getHello(@Request() req): string {
     return req.user;
   }
 
   @Get('/logout')
-  logout(@Request() req,  @Res() res): any {
-    req.session.destroy();
-    console.log("saiu");
-    res.redirect('/');
-    //return { msg: 'The user session has ended' }
+  async logout(@Request() req,  @Res() res): Promise<{ userIsLoggedIn: boolean }> {
+    const userIsLoggedIn = req.isAuthenticated();
+    const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+    if(!user){res.redirect('/');}
+    else{
+      req.session.destroy();
+      console.log("saiu");
+      res.redirect('/');
+    }
+
+    return {userIsLoggedIn}
   }
 
   @Get('/delete-account')
   @Render('delete-account.html')
-  async showDeleteAccountPage(@Request() req): Promise<{ user: User, deleteCode: string }> {
-    const userId = req.user.id;
-    const user = await this.usersService.findById(userId);
+  async showDeleteAccountPage(@Request() req, @Res() res): Promise<{ user: User, deleteCode: string, userIsLoggedIn: boolean }> {
+    const userIsLoggedIn = req.isAuthenticated();
+    const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+    if(!user){res.redirect('/');}
   
-    // Gere um código aleatório (pode ser um número aleatório de 6 dígitos, por exemplo)
+    // Gera um código aleatório (pode ser um número aleatório de 6 dígitos, por exemplo)
     const deleteCode = Math.floor(100000 + Math.random() * 900000).toString();
     req.session.deleteCode = deleteCode;
   
-    return { user: user, deleteCode: deleteCode };
+    return { user: user, deleteCode: deleteCode, userIsLoggedIn };
   }
   
   @Post('/delete-account')
+  @UseGuards(AuthenticatedGuard)
   async deleteAccount(
     @Body() formData: { email: string, senha: string, deleteCode: string },
     @Request() req,
@@ -211,25 +207,20 @@ export class UsersController {
     const userId = req.user.id;
     const user = await this.usersService.findById(userId);
   
-    if (!user) {
-      const errorMessages = ['Usuário não encontrado.'];
-      return res.render('delete-account.html');
-    }
+    if(!user){res.redirect('/');}
   
     // Verifique se o email e a senha estão corretos
     const passwordsMatch = await this.usersService.comparePasswords(formData.senha, user.senhaUsuario);
     if (!passwordsMatch || formData.email !== user.emailUsuario) {
-      const errorMessages = ['Credenciais incorretas.'];
       return res.render('delete-account.html');
     }
   
     // Verifique se o código de exclusão está correto
     if (formData.deleteCode !== req.session.deleteCode) {
-      const errorMessages = ['Código de exclusão incorreto.'];
       return res.render('delete-account.html');
     }
   
-    // Se tudo estiver correto, exclua a conta e redirecione para a página de login
+    // Se tudo estiver correto, exclui a conta e redireciona para a página de login
     await this.usersService.delete(userId);
     req.session.destroy();
     res.redirect('/users/login');
@@ -237,10 +228,20 @@ export class UsersController {
 
   @Get('/uploads/perfil/:imageName')
   async serveProfileImage(@Param('imageName') imageName, @Res() res) {
-    // Construa o caminho completo da imagem a partir do nome recebido
+    // Constroi o caminho completo da imagem a partir do nome recebido
     const imagePath = `./uploads/perfil/${imageName}`;
-    // Envie o arquivo como resposta
+    // Envia o arquivo como resposta
     res.sendFile(imagePath, { root: '.' });
+  }
+
+  @Get('/account-config')
+  @Render('account-config.html') // Renderiza a página 'account-config.html'
+  async showAccountConfig(@Request() req, @Res() res): Promise<{ userIsLoggedIn: boolean, user: User }> {
+    const userIsLoggedIn = req.isAuthenticated(); 
+    const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+    if(!user){res.redirect('/');}
+
+    return { userIsLoggedIn, user };
   }
 
 }

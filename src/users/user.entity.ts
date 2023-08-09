@@ -11,6 +11,7 @@ export class User {
   imagemPerfil: string;
 
   @Column()
+  @Length(3, 64, { message: 'O nome pode ter entre 3 e 64 caracteres.' })
   nomeUsuario: string;
 
   @Column()

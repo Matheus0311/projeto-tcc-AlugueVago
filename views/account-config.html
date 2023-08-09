@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AlugueVago - Página Inicial</title>
+  <title>AlugueVago - Configurações</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
   <style>
@@ -23,7 +23,7 @@
       padding: 20px;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
       width: 100%;
-      max-width: 420px;
+      max-width: 960px;
       margin: 0 auto;
       margin-top: 20px;
     }
@@ -34,24 +34,29 @@
       text-align: center;
     }
 
-    .home-content {
-      text-align: center;
-      margin-top: 50px;
+    .section {
+      margin-bottom: 40px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.2s ease-in-out;
+      cursor: pointer;
     }
 
-    .btn-primary {
-      margin-top: 20px;
+    .section:hover {
+      background-color: #f0f0f0;
     }
 
-    .profile-image {
-      margin-top: 20px;
-      text-align: center;
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+      cursor: pointer; 
     }
+    
 
-    .profile-image img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
+    .section-title:hover{
+      text-decoration: none;
     }
 
     /* Estilos para a imagem de perfil na navbar */
@@ -110,8 +115,7 @@
                 <%= user.nomeUsuario %>
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdownToggle">
-                <a class="dropdown-item" href="users/account-config">Configuração de Conta</a>
-                <a class="dropdown-item" href="users/logout">Deslogar</a>
+                <a class="dropdown-item" href="/users/logout">Deslogar</a>
               </div>
             </li>
           <% } else { %>
@@ -128,12 +132,16 @@
     </div>
   </nav>
 
-  <div class="container home-content">
-    <h1>Bem-vindo à AlugueVago</h1>
-    <p>Encontre o espaço perfeito para você alugar.</p>
-    <button class="btn btn-primary">Ver Anúncios</button>
+  <div class="container">
+    <h1>Configurações da Conta</h1>
 
-    
+    <div class="section">
+      <a href="/users/edit" class="section-title">Editar Dados</a>
+    </div>
+
+    <div class="section">
+      <a href="/users/delete-account" class="section-title">Apagar Conta</a>
+    </div>
   </div>
 
   <!-- Scripts JavaScript -->
