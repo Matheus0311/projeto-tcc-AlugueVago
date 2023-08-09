@@ -1,18 +1,138 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ImovelService } from './imoveis.service';
 import { Imovel } from './imovel.entity';
-import { Endereco } from '../enderecos/endereco.entity';
+import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+import { User } from 'src/users/user.entity';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import * as fs from 'fs';
 
 @Controller('imoveis')
 export class ImovelController {
   constructor(private readonly imovelService: ImovelService) {}
 
   @Post()
-  async create(@Body() body: { imovel: Imovel; endereco: Endereco }): Promise<Imovel> {
-    const { imovel, endereco } = body;
+  @UseGuards(AuthenticatedGuard)
+  @UseInterceptors(FileInterceptor('pdfDocument', {
+    storage: diskStorage({
+      destination: './uploads/documentos-imoveis',
+      filename: (req, file, callback) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        callback(null, `${uniqueSuffix}${extname(file.originalname)}`);
+      },
+    }),
+  }),
+  // FilesInterceptor('fotos', 6, {
+  //   storage: diskStorage({
+  //     destination: (req, file, callback) => {
+  //       // const user: User = req.user as User; 
+  //       // console.log(user.id);
+  //       const uniqueToken = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+  //       const folder = `./uploads/fotos-imoveis/${uniqueToken}`;
+  //       if (!fs.existsSync(folder)) {
+  //         fs.mkdirSync(folder, { recursive: true });
+  //       }
+  //       callback(null, folder);
+  //     },
+  //     filename: (req, file, callback) => {
+  //       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+  //       callback(null, `${uniqueSuffix}${extname(file.originalname)}`);
+  //     },
+  //   }),
+  // })
+  FileInterceptor('fotos', {
+    storage: diskStorage({
+      destination: './uploads/fotos-imoveis',
+      filename: (req, file, cb) => {
+        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+        const fileExtension = file.originalname.split('.').pop(); // Obter a extensão do arquivo
+        const filename = `${uniqueSuffix}.${fileExtension}`; // Nome do arquivo com base em um valor único
+        cb(null, filename);
+      },
+    }),
+  }),
+  )
+  async create(
+    @Body() body: any,
+    @UploadedFile() pdfDocument: Express.Multer.File,
+    @UploadedFile() fotos: Express.Multer.File[],
+    @Req() req,
+  ): Promise<Imovel> {
+    const {
+      tamanho,
+      quantidadeComodos,
+      mobiliado,
+      statusNegociacao,
+      valor,
+      descricao,
+      numeroInscricao,
+      rgProprietario,
+      cpfProprietario,
+      telefoneContato,
+      emailContato,
+      enderecoRua,
+      enderecoNumero,
+      enderecoBairro,
+      enderecoCEP,
+      enderecoCidade,
+      estadoNome,
+    } = body;
+    console.log(body)
+
+    if (
+      !enderecoRua ||
+      !enderecoNumero ||
+      !enderecoBairro ||
+      !enderecoCEP ||
+      !enderecoCidade ||
+      !estadoNome
+    ) {
+      throw new BadRequestException('Dados do endereço e estado são obrigatórios.');
+    }
+
     try {
-      imovel.endereco = endereco; // Associa o endereço ao imóvel
-      return await this.imovelService.createImovelWithEndereco(imovel, endereco);
+      const newImovel = new Imovel();
+
+      newImovel.tamanho = tamanho;
+      newImovel.quantidadeComodos = quantidadeComodos;
+      newImovel.mobiliado = mobiliado;
+      newImovel.statusNegociacao = statusNegociacao;
+      newImovel.valor = valor;
+      newImovel.descricao = descricao;
+      newImovel.numeroInscricao = numeroInscricao;
+      newImovel.rgProprietario = rgProprietario;
+      newImovel.cpfProprietario = cpfProprietario;
+      newImovel.telefoneContato = telefoneContato;
+      newImovel.emailContato = emailContato;
+      newImovel.enderecoRua = enderecoRua;
+      newImovel.enderecoNumero = enderecoNumero;
+      newImovel.enderecoBairro = enderecoBairro;
+      newImovel.enderecoCEP = enderecoCEP;
+      newImovel.enderecoCidade = enderecoCidade;
+      newImovel.estadoNome = estadoNome;
+
+      if (pdfDocument) {
+        newImovel.pdfDocument = pdfDocument.filename;
+        console.log("Tem documento");
+      }
+      if (req.files && req.files.fotos) {
+        newImovel.fotos = req.files.fotos.map((file) => ({
+          filename: file.filename,
+          originalname: file.originalname,
+        }));
+        console.log("Tem foto");
+      }else{
+        console.log("Não tem foto");
+      }
+
+      const user: User = req.user;
+      newImovel.usuario = user;
+
+      console.log("criando novo imovel =")
+      console.log(newImovel)
+
+      return await this.imovelService.createImovel(newImovel);
     } catch (error) {
       console.error('Erro ao criar o imóvel:', error);
       throw new InternalServerErrorException('Erro ao criar o imóvel');
@@ -22,6 +142,13 @@ export class ImovelController {
   @Get()
   async findAll(): Promise<Imovel[]> {
     return this.imovelService.findAll();
+  }
+
+  @Get('cadastro-imovel')
+  @UseGuards(AuthenticatedGuard)
+  @Render('cadastro-imovel.html')
+  showCadastroImovelPage() {
+    return {};
   }
 
   @Get(':id')

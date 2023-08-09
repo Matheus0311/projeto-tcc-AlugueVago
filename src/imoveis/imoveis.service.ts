@@ -9,20 +9,18 @@ export class ImovelService {
   constructor(
     @InjectRepository(Imovel)
     private readonly imovelRepository: Repository<Imovel>,
-    @InjectRepository(Endereco)
-    private readonly enderecoRepository: Repository<Endereco>,
   ) {}
 
-  async createImovelWithEndereco(imovel: Imovel, endereco: Endereco): Promise<Imovel> {
+  async createImovel(imovel: Imovel): Promise<Imovel> {
+    console.log("entrou no createImovel")
     return this.imovelRepository.manager.transaction(async transactionalEntityManager => {
-      const savedEndereco = await transactionalEntityManager.save(Endereco, endereco);
-      imovel.endereco = savedEndereco;
-      return transactionalEntityManager.save(Imovel, imovel);
+      const savedImovel = await transactionalEntityManager.save(Imovel, imovel);
+      return savedImovel;
     });
   }
 
   async findAll(): Promise<Imovel[]> {
-    return this.imovelRepository.find({ relations: ['endereco', 'usuario'] });
+    return this.imovelRepository.find();
   }
 
   async findOne(id: number): Promise<Imovel> {

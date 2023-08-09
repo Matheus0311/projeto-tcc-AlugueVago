@@ -1,8 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne, JoinColumn } from 'typeorm';
-import { Endereco } from '../enderecos/endereco.entity';
 import { Avaliacao } from '../avaliacoes/avaliacao.entity';
 import { User } from '../users/user.entity';
-
 
 @Entity()
 export class Imovel {
@@ -27,6 +25,9 @@ export class Imovel {
   @Column()
   emailContato: string;
 
+  @Column('json', { nullable: true })
+  fotos: { filename: string; originalname: string }[];
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   valor: number;
 
@@ -45,13 +46,28 @@ export class Imovel {
   @Column()
   cpfProprietario: string;
 
+  // Propriedades para Endereço e Estado
+  @Column()
+  enderecoRua: string;
+
+  @Column()
+  enderecoNumero: string;
+
+  @Column()
+  enderecoBairro: string;
+
+  @Column()
+  enderecoCEP: string;
+
+  @Column()
+  enderecoCidade: string;
+
+  @Column()
+  estadoNome: string;
+
   @ManyToOne(() => User, user => user.imoveis)
   usuario: User;
 
-@ManyToOne(() => Endereco, endereco => endereco.imovel)
-  endereco: Endereco;
-
-@OneToMany(() => Avaliacao, avaliacao => avaliacao.imovel)
+  @OneToMany(() => Avaliacao, avaliacao => avaliacao.imovel)
   avaliacoes: Avaliacao[];
-
 }

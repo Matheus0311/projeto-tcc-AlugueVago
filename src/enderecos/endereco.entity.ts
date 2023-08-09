@@ -33,8 +33,8 @@ export class Endereco {
   @IsString()
   cidade: string;
 
-  @OneToOne(() => Imovel, imovel => imovel.endereco)
-  imovel: Imovel;
+  // @OneToOne(() => Imovel, imovel => imovel.endereco)
+  // imovel: Imovel;
 
   @ManyToOne(() => Estado, estado => estado.enderecos)
   estado: Estado;
