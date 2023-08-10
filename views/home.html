@@ -6,12 +6,34 @@
   <title>AlugueVago - Página Inicial</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+  <!-- Include Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
   <style>
     body {
       background-color: #e6f0ff;
       margin: 0;
       padding: 0;
     }
+
+    /*Abrir o dorpmeun certo*/
+
+  .dropdown-menu.right-0 {
+    right: 0;
+    left: auto;
+  }
+  
+  .dropdown-menu.left-0 {
+    left: 0;
+    right: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .dropdown-menu.left-0, .dropdown-menu.right-0 {
+      right: auto;
+      left: 0;
+    }
+  }
+  
 
     .navbar {
       margin-bottom: 20px;
@@ -60,38 +82,44 @@
       height: 30px;
       border-radius: 50%;
       margin-right: 10px;
+      margin-top: 5px;
     }
 
     /* Estilos para a animação do link na navbar */
-    .navbar-nav .nav-link {
-      color: #333;
+    .nav-link {
       position: relative;
+      display: inline-block;
+      color: #ffffff;
+      transition: color 0.3s;
     }
-
-    .navbar-nav .nav-link::before {
+    .nav-link:hover {
+      color: #fff;
+    }
+    .nav-link::before {
       content: "";
       position: absolute;
-      width: 100%;
+      width: 0;
       height: 2px;
-      background-color: #007bff;
+      background-color: white;
       bottom: -4px;
-      left: 0;
-      transform: scaleX(0);
-      transform-origin: center;
-      transition: transform 0.3s ease-in-out;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: width 0.3s;
     }
-
-    .navbar-nav .nav-link:hover::before {
-      transform: scaleX(1);
+    .nav-link:hover::before {
+      width: 100%;
     }
-
+    .navbar {
+      background-color: #4a90e2;
+    }
   </style>
 </head>
-<body>
+<body class="bg-gray-100">
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500 navbar-light bg-light">
+  <!-- <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500"> -->
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">AlugueVago</a>
+      <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -99,41 +127,41 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link text-white" href="/">Home</a>
           </li>
-          
           <% if (userIsLoggedIn && user.imagemPerfil) { %>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
+           
+            <li class="nav-item dropdown relative">
+              <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <img class="profile-image-navbar" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
-                <%= user.nomeUsuario %>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdownToggle">
-                <a class="dropdown-item" href="users/account-config">Configuração de Conta</a>
-                <a class="dropdown-item" href="users/logout">Deslogar</a>
+                <span class="text-white"><%= user.nomeUsuario %></span>
+              </a>  
+              <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
+                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
+                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
               </div>
             </li>
-          <% } else { %>
+            <img class="profile-image-navbar " src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+          
+            <% } else { %>
             <li class="nav-item">
-              <a class="nav-link profile-link" href="/users/login">
+              <a class="nav-link profile-link text-white" href="/users/login">
                 <i class="fas fa-user"></i>
                 Fazer Login
               </a>
-              <li><a class="nav-link" href="/users/cadastro">Cadastro</a></li>
+              <li><a class="nav-link text-white" href="/users/cadastro">Cadastro</a></li>
             </li>
           <% } %>
+          
         </ul>
       </div>
     </div>
   </nav>
 
-  <div class="container home-content">
-    <h1>Bem-vindo à AlugueVago</h1>
-    <p>Encontre o espaço perfeito para você alugar.</p>
-    <button class="btn btn-primary">Ver Anúncios</button>
-
-    
+  <div class="container mx-auto p-8 bg-white rounded-lg shadow-md max-w-md mt-20">
+    <h1 class="text-2xl font-semibold text-center mb-6">Bem-vindo à AlugueVago</h1>
+    <p class="text-center mb-8">Encontre o espaço perfeito para você alugar.</p>
+    <button class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Ver Anúncios</button>
   </div>
 
   <!-- Scripts JavaScript -->

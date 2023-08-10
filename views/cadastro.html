@@ -4,171 +4,236 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Usuário</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    body {
-      background-color: #e6f0ff;
-      margin: 0;
-      padding: 0;
-    }
-
-    .navbar {
-      margin-bottom: 20px;
-    }
-
-    .navbar-nav .nav-link {
-      color: #333;
-      position: relative;
-    }
-
-    .navbar-nav .nav-link::before {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 2px;
-      background-color: #007bff;
-      bottom: -4px;
-      left: 0;
-      transform: scaleX(0);
-      transform-origin: center;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .navbar-nav .nav-link:hover::before {
-      transform: scaleX(1);
-    }
-
-    .container {
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 5px;
-      padding: 20px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 420px;
-      margin: 0 auto;
-      margin-top: 20px;
-    }
-
-    .container h1 {
-      font-size: 24px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">AlugueVago</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/users/login">Login</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <div class="container">
-    <h1>Cadastro de Usuário</h1>
+<style>
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    color: #ffffff;
+    transition: color 0.3s;
+  }
+  .nav-link:hover {
+    color: #fff;
+  }
+  .nav-link::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: width 0.3s;
+  }
+  .nav-link:hover::before {
+    width: 100%;
+  }
+  .navbar {
+    background-color: #4a90e2;
+  }
+  
+  .input-container {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  .input-container label {
+    font-weight: 600;
+    color: #4a90e2;
+    margin-bottom: 0.25rem;
+  }
+  .input-container input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    transition: border-color 0.3s;
+  }
+  .input-container input:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+  .input-container .helper-text {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 0.25rem;
+  }
+  .upload-container {
+    border: 2px dashed #ccc;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .upload-container:hover {
+    border-color: #4a90e2;
+  }
+  .upload-container p {
+    font-size: 0.875rem;
+    color: #999;
+    margin: 0.5rem 0;
+  }
+</style>
+</head>
+<body class="bg-gray-100">
+<!-- Navbar -->
+<nav class="bg-gradient-to-r from-blue-300 to-blue-500 py-3 navbar">
+  <div class="container mx-auto flex justify-between items-center">
+    <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
+    <ul class="flex space-x-6">
+      <li><a class="nav-link" href="/">Home</a></li>
+      <li><a class="nav-link" href="/users/login">Login</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="container mx-auto mt-4">
+  <div class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
+    <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Usuário</h1>
 
     <form action="/users" method="POST" enctype="multipart/form-data">
-      <div class="form-group">
-        <label for="nomeUsuario">Nome:</label>
-        <input
-          type="text"
-          id="nomeUsuario"
-          name="nomeUsuario"
-          class="form-control"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="emailUsuario">Email:</label>
-        <input
-          type="email"
-          id="emailUsuario"
-          name="emailUsuario"
-          class="form-control"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="senhaUsuario">Senha:</label>
-        <input
-          type="password"
-          id="senhaUsuario"
-          name="senhaUsuario"
-          class="form-control"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <div class="row">
-          <div class="col-md-6">
-            <label for="rgUsuario">RG:</label>
-            <input
-              type="text"
-              id="rgUsuario"
-              name="rgUsuario"
-              class="form-control"
-              required
-            />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Seção 1 -->
+        <div>
+          <div class="grid grid-cols-1 gap-4">
+            <div class="input-container">
+              <label for="nomeUsuario"><span class="text-red-500">*</span> Nome:</label>
+              <input
+                type="text"
+                id="nomeUsuario"
+                name="nomeUsuario"
+                class="rounded-md focus:border-blue-500"
+                required
+              />
+            </div>
+            <div class="input-container">
+              <label for="emailUsuario"><span class="text-red-500">*</span> Email:</label>
+              <input
+                type="email"
+                id="emailUsuario"
+                name="emailUsuario"
+                class="rounded-md focus:border-blue-500"
+                required
+              />
+            </div>
+            <div class="input-container">
+              <label for="senhaUsuario"><span class="text-red-500">*</span> Senha:</label>
+              <input
+                type="password"
+                id="senhaUsuario"
+                name="senhaUsuario"
+                class="rounded-md focus:border-blue-500"
+                minlength="6"
+                required
+                oninput="updatePasswordStrength(this.value)"
+              />
+              <div class="helper-text">Mínimo 6 caracteres</div>
+              <div class="mt-1 relative">
+                <div class="h-2 w-70 rounded-full bg-gray-300">
+                  <div id="password-strength" class="h-full rounded-full transition-all"></div>
+                </div>
+                <div class="absolute text-xs font-semibold" id="password-strength-label">Fraca</div>
+              </div>
+            </div>
           </div>
-          <div class="col-md-6">
-            <label for="cpfUsuario">CPF:</label>
-            <input
-              type="text"
-              id="cpfUsuario"
-              name="cpfUsuario"
-              class="form-control"
-              required
-            />
+        </div>
+
+        <!-- Seção 2 -->
+        <div>
+          <div class="grid grid-cols-1 gap-4">
+            <div class="input-container">
+              <label for="rgUsuario"><span class="text-red-500">*</span> RG:</label>
+              <input
+                type="text"
+                id="rgUsuario"
+                name="rgUsuario"
+                placeholder="Digite sem pontuação"
+                class="rounded-md focus:border-blue-500"
+                required
+              />
+            </div>
+            <div class="input-container">
+              <label for="cpfUsuario"><span class="text-red-500">*</span> CPF:</label>
+              <input
+                type="text"
+                id="cpfUsuario"
+                name="cpfUsuario"
+                placeholder="Digite sem pontuação"
+                class="rounded-md focus:border-blue-500"
+                required
+              />
+            </div>
+            <div class="input-container">
+              <label for="rendaMensalUsuario"><span class="text-red-500">*</span> Renda Mensal:</label>
+              <input
+                type="number"
+                id="rendaMensalUsuario"
+                name="rendaMensalUsuario"
+                class="rounded-md focus:border-blue-500"
+                required
+              />
+            </div>
+          </div>
+          <div class="upload-container">
+            <label for="imagemPerfil" class="block text-gray-700 font-semibold mb-2">Imagem de Perfil:</label>
+            <div class="relative">
+              <input
+                type="file"
+                id="imagemPerfil"
+                name="imagemPerfil"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                accept="image/*"
+                onchange="updateImageLabel(this)"
+              />
+              <p id="imagemPerfilLabel">Clique para selecionar uma imagem</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="row">
-          <div class="col-md-6">
-            <label for="rendaMensalUsuario">Renda Mensal:</label>
-            <input
-              type="number"
-              id="rendaMensalUsuario"
-              name="rendaMensalUsuario"
-              class="form-control"
-              required
-            />
-          </div>
-          <div class="col-md-6">
-            <label for="imagemPerfil">Imagem de Perfil:</label>
-            <input
-              type="file"
-              id="imagemPerfil"
-              name="imagemPerfil"
-              class="form-control-file"
-            />
-          </div>
-        </div>
+      <div class="mt-4">
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Cadastrar</button>
       </div>
-
-      <button type="submit" class="btn btn-primary">Cadastrar</button>
     </form>
   </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+
+
+  function updateImageLabel(input) {
+    const label = document.getElementById('imagemPerfilLabel');
+    if (input.files.length > 0) {
+      label.textContent = `${input.files[0].name} selecionado`;
+    } else {
+      label.textContent = 'Clique para selecionar uma imagem';
+    }
+  }
+
+
+  function updatePasswordStrength(password) {
+    const strengthIndicator = document.getElementById('password-strength');
+    const strengthLabel = document.getElementById('password-strength-label');
+    const strength = calculatePasswordStrength(password);
+    const colors = ['#FF0000', '#FF4500', '#FFD700', '#32CD32', '#00FF00'];
+    const labels = ['Fraca', 'Média', 'Forte', 'Muito Forte'];
+
+    strengthIndicator.style.width = `${strength * 33.33}%`;
+    strengthIndicator.style.backgroundColor = colors[strength];
+    strengthLabel.textContent = labels[strength];
+    strengthLabel.style.color = colors[strength];
+  }
+
+  function calculatePasswordStrength(password) {
+    if (password.length < 6) return 0;
+    if (password.length < 8) return 1;
+    if (/[a-zA-Z]/.test(password) && /\d/.test(password) && /[!@#$%^&*()_+{}\[\]:;<>,.?~\-]/.test(password)) return 3;
+    if (/[a-zA-Z]/.test(password) && /\d/.test(password)) return 2;
+    if (/[a-zA-Z]/.test(password)) return 1;
+    return 4;
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 </body>
 </html>

@@ -4,107 +4,123 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    body {
-      background-color: #e6f0ff;
-      margin: 0;
-      padding: 0;
-    }
-
-    .navbar {
-      margin-bottom: 20px;
-    }
-
-    .navbar-nav .nav-link {
-      color: #333;
-      position: relative;
-    }
-
-    .navbar-nav .nav-link::before {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 2px;
-      background-color: #007bff;
-      bottom: -4px;
-      left: 0;
-      transform: scaleX(0);
-      transform-origin: center;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .navbar-nav .nav-link:hover::before {
-      transform: scaleX(1);
-    }
-
-    .container {
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 5px;
-      padding: 20px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 420px;
-      margin: 0 auto;
-      margin-top: 20px;
-    }
-
-    .container h1 {
-      font-size: 24px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">AlugueVago</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/users/cadastro">Cadastro</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <div class="container">
-    <h1>Login</h1>
+<style>
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    color: #ffffff;
+    transition: color 0.3s;
+  }
+  .nav-link:hover {
+    color: #fff;
+  }
+  .nav-link::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: width 0.3s;
+  }
+  .nav-link:hover::before {
+    width: 100%;
+  }
+  .navbar {
+    background-color: #4a90e2;
+  }
+  /* New styles for form */
+  .input-container {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  .input-container label {
+    font-weight: 600;
+    color: #4a90e2;
+    margin-bottom: 0.25rem;
+  }
+  .input-container input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    transition: border-color 0.3s;
+  }
+  .input-container input:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+  .upload-container {
+    border: 2px dashed #ccc;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .upload-container:hover {
+    border-color: #4a90e2;
+  }
+  .upload-container p {
+    font-size: 0.875rem;
+    color: #999;
+    margin: 0.5rem 0;
+  }
+</style>
+</head>
+<body class="bg-gray-100">
+<!-- Navbar -->
+<nav class="bg-gradient-to-r from-blue-300 to-blue-500 py-3 navbar">
+  <div class="container mx-auto flex justify-between items-center">
+    <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
+    <ul class="flex space-x-6">
+      <li><a class="nav-link" href="/">Home</a></li>
+      <li><a class="nav-link" href="/users/cadastro">Cadastro</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="container mx-auto mt-4">
+  <div class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
+    <h1 class="text-2xl font-semibold text-center mb-6">Login</h1>
+
     <form action="/users/login" method="POST">
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          class="form-control"
-          required
-        />
+      <div class="grid grid-cols-1 gap-4">
+        <div class="input-container">
+          <label for="email"><span class="text-red-500">*</span> Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="rounded-md focus:border-blue-500"
+            required
+          />
+        </div>
+        <div class="input-container">
+          <label for="senha"><span class="text-red-500">*</span> Senha:</label>
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            class="rounded-md focus:border-blue-500"
+            required
+          />
+        </div>
       </div>
-      <div class="form-group">
-        <label for="senha">Senha:</label>
-        <input
-          type="password"
-          id="senha"
-          name="senha"
-          class="form-control"
-          required
-        />
+
+      <div class="mt-4">
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Login</button>
       </div>
-      <button type="submit" class="btn btn-primary">Login</button>
     </form>
   </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  // Funções de senha omitidas para manter o foco no formulário de login
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 </body>
 </html>
