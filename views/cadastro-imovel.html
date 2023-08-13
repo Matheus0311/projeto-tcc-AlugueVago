@@ -1,335 +1,450 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastro de Imóveis</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <style>
-      body {
-        background-color: #e6f0ff;
-        margin: 0;
-        padding: 0;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Imóveis</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<style>
+  
+  
+  .input-container {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  .input-container label {
+    font-weight: 600;
+    color: #4a90e2;
+    margin-bottom: 0.25rem;
+  }
+  .input-container input,
+  .input-container select,
+  .input-container textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    transition: border-color 0.3s;
+  }
+  .input-container input:focus,
+  .input-container select:focus,
+  .input-container textarea:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+  .input-container .helper-text {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 0.25rem;
+  }
+  .upload-container {
+    border: 2px dashed #ccc;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .upload-container:hover {
+    border-color: #4a90e2;
+  }
+  .upload-container p {
+    font-size: 0.875rem;
+    color: #999;
+    margin: 0.5rem 0;
+  }
 
-      .navbar {
-        margin-bottom: 20px;
-      }
 
-      .navbar-nav .nav-link {
-        color: #333;
-        position: relative;
-      }
+  /*Abrir o dorpmeun certo*/
 
-      .navbar-nav .nav-link::before {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        background-color: #007bff;
-        bottom: -4px;
-        left: 0;
-        transform: scaleX(0);
-        transform-origin: center;
-        transition: transform 0.3s ease-in-out;
-      }
+  .dropdown-menu.right-0 {
+    right: 0;
+    left: auto;
+  }
+  
+  .dropdown-menu.left-0 {
+    left: 0;
+    right: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .dropdown-menu.left-0, .dropdown-menu.right-0 {
+      right: auto;
+      left: 0;
+    }
+  }
+  
 
-      .navbar-nav .nav-link:hover::before {
-        transform: scaleX(1);
-      }
 
-      .container {
-        background-color: rgba(255, 255, 255, 0.9);
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-        max-width: 800px;
-        margin: 0 auto;
-        margin-top: 20px;
-      }
+  .profile-image {
+    margin-top: 20px;
+    text-align: center;
+  }
 
-      .container h1 {
-        font-size: 24px;
-        margin-bottom: 15px;
-        text-align: center;
-      }
+  .profile-image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
 
-      .form-group {
-        margin-bottom: 20px;
-      }
+  /* Estilos para a imagem de perfil na navbar */
+  .profile-image-navbar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-top: 5px;
+  }
 
-      .form-group label {
-        font-weight: bold;
-      }
+  /* Estilos para a animação do link na navbar */
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    color: #ffffff;
+    transition: color 0.3s;
+  }
+  .nav-link:hover {
+    color: #fff;
+  }
+  .nav-link::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: width 0.3s;
+  }
+  .nav-link:hover::before {
+    width: 100%;
+  }
+  .navbar {
+    background-color: #4a90e2;
+  }
 
-      .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-right: -15px;
-        margin-left: -15px;
-      }
-
-      .col-half {
-        flex: 0 0 50%;
-        max-width: 50%;
-        padding-right: 15px;
-        padding-left: 15px;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">AlugueVago</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
+</style>
+<body class="bg-gray-100">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500 navbar-light bg-light">
+  <!-- <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500"> -->
+    <div class="container-fluid">
+      <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/">Home</a>
+          </li>
+          <% if (userIsLoggedIn && user.imagemPerfil) { %>
+           
+            <li class="nav-item dropdown relative">
+              <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="text-white"><%= user.nomeUsuario %></span>
+              </a>  
+              <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
+                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
+                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
+              </div>
             </li>
+            <img class="profile-image-navbar " src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+          
+            <% } else { %>
             <li class="nav-item">
-              <a class="nav-link" href="/users/login">Login</a>
+              <a class="nav-link profile-link text-white" href="/users/login">
+                <i class="fas fa-user"></i>
+                Fazer Login
+              </a>
+              <li><a class="nav-link text-white" href="/users/cadastro">Cadastro</a></li>
             </li>
-          </ul>
+          <% } %>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+<div class="container mx-auto mt-4">
+  <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl mx-auto">
+    <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Imóveis</h1>
+
+    <form action="/imoveis" method="POST" enctype="multipart/form-data">
+      <!-- Parte 1 - Informações do Imóvel -->
+      <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <!-- Tamanho -->
+          <div class="input-container">
+            <label for="tamanho"><span class="text-red-500">*</span> Tamanho (m²):</label>
+            <input type="number" id="tamanho" name="tamanho" class="rounded-md focus:border-blue-500" required>
+          </div>
+          <!-- Quantidade de Cômodos -->
+          <div class="input-container">
+            <label for="quantidadeComodos"><span class="text-red-500">*</span> Quantidade de Cômodos:</label>
+            <input type="number" id="quantidadeComodos" name="quantidadeComodos" class="rounded-md focus:border-blue-500" required>
+          </div>
+          <!-- Mobiliado -->
+          <div class="input-container">
+            <label for="mobiliado"><span class="text-red-500">*</span> Mobiliado:</label>
+            <select id="mobiliado" name="mobiliado" class="rounded-md focus:border-blue-500" required>
+              <option value="" selected>Escolha a opção</option>
+              <option value="true">Sim</option>
+              <option value="false">Não</option>
+            </select>
+          </div>
+          <!-- Status de Negociação -->
+          <div class="input-container">
+            <label for="statusNegociacao"><span class="text-red-500">*</span> Status de Negociação:</label>
+            <select id="statusNegociacao" name="statusNegociacao" class="rounded-md focus:border-blue-500" required>
+              <option value="" selected>Escolha a opção</option>
+              <option value="true">Disponível</option>
+              <option value="false">Indisponível</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <!-- Valor -->
+          <div class="input-container">
+            <label for="valor"><span class="text-red-500">*</span> Valor Mensal:</label>
+            <input type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" required>
+          </div>
+          <!-- RG do Proprietário -->
+          <div class="input-container">
+            <label for="rgProprietario"><span class="text-red-500">*</span> RG do Proprietário:</label>
+            <input type="text" id="rgProprietario" name="rgProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+          </div>
+          <!-- CPF do Proprietário -->
+          <div class="input-container">
+            <label for="cpfProprietario"><span class="text-red-500">*</span> CPF do Proprietário:</label>
+            <input type="text" id="cpfProprietario" name="cpfProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+          </div>
+          <!-- Número de Inscrição -->
+          <div class="input-container">
+            <label for="numeroInscricao"><span class="text-red-500">*</span> Número de Inscrição do Imóvel:</label>
+            <input type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+          </div>
+        </div>
+        <div>
+          <!-- Descrição -->
+<div class="input-container">
+  <label for="descricao"><span class="text-red-500">*</span> Descrição:</label>
+  <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4" required></textarea>
+</div>
+
+          <!-- Fotos do Imóvel -->
+          <div class="upload-container">
+            <label for="fotos" class="block text-gray-700 font-semibold mb-2">Fotos (até 6 fotos):</label>
+            <div class="relative">
+              <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="updateImageLabel(this)">
+              <p id="fotosLabel">Clique para selecionar fotos</p>
+            </div>
+          </div>
+          <!-- Documentos do Imóvel -->
+          <div class="upload-container">
+            <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">PDF Document:</label>
+            <div class="relative">
+              <input type="file" id="pdfDocument" name="pdfDocument" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" onchange="updatePDFLabel(this)">
+              <p id="pdfDocumentLabel">Clique para selecionar um PDF</p>
+            </div>
+          </div>
         </div>
       </div>
-    </nav>
-    <div class="container">
-      <h1>Cadastro de Imóveis</h1>
 
-      <form action="/imoveis" method="POST" enctype="multipart/form-data">
-        <div class="row">
-          <div class="col-half">
-            <h2>Informações do Imóvel</h2>
-            <div class="form-group">
-              <label for="tamanho">Tamanho:</label>
-              <input
-                type="number"
-                id="tamanho"
-                name="tamanho"
-                class="form-control"
-                required
-              />
+    <!-- Parte 2 e 3 - Informações de Endereço e Contato -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+      <!-- Seção 2 - Informações de Endereço -->
+      <div class="md:col-span-2">
+        <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações de Endereço</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Coluna 1 - Endereço -->
+          <div>
+            <!-- CEP -->
+            <div class="input-container">
+              <label for="enderecoCEP"><span class="text-red-500">*</span> CEP:</label>
+              <input type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
             </div>
-            <div class="form-group">
-              <label for="quantidadeComodos">Quantidade de Cômodos:</label>
-              <input
-                type="number"
-                id="quantidadeComodos"
-                name="quantidadeComodos"
-                class="form-control"
-                required
-              />
+            <!-- Cidade -->
+            <div class="input-container">
+              <label for="enderecoCidade"><span class="text-red-500">*</span> Cidade:</label>
+              <input type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" required>
             </div>
-            <div class="form-group">
-              <label for="mobiliado">Mobiliado:</label>
-              <select
-                id="mobiliado"
-                name="mobiliado"
-                class="form-control"
-                required
-              >
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Sim</option>
-                <option value="false">Não</option>
+            <!-- Estado -->
+            <div class="input-container">
+              <label for="estadoNome"><span class="text-red-500">*</span> Estado:</label>
+              <select id="estadoNome" name="estadoNome" class="rounded-md focus:border-blue-500" required>
+                <option value="" selected>Selecione o estado</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
               </select>
             </div>
-            <div class="form-group">
-              <label for="statusNegociacao">Status de Negociação:</label>
-              <select
-                id="statusNegociacao"
-                name="statusNegociacao"
-                class="form-control"
-                required
-              >
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Disponível</option>
-                <option value="false">Indisponível</option>
-              </select>
-            </div>
+          </div>
+          <!-- Coluna 2 - Endereço -->
 
-            <div class="form-group">
-              <label for="valor">Valor:</label>
-              <input
-                type="number"
-                id="valor"
-                name="valor"
-                class="form-control"
-                required
-              />
+          <div>
+            <!-- Rua -->
+            <div class="input-container">
+              <label for="enderecoRua"><span class="text-red-500">*</span> Rua:</label>
+              <input type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" required>
             </div>
-            <div class="form-group">
-              <label for="descricao">Descrição:</label>
-              <textarea
-                id="descricao"
-                name="descricao"
-                class="form-control"
-                rows="4"
-                required
-              ></textarea>
+            <!-- Número -->
+            <div class="input-container">
+              <label for="enderecoNumero"><span class="text-red-500">*</span> Número:</label>
+              <input type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" required>
             </div>
-            <div class="form-group">
-              <label for="fotos">Fotos (até 6 fotos):</label>
-              <input
-                type="file"
-                id="fotos"
-                name="fotos"
-                class="form-control-file"
-                multiple
-                accept="image/*"
-              />
-            </div>
-            <div class="form-group">
-              <label for="pdfDocument">PDF Document:</label>
-              <input
-                type="file"
-                id="pdfDocument"
-                name="pdfDocument"
-                class="form-control-file"
-                accept=".pdf"
-              />
-            </div>
-            <div class="form-group">
-              <label for="numeroInscricao">Número de Inscrição:</label>
-              <input
-                type="text"
-                id="numeroInscricao"
-                name="numeroInscricao"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="rgProprietario">RG do Proprietário:</label>
-              <input
-                type="text"
-                id="rgProprietario"
-                name="rgProprietario"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="cpfProprietario">CPF do Proprietário:</label>
-              <input
-                type="text"
-                id="cpfProprietario"
-                name="cpfProprietario"
-                class="form-control"
-                required
-              />
+            <!-- Bairro -->
+            <div class="input-container">
+              <label for="enderecoBairro"><span class="text-red-500">*</span> Bairro:</label>
+              <input type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" required>
             </div>
           </div>
-          <div class="col-half">
-            <h2>Endereço</h2>
-            <!-- Campos de endereço -->
-            <div class="form-group">
-              <label for="enderecoRua">Rua:</label>
-              <input
-                type="text"
-                id="enderecoRua"
-                name="enderecoRua"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="enderecoNumero">Número:</label>
-              <input
-                type="text"
-                id="enderecoNumero"
-                name="enderecoNumero"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="enderecoBairro">Bairro:</label>
-              <input
-                type="text"
-                id="enderecoBairro"
-                name="enderecoBairro"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="enderecoCEP">CEP:</label>
-              <input
-                type="text"
-                id="enderecoCEP"
-                name="enderecoCEP"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="enderecoCidade">Cidade:</label>
-              <input
-                type="text"
-                id="enderecoCidade"
-                name="enderecoCidade"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="estadoNome">Estado:</label>
-              <input
-                type="text"
-                id="estadoNome"
-                name="estadoNome"
-                class="form-control"
-                required
-              />
-            </div>
-            <h2>Contato</h2>
-            <!-- Campos para contato -->
-            <div class="form-group">
-              <label for="telefoneContato">Telefone de Contato:</label>
-              <input
-                type="tel"
-                id="telefoneContato"
-                name="telefoneContato"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="emailContato">Email de Contato:</label>
-              <input
-                type="email"
-                id="emailContato"
-                name="emailContato"
-                class="form-control"
-                required
-              />
-            </div>
-          </div>
+          
         </div>
-
-        <!-- Mais campos aqui... -->
-
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
-      </form>
+      </div>
+      <!-- Seção 3 - Informações de Contato -->
+      <div>
+        <h2 class="text-lg font-semibold mb-4 border-b pb-2">
+          Informações de Contato
+        </h2>
+        <!-- Telefone de Contato -->
+        <div class="input-container">
+          <label for="telefoneContato"><span class="text-red-500">*</span> Telefone de Contato:</label>
+          <input type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação">
+        </div>
+        <!-- Email de Contato -->
+        <div class="input-container">
+          <label for="emailContato"><span class="text-red-500">*</span> Email de Contato:</label>
+          <input type="email" id="emailContato" name="emailContato" class="rounded-md focus:border-blue-500" placeholder="exemplo@exemplo.com">
+        </div>
+      </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  </body>
+      <div class="mt-4">
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Cadastrar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const enderecoCEP = document.getElementById("enderecoCEP");
+    const enderecoRua = document.getElementById("enderecoRua");
+    const enderecoBairro = document.getElementById("enderecoBairro");
+    const enderecoCidade = document.getElementById("enderecoCidade");
+    const estadoNome = document.getElementById("estadoNome");
+
+    enderecoCEP.addEventListener("blur", function () {
+      const cep = enderecoCEP.value.replace(/\D/g, "");
+
+      if (cep.length === 8) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (!data.erro) {
+              enderecoRua.value = data.logradouro;
+              enderecoBairro.value = data.bairro;
+              enderecoCidade.value = data.localidade;
+              estadoNome.value = data.uf;
+            }
+          })
+          .catch((error) => {
+            console.error("Erro ao buscar CEP:", error);
+          });
+      }
+    });
+  });
+
+  
+  function updateImageLabel(input) {
+    const label = document.getElementById('fotosLabel');
+    if (input.files.length > 0) {
+      label.textContent = `${input.files.length} fotos selecionadas`;
+    } else {
+      label.textContent = 'Clique para selecionar fotos';
+    }
+  }
+
+  function updatePDFLabel(input) {
+    const label = document.getElementById('pdfDocumentLabel');
+    if (input.files.length > 0) {
+      label.textContent = `${input.files[0].name} selecionado`;
+    } else {
+      label.textContent = 'Clique para selecionar um PDF';
+    }
+  }
+
+  const examplePhrases = [
+  "Lindo apartamento com vista para o mar.",
+  "Casa espaçosa com jardim e piscina.",
+  "Sala comercial em uma localização privilegiada.",
+  "Charmoso chalé nas montanhas.",
+  "Imóvel ideal para famílias grandes.",
+  "Apartamento moderno e bem iluminado.",
+  "Casa térrea com amplo quintal.",
+  "Sítio tranquilo e rodeado pela natureza.",
+  "Cobertura de luxo com terraço panorâmico.",
+  "Apartamento mobiliado em condomínio resort.",
+  "Loja ampla com grande visibilidade.",
+  "Casa com arquitetura contemporânea.",
+  "Sala de escritório moderna e funcional.",
+  "Apartamento próximo a parques e comércio.",
+  "Casa com acabamentos de alta qualidade.",
+  "Studio compacto e aconchegante.",
+  "Terreno amplo em área valorizada.",
+  "Apartamento duplex com design exclusivo.",
+  "Casa charmosa em bairro arborizado.",
+  "Loft espaçoso com pé-direito alto."
+];
+
+  const descricaoInput = document.getElementById("descricao");
+  const randomIndex = Math.floor(Math.random() * examplePhrases.length);
+  const randomPhrase = examplePhrases[randomIndex];
+  descricaoInput.placeholder = randomPhrase;
+
+</script>
+
+
+
+
+<!-- Scripts JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+
+</body>
 </html>

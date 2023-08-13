@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile, Res, Request } from '@nestjs/common';
 import { ImovelService } from './imoveis.service';
 import { Imovel } from './imovel.entity';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
@@ -6,11 +6,12 @@ import { User } from 'src/users/user.entity';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { UsersService } from 'src/users/users.service';
 import * as fs from 'fs';
 
 @Controller('imoveis')
 export class ImovelController {
-  constructor(private readonly imovelService: ImovelService) {}
+  constructor(private readonly imovelService: ImovelService, private readonly usersService: UsersService) {}
 
   @Post()
   @UseGuards(AuthenticatedGuard)
@@ -144,11 +145,15 @@ export class ImovelController {
     return this.imovelService.findAll();
   }
 
-  @Get('cadastro-imovel')
-  @UseGuards(AuthenticatedGuard)
+  //@UseGuards(AuthenticatedGuard)
+  @Get('/cadastro-imovel')
   @Render('cadastro-imovel.html')
-  showCadastroImovelPage() {
-    return {};
+  async showCadastroImovelPage(@Request() req, @Res() res): Promise<{ userIsLoggedIn: boolean, user: User }> {
+    const userIsLoggedIn = req.isAuthenticated(); 
+    const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+    //if(!user){res.redirect('/');}
+
+    return { userIsLoggedIn, user };
   }
 
   @Get(':id')
