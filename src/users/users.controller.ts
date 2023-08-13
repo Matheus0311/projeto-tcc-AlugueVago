@@ -17,6 +17,7 @@ import {
   Logger,
   Patch,
   Req,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
@@ -145,9 +146,9 @@ export class UsersController {
   }
   
   @Get('login')
-  @Render('login.html') // Renderiza a página 'login.html'
-  showLogin() {
-    return {};
+  @Render('login')
+  loginPage(@Query('error') error: string) {
+    return { error };
   }
 
   @UseGuards(LocalAuthGuard)
@@ -156,11 +157,13 @@ export class UsersController {
     try {
       // O LocalAuthGuard já fez a validação e autenticação
       // Se chegou aqui, o usuário é válido
+      console.log("login")
       res.redirect('/');
     } catch (error) {
-      res.redirect('/users/login');
+      console.error('Login error:', error);
+      const errorMessage = 'Usuário ou senha incorretos. Tente novamente.';
+      return res.redirect(`/users/login?error=${encodeURIComponent(errorMessage)}`);
     }
-
   }
 
   @Get('/protected')
@@ -207,7 +210,7 @@ export class UsersController {
     const userId = req.user.id;
     const user = await this.usersService.findById(userId);
   
-    if(!user){res.redirect('/');}
+    if(!user){res.redirect('/users/delete-account');}
   
     // Verifique se o email e a senha estão corretos
     const passwordsMatch = await this.usersService.comparePasswords(formData.senha, user.senhaUsuario);

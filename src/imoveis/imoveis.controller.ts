@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile, Res, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile, Res, Request, ConsoleLogger, ParseIntPipe  } from '@nestjs/common';
 import { ImovelService } from './imoveis.service';
 import { Imovel } from './imovel.entity';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
@@ -8,6 +8,14 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { UsersService } from 'src/users/users.service';
 import * as fs from 'fs';
+import { useBeforeUnload } from 'react-router-dom';
+export interface ExtendedUser extends User {
+  userImoveis: Imovel[];
+}
+import { NotFoundException } from '@nestjs/common';
+import { AdminGuard } from 'src/auth/admin.guard';
+
+
 
 @Controller('imoveis')
 export class ImovelController {
@@ -156,6 +164,44 @@ export class ImovelController {
     return { userIsLoggedIn, user };
   }
 
+  @UseGuards(AuthenticatedGuard)
+  @Get('/meus-imoveis')
+  @Render('meus-imoveis.html')
+  async showMeusImoveisPage(@Request() req, @Res() res): Promise<{ userIsLoggedIn: boolean, user: User, userImoveis: Imovel[] }> {
+    const userIsLoggedIn = req.isAuthenticated(); 
+    const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+    //if(!user){res.redirect('/');}
+
+    let userImoveis: Imovel[] = [];
+    if (userIsLoggedIn) {
+      userImoveis = await this.imovelService.findImoveisByUserId(user.id);
+    }
+    console.log(user.id);
+
+    return { userIsLoggedIn, user, userImoveis };
+  }
+
+  
+  @UseGuards(AuthenticatedGuard)
+  @Get('/delete-imovel/:id')
+  @Render('delete-imovel') // Renderiza a página de confirmação de exclusão
+  async showDeleteImovelPage(@Param('id') id: string, @Req() req, @Res() res) {
+  }
+  
+  @UseGuards(AuthenticatedGuard)
+  @Post('delete-imovel/:id')
+  async deleteImovel(@Param('id', ParseIntPipe) id: number, @Res() res) {
+    const imovel = await this.imovelService.findOne(id);
+    if (!imovel) {
+      throw new NotFoundException('Imóvel não encontrado');
+    }
+
+    await this.imovelService.delete(id);
+    return res.redirect('/imoveis/meus-imoveis');
+    // return { message: 'Imóvel excluído com sucesso' };
+  }
+
+
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<Imovel> {
     return this.imovelService.findOne(id);
@@ -167,6 +213,7 @@ export class ImovelController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthenticatedGuard, AdminGuard)
   async delete(@Param('id') id: number): Promise<void> {
     return this.imovelService.delete(id);
   }

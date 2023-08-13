@@ -9,7 +9,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(email)
 
     if (!user)
-      throw new NotAcceptableException('User not found')
+      throw new NotAcceptableException('Usuário não encontrado')
 
     const passwordIsValid = await this.usersService.comparePasswords(password, user.senhaUsuario)
 

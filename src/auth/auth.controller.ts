@@ -1,23 +1,31 @@
-import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Render, Request, UseGuards, Query } from '@nestjs/common';
 import { LocalAuthGuard } from './local.auth.guard';
 import { AuthService } from './auth.service';
+
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
+  @Get('login')
+  @Render('login') // Renderiza a página de login
+  showLoginPage(@Query('error') error: string) { // Captura o parâmetro 'error' da URL
+    return { error }; // Passa a variável 'error' para a renderização
+  }
+
+  //@UseGuards(LocalAuthGuard)
   @Post('login')
+  @Render('login')
   async login(@Request() req) {
     try {
       const user = await this.authService.validateUser(req.body.email, req.body.senha);
       if (user) {
         return { message: 'Login bem-sucedido', user };
       } else {
-        return { message: 'Credenciais inválidas' };
+        return { error: 'Credenciais inválidas' };
       }
     } catch (error) {
-      return { message: 'Erro durante o login' };
+      return { error: error.message || 'Erro durante o login' };
     }
   }
 }

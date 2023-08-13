@@ -27,6 +27,11 @@ export class ImovelService {
     return this.imovelRepository.findOne({ where: { id }, relations: ['usuario'] });
   }
 
+  async findImoveisByUserId(userId: number): Promise<Imovel[]> {
+    console.log("entrou aqui");
+    return this.imovelRepository.find({ where: { usuario: { id: userId } } });
+  }
+
   async update(id: number, imovel: Imovel): Promise<Imovel> {
     await this.imovelRepository.update(id, imovel);
     return this.imovelRepository.findOne({ where: { id } });

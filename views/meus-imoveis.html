@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AlugueVago - Configurações</title>
+  <title>AlugueVago - Meus Imóveis</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
     <!-- Include Tailwind CSS -->
@@ -191,8 +191,8 @@
                   <span class="text-white"><%= user.nomeUsuario %></span>
                 </a>  
                 <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
-                  <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/imoveis/meus-imoveis">Meus Imoveis</a>
-                  <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
+                    <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/imoveis/meus-imoveis">Meus Imoveis</a>
+                    <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
                   <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
                 </div>
               </li>
@@ -212,23 +212,112 @@
         </div>
       </div>
     </nav>
+   
 
     <div class="container mx-auto mt-8 p-4 max-w-md">
-      <!-- Foto do usuário e nome no topo -->
-      <div class="text-center mb-4">
-        <img class="profile-image-framed w-24 h-24 rounded-full mx-auto" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
-        <h1 class="text-xl font-semibold mt-2"><%= user.nomeUsuario %></h1>
-      </div>
-  
-      <div class="flex flex-col space-y-2 items-start">
-        <a href="/users/edit" class="text-blue-500 link-transition py-1 px-2 rounded-full text-center transition duration-300 hover:bg-gray-100 text-decoration-none">Editar Dados</a>
-        <a href="/users/delete-account" class="text-red-500 link-transition py-1 px-2 rounded-full text-center transition duration-300 hover:bg-gray-100 text-decoration-none">Apagar Conta</a>
+        <!-- Foto do usuário e nome no topo -->
+        <div class="text-center mb-4">
+          <img class="profile-image-framed w-24 h-24 rounded-full mx-auto" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+          <h1 class="text-xl font-semibold mt-2"><%= user.nomeUsuario %></h1>
+        </div>
+
+        <!-- Lista de imóveis ou mensagem de incentivo -->
+        <div class="mt-8">
+            <% if (userImoveis.length > 0) { %>
+                <div class="text-right mt-4 mr-4">
+                    <a href="/imoveis/cadastro-imovel" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-lg font-semibold hover:bg-blue-600">
+                    Adicionar <i class="fas fa-plus ml-1"></i>
+                    </a>
+                </div>
+                <h2 class="text-xl font-semibold mb-4 ml-4">
+                    Seus Imóveis (<%= userImoveis.length %>):
+                </h2>
+                <ul class="space-y-4">
+                    <% userImoveis.forEach(imovel => { %>
+                        <li class="border border-gray-200 rounded-lg p-4 flex">
+                            <div class="w-1/4">
+                            <% if (imovel.fotos && imovel.fotos.length > 0) { %>
+                                <img src="/uploads/fotos-imoveis/<%= imovel.fotos[0].filename %>" alt="Imagem do Imóvel"
+                                class="w-full rounded-lg shadow-md">
+                            <% } else { %>
+                                <div class="w-full h-40 bg-gray-200 rounded-lg shadow-md"></div>
+                            <% } %>
+                            </div>
+                            <div class="w-3/4 pl-4">
+                            <h3 class="text-lg font-semibold mb-2"><%= imovel.descricao %></h3>
+                            <p class="mb-2 text-sm"><strong>Tamanho:</strong> <%= imovel.tamanho %> m²</p>
+                            <p class="mb-2 text-sm"><strong>Valor:</strong> R$ <%= imovel.valor %></p>
+                            <p class="mb-2 text-sm"><strong>Status de Negociação:</strong>
+                                <%= imovel.statusNegociacao ? 'Negociável' : 'Não negociável' %></p>
+                            <p class="mb-2 text-sm"><strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>, <%= imovel.enderecoCidade %></p>
+                            <div class="flex space-x-2">
+                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-imovel-id="<%= imovel.id %>">Deletar</button>
+                              <!-- <a href="/imoveis/delete-imovel/<%= imovel.id %>"
+                                class="btn btn-danger">Deletar</a> -->
+                                <a href="/imoveis/edit-imovel/<%= imovel._id %>"
+                                class="btn btn-primary">Editar</a>
+                            </div>
+                            </div>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } else { %>
+            <h2 class="text-xl font-semibold mb-4 text-center">Comece a fazer seu imóvel parado render!</h2>
+            <p class="text-center"><a href="/imoveis/cadastro-imovel" class="text-blue-500">Clique aqui para cadastrar um
+                imóvel</a></p>
+            <% } %>
+        </div>
+    </div>
+
+  <!-- Modal de Confirmação de Exclusão -->
+  <% userImoveis.forEach(imovel => { %>
+    <div class="modal fade" id="confirmDeleteModal<%= imovel._id %>" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Você tem certeza que deseja excluir este imóvel?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <form method="POST" action="/imoveis/delete-imovel/<%= imovel.id %>">
+              <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
+  <% }); %>
+</div>
 
   <!-- Scripts JavaScript -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+  <script>
+    $(document).ready(function () {
+      $('#confirmDeleteModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget); // Botão que acionou o modal
+        const imovelId = button.data('imovel-id'); // Pega o ID do imóvel a partir do atributo data-imovel-id
+  
+        // Atualiza o botão de confirmação no modal com o ID do imóvel e o link de exclusão
+        $('#confirmDeleteButton').data('imovel-id', imovelId);
+      });
+  
+      $('#confirmDeleteButton').on('click', function () {
+        const imovelId = $(this).data('imovel-id');
+        window.location.href = `/imoveis/delete-imovel/${imovelId}`;
+      });
+    });
+  </script>
+  
+  
 </body>
 </html>

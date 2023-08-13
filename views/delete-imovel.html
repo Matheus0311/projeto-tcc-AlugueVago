@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Exclusão</title>
+</head>
+<body>
+    <h1>Confirmação de Exclusão</h1>
+    <p>Você tem certeza que deseja excluir este imóvel?</p>
+    
+    <!-- Formulário para confirmar a exclusão -->
+    <form method="POST" action="/imoveis/delete-imovel/<%= imovelId %>">
+        <button type="submit">Confirmar Exclusão</button>
+        <a href="/imoveis/meus-imoveis">Cancelar</a>
+    </form>
+</body>
+</html>
