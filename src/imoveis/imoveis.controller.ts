@@ -207,6 +207,47 @@ export class ImovelController {
     return this.imovelService.findOne(id);
   }
 
+  @Get(':id/relevant-fields')
+async findRelevantFields(@Param('id') id: number): Promise<{
+  id: number;
+  enderecoRua: string;
+  enderecoNumero: string;
+  enderecoBairro: string;
+  enderecoCidade: string;
+  valor: number;
+}> {
+  const imovel = await this.imovelService.findOne(id);
+  if (!imovel) {
+    return null;
+  }
+
+  const relevantFields = {
+    id: imovel.id,
+    enderecoRua: imovel.enderecoRua,
+    enderecoNumero: imovel.enderecoNumero,
+    enderecoBairro: imovel.enderecoBairro,
+    enderecoCidade: imovel.enderecoCidade,
+    valor: imovel.valor, 
+  };
+
+  return relevantFields;
+}
+
+
+  @Get('informacoes-imovel/:id')
+
+  @Render('informacoes-imovel') // Substitua pelo nome do seu arquivo de visualização
+  async showInformacoesImovelPage(@Param('id') id: number, @Res() res, @Request() req): Promise<{ imovel: Imovel, user: User, userIsLoggedIn: boolean }> {
+    const userIsLoggedIn = req.isAuthenticated(); 
+    const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+    const imovel = await this.imovelService.findOne(id);
+    if (!imovel) {
+      throw new NotFoundException('Imóvel não encontrado');
+    }
+    
+    return { imovel, user, userIsLoggedIn };
+  }
+
   @Put(':id')
   async update(@Param('id') id: number, @Body() imovel: Imovel): Promise<Imovel> {
     return this.imovelService.update(id, imovel);

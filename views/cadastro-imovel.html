@@ -142,6 +142,15 @@
           <li class="nav-item">
             <a class="nav-link text-white" href="/">Home</a>
           </li>
+          <li class="nav-item dropdown relative">
+            <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-star text-white mr-2"></i> Favoritos  <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
+            </a>
+            
+            <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
+              <div id="favoritesList"></div>
+            </div>
+          </li>
           <% if (userIsLoggedIn && user.imagemPerfil) { %>
            
             <li class="nav-item dropdown relative">
@@ -171,92 +180,177 @@
       </div>
     </div>
   </nav>
-<div class="container mx-auto mt-4">
-  <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl mx-auto">
-    <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Imóveis</h1>
+  <div class="container mx-auto mt-4">
+    <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl mx-auto">
+      <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Imóveis</h1>
+  
+      <form action="/imoveis" method="POST" enctype="multipart/form-data">
+        <!-- Parte 1 - Informações do Imóvel -->
+        <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <!-- Tamanho -->
+            <div class="input-container">
+              <label for="tamanho"><span class="text-red-500">*</span> Tamanho (m²):</label>
+              <input type="number" id="tamanho" name="tamanho" class="rounded-md focus:border-blue-500" required>
+            </div>
+            <!-- Quantidade de Cômodos -->
+            <div class="input-container">
+              <label for="quantidadeComodos"><span class="text-red-500">*</span> Quantidade de Cômodos:</label>
+              <input type="number" id="quantidadeComodos" name="quantidadeComodos" class="rounded-md focus:border-blue-500" required>
+            </div>
+            <!-- Mobiliado -->
+            <div class="input-container">
+              <label for="mobiliado"><span class="text-red-500">*</span> Mobiliado:</label>
+              <select id="mobiliado" name="mobiliado" class="rounded-md focus:border-blue-500" required>
+                <option value="" selected>Escolha a opção</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </div>
+            <!-- Status de Negociação -->
+            <div class="input-container">
+              <label for="statusNegociacao"><span class="text-red-500">*</span> Status de Negociação:</label>
+              <select id="statusNegociacao" name="statusNegociacao" class="rounded-md focus:border-blue-500" required>
+                <option value="" selected>Escolha a opção</option>
+                <option value="true">Disponível</option>
+                <option value="false">Indisponível</option>
+              </select>
+            </div>
+            <!-- Valor -->
+            <div class="input-container">
+              <label for="valor"><span class="text-red-500">*</span> Valor Mensal:</label>
+              <input type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" required>
+            </div>
+            <!-- RG do Proprietário -->
+            <div class="input-container">
+              <label for="rgProprietario"><span class="text-red-500">*</span> RG do Proprietário:</label>
+              <input type="text" id="rgProprietario" name="rgProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+            </div>
+            <!-- CPF do Proprietário -->
+            <div class="input-container">
+              <label for="cpfProprietario"><span class="text-red-500">*</span> CPF do Proprietário:</label>
+              <input type="text" id="cpfProprietario" name="cpfProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+            </div>
+            
+          </div>
+          <div>
+            <!-- Descrição -->
+            <div class="input-container">
+              <label for="descricao"><span class="text-red-500">*</span> Descrição:</label>
+              <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4" required></textarea>
+            </div>
+            <!-- Fotos do Imóvel -->
+            <div class="upload-container">
+              <label for="fotos" class="block text-gray-700 font-semibold mb-2">Fotos (até 6 fotos):</label>
+              <div class="relative">
+                <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="updateImageLabel(this)">
+                <p id="fotosLabel">Clique para selecionar fotos</p>
+              </div>
+            </div>
+            <!-- Documentos do Imóvel -->
+            <div class="upload-container">
+              <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">PDF Document:</label>
+              <div class="relative">
+                <input type="file" id="pdfDocument" name="pdfDocument" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" onchange="updatePDFLabel(this)">
+                <p id="pdfDocumentLabel">Clique para selecionar um PDF</p>
+              </div>
+            </div>
 
-    <form action="/imoveis" method="POST" enctype="multipart/form-data">
-      <!-- Parte 1 - Informações do Imóvel -->
-      <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel</h2>
+            <!-- Número de Inscrição -->
+            <div class="input-container">
+              <label for="numeroInscricao"><span class="text-red-500">*</span> Número de Inscrição do Imóvel:</label>
+              <input type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+            </div>
+            <!-- Tipo de Imóvel -->
+            <div class="input-container">
+              <label for="tipoImovel"><span class="text-red-500">*</span> Tipo de Imóvel:</label>
+              <select id="tipoImovel" name="tipoImovel" class="rounded-md focus:border-blue-500" required>
+                <option value="" selected>Escolha o tipo</option>
+                <option value="salao">Salão Comercial</option>
+                <option value="casa">Casa</option>
+                <option value="apartamento">Apartamento</option>
+                <option value="chacara">Chácara</option>
+                <option value="loft">Loft</option>
+                <option value="studio">Studio</option>
+                <option value="condominio">Casa em Condomínio</option>
+                <option value="quitinete">Quitinete</option>
+                <option value="flat">Flat</option>
+              </select>
+            </div>
+
+          </div>
+          <div>
+            <!-- Grande -->
+            <div class="input-container">
+              <label for="grande"><span class="text-red-500">*</span> Grande:</label>
+              <select id="grande" name="grande" class="rounded-md focus:border-blue-500">
+                <option value="" selected>Escolha a opção</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </div>
+            <!-- Bem Localizado -->
+            <div class="input-container">
+              <label for="bemLocalizado"><span class="text-red-500">*</span> Bem Localizado:</label>
+              <select id="bemLocalizado" name="bemLocalizado" class="rounded-md focus:border-blue-500">
+                <option value="" selected>Escolha a opção</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </div>
+            <!-- Condomínio Fechado -->
+            <div class="input-container">
+              <label for="condominioFechado"><span class="text-red-500">*</span> Condomínio Fechado:</label>
+              <select id="condominioFechado" name="condominioFechado" class="rounded-md focus:border-blue-500">
+                <option value="" selected>Escolha a opção</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </div>
+            <!-- Novo -->
+            <div class="input-container">
+              <label for="novo"><span class="text-red-500">*</span> Novo:</label>
+              <select id="novo" name="novo" class="rounded-md focus:border-blue-500">
+                <option value="" selected>Escolha a opção</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </div>
+            <!-- Estacionamento -->
+            <div class="input-container">
+              <label for="estacionamento"><span class="text-red-500">*</span> Estacionamento:</label>
+              <select id="estacionamento" name="estacionamento" class="rounded-md focus:border-blue-500">
+                <option value="" selected>Escolha a opção</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </div>
+            <!-- Água Gratuita -->
+            <div class="input-container">
+              <label for="aguaGratuita"><span class="text-red-500">*</span> Água Inclusa:</label>
+              <select id="aguaGratuita" name="aguaGratuita" class="rounded-md focus:border-blue-500">
+                <option value="" selected>Escolha a opção</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </div>
+            <!-- IPTU Incluso -->
+            <div class="input-container">
+              <label for="iptuIncluso"><span class="text-red-500">*</span> IPTU Incluso:</label>
+              <select id="iptuIncluso" name="iptuIncluso" class="rounded-md focus:border-blue-500">
+                <option value="" selected>Escolha a opção</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        
+
       
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <!-- Tamanho -->
-          <div class="input-container">
-            <label for="tamanho"><span class="text-red-500">*</span> Tamanho (m²):</label>
-            <input type="number" id="tamanho" name="tamanho" class="rounded-md focus:border-blue-500" required>
-          </div>
-          <!-- Quantidade de Cômodos -->
-          <div class="input-container">
-            <label for="quantidadeComodos"><span class="text-red-500">*</span> Quantidade de Cômodos:</label>
-            <input type="number" id="quantidadeComodos" name="quantidadeComodos" class="rounded-md focus:border-blue-500" required>
-          </div>
-          <!-- Mobiliado -->
-          <div class="input-container">
-            <label for="mobiliado"><span class="text-red-500">*</span> Mobiliado:</label>
-            <select id="mobiliado" name="mobiliado" class="rounded-md focus:border-blue-500" required>
-              <option value="" selected>Escolha a opção</option>
-              <option value="true">Sim</option>
-              <option value="false">Não</option>
-            </select>
-          </div>
-          <!-- Status de Negociação -->
-          <div class="input-container">
-            <label for="statusNegociacao"><span class="text-red-500">*</span> Status de Negociação:</label>
-            <select id="statusNegociacao" name="statusNegociacao" class="rounded-md focus:border-blue-500" required>
-              <option value="" selected>Escolha a opção</option>
-              <option value="true">Disponível</option>
-              <option value="false">Indisponível</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <!-- Valor -->
-          <div class="input-container">
-            <label for="valor"><span class="text-red-500">*</span> Valor Mensal:</label>
-            <input type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" required>
-          </div>
-          <!-- RG do Proprietário -->
-          <div class="input-container">
-            <label for="rgProprietario"><span class="text-red-500">*</span> RG do Proprietário:</label>
-            <input type="text" id="rgProprietario" name="rgProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
-          </div>
-          <!-- CPF do Proprietário -->
-          <div class="input-container">
-            <label for="cpfProprietario"><span class="text-red-500">*</span> CPF do Proprietário:</label>
-            <input type="text" id="cpfProprietario" name="cpfProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
-          </div>
-          <!-- Número de Inscrição -->
-          <div class="input-container">
-            <label for="numeroInscricao"><span class="text-red-500">*</span> Número de Inscrição do Imóvel:</label>
-            <input type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
-          </div>
-        </div>
-        <div>
-          <!-- Descrição -->
-<div class="input-container">
-  <label for="descricao"><span class="text-red-500">*</span> Descrição:</label>
-  <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4" required></textarea>
-</div>
-
-          <!-- Fotos do Imóvel -->
-          <div class="upload-container">
-            <label for="fotos" class="block text-gray-700 font-semibold mb-2">Fotos (até 6 fotos):</label>
-            <div class="relative">
-              <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="updateImageLabel(this)">
-              <p id="fotosLabel">Clique para selecionar fotos</p>
-            </div>
-          </div>
-          <!-- Documentos do Imóvel -->
-          <div class="upload-container">
-            <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">PDF Document:</label>
-            <div class="relative">
-              <input type="file" id="pdfDocument" name="pdfDocument" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" onchange="updatePDFLabel(this)">
-              <p id="pdfDocumentLabel">Clique para selecionar um PDF</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
     <!-- Parte 2 e 3 - Informações de Endereço e Contato -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
@@ -435,6 +529,96 @@
   const randomIndex = Math.floor(Math.random() * examplePhrases.length);
   const randomPhrase = examplePhrases[randomIndex];
   descricaoInput.placeholder = randomPhrase;
+
+</script>
+
+<script>
+  // Chamando a função quando a página carrega
+  window.addEventListener('load', () => {
+    populateFavoritesList();
+  });
+</script>
+<script>
+    
+  const favoritesList = document.getElementById('favoritesList');
+
+  async function getImovelData(imovelId) {
+    try {
+      const response = await fetch(`/imoveis/${imovelId}/relevant-fields`);
+      if (response.ok) {
+        const data = await response.json();
+        const relevantData = {
+          id: data.id,
+          enderecoRua: data.enderecoRua,
+          enderecoNumero: data.enderecoNumero,
+          enderecoBairro: data.enderecoBairro,
+          enderecoCidade: data.enderecoCidade,
+          valor: data.valor
+        };
+        return relevantData;
+      } else {
+        console.error('Failed to fetch property data');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching property data:', error);
+      return null;
+    }
+  }
+  
+  async function populateFavoritesList() {
+    favoritesList.innerHTML = '';
+  
+    let hasFavoritedProperties = false;
+    let favoritesCount = 0;
+  
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.startsWith('liked_') && localStorage.getItem(key) === 'true') {
+        const imovelId = key.substring(6);
+        const imovel = await getImovelData(imovelId);
+        if (imovel) {
+          hasFavoritedProperties = true;
+          favoritesCount++;
+  
+          const listItem = document.createElement('div');
+          listItem.className = 'dropdown-item';
+          const link = document.createElement('a');
+          link.href = `/imoveis/informacoes-imovel/${imovelId}`;
+  
+          let propertyImage = '';
+          if (imovel.fotos && imovel.fotos.length > 0) {
+            propertyImage = `<img src="${imovel.fotos[0]}" alt="Property Image" class="property-image">`;
+          } else {
+            propertyImage = '<i class="fas fa-image property-placeholder"></i>';
+          }
+  
+          link.innerHTML = `
+            ${propertyImage}
+            <p><strong>Endereço:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoBairro}, ${imovel.enderecoCidade}</p>
+            <p><strong>Valor:</strong> R$ ${imovel.valor}</p>
+            <hr>
+          `;
+          listItem.appendChild(link);
+          favoritesList.appendChild(listItem);
+        }
+      }
+    }
+  
+    const favoritesCountSpan = document.getElementById('favoritesCount');
+    favoritesCountSpan.textContent = favoritesCount;
+  
+    if (!hasFavoritedProperties) {
+      const noFavoritesMessage = document.createElement('div');
+      noFavoritesMessage.className = 'dropdown-item';
+      noFavoritesMessage.innerText = 'Nenhum imóvel curtido ainda ( ´•︵•` )';
+      favoritesList.appendChild(noFavoritesMessage);
+    }
+  }
+  
+  const favoritesDropdown = document.getElementById('favoritesDropdown');
+  favoritesDropdown.addEventListener('click', populateFavoritesList);
+  
 
 </script>
 

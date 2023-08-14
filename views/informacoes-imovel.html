@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informações do Imóvel</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+
+ 
+
+  <style>
+    /*Abrir o dorpmeun certo*/
+
+    .dropdown-menu.right-0 {
+      right: 0;
+      left: auto;
+    }
+
+    .dropdown-menu.left-0 {
+      left: 0;
+      right: auto;
+    }
+
+    @media (max-width: 768px) {
+      .dropdown-menu.left-0, .dropdown-menu.right-0 {
+        right: auto;
+        left: 0;
+      }
+    }
+
+    .profile-image {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .profile-image img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+
+    /* Estilos para a imagem de perfil na navbar */
+    .profile-image-navbar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+      margin-top: 5px;
+    }
+
+    /* Estilos para a animação do link na navbar */
+    .nav-link {
+      position: relative;
+      display: inline-block;
+      color: #ffffff;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+    }
+
+    .nav-link::before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background-color: white;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover::before {
+      width: 100%;
+    }
+
+    .navbar {
+      background-color: #4a90e2;
+    }
+
+    .carousel-inner {
+      background-color: #f0f2f5;
+      height: 400px;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+      color: #000;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      background-color: #ccc;
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 18px;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+      background-color: #999;
+    }
+
+    .contact-info {
+      width: 100%;
+      position: relative;
+      margin-top: 16px;
+      background-color: #f0f2f5;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .photo-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Estilos adicionais para tornar o conteúdo responsivo */
+    .content-container {
+      padding: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .content-container {
+        padding: 10px;
+      }
+    }
+    .info-icon {
+        display: inline-block;
+        width: 28px; /* Ajuste este valor conforme necessário */
+        text-align: center;
+    }
+
+    @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    
+      .pulse {
+        animation: pulse 1s ;
+      }
+      .red-heart {
+        color: red ;
+      }
+
+
+  </style>
+</head>
+<body class="bg-gray-100">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500 navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/">Home</a>
+          </li>
+          <li class="nav-item dropdown relative">
+            <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-star text-white mr-2"></i> Favoritos <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
+            </a>
+            
+            <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg" aria-labelledby="favoritesDropdown">
+                <div id="favoritesList"></div>
+            </div>
+          </li>
+
+          <% if (userIsLoggedIn && user.imagemPerfil) { %>
+          <li class="nav-item dropdown relative">
+            <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <span class="text-white"><%= user.nomeUsuario %></span>
+            </a>
+            <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
+              <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/imoveis/meus-imoveis">Meus Imoveis</a>
+              <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
+              <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
+            </div>
+          </li>
+          <img class="profile-image-navbar " src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+          <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link profile-link text-white" href="/users/login">
+              <i class="fas fa-user"></i>
+              Fazer Login
+            </a>
+            <li><a class="nav-link text-white" href="/users/cadastro">Cadastro</a></li>
+          </li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo da página -->
+ <!-- Conteúdo da página -->
+<div class="container mx-auto mt-8">
+    <div class="content-container">
+      <div class="flex flex-wrap">
+        <!-- Carousel de Imagens -->
+        <div class="w-full md:w-1/2 mb-4 pr-4 relative">
+          <div id="propertyCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <% if (imovel.fotos && imovel.fotos.length > 0) { %>
+                <% for (let i = 0; i < imovel.fotos.length; i++) { %>
+                  <li data-target="#propertyCarousel" data-slide-to="<%= i %>" <% if (i === 0) { %>class="active"<% } %>></li>
+                <% } %>
+              <% } %>
+            </ol>
+            <div class="carousel-inner">
+              <% if (imovel.fotos && imovel.fotos.length > 0) { %>
+                <% for (let i = 0; i < imovel.fotos.length; i++) { %>
+                  <div class="carousel-item <% if (i === 0) { %>active<% } %>">
+                    <img src="/imoveis/fotos/<%= imovel.fotos[i].filename %>" class="d-block w-100" alt="Imagem do Imóvel">
+                    <div class="carousel-caption d-none d-md-block">
+                      <p class="photo-title"><%= imovel.fotos[i].originalname %></p>
+                    </div>
+                  </div>
+                <% } %>
+              <% } else { %>
+                <div class="carousel-item active">
+                  <div class="h-64 flex items-center justify-center bg-gray-300">
+                    <i class="fas fa-image text-gray-500 text-4xl"></i>
+                  </div>
+                  <div class="carousel-caption d-none d-md-block">
+                    <p class="photo-title">Nenhuma foto disponível</p>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+            <a class="carousel-control-prev" href="#propertyCarousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Anterior</span>
+            </a>
+            <a class="carousel-control-next" href="#propertyCarousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Próximo</span>
+            </a>
+          </div>
+          <div class="text-center mt-3">
+            <p class="text-3xl font-bold text-blue-500">
+              <span class="text-5xl">R$<%= imovel.valor %></span> <span class="text-sm text-gray-500">/mês</span>
+            </p>
+          </div>
+          <div class="contact-info border rounded-lg p-4 mt-3 bg-white shadow-md">
+            <h2 class="section-title mb-2">Informações de Contato</h2>
+            <div class="flex items-center mb-2">
+                <div class="info-icon">
+                    <i class="fas fa-envelope text-blue-500"></i>
+                </div>
+                <p class="text-lg"><strong>E-mail:</strong> <%= imovel.emailContato %></p>
+            </div>
+            <div class="flex items-center mb-2">
+                <div class="info-icon">
+                    <i class="fas fa-phone-alt text-blue-500"></i>
+                </div>
+                <p class="text-lg"><strong>Telefone:</strong> <%= imovel.telefoneContato %></p>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <button id="openEmailForm" class="btn btn-primary mr-2">
+                    <i class="fas fa-envelope"></i> Enviar E-mail
+                </button>
+                <a href="tel:<%= imovel.telefoneContato %>" class="btn btn-info mr-2">
+                    <i class="fas fa-phone"></i> Fazer Ligação
+                </a>
+                <a href="https://wa.me/<%= imovel.telefoneContato %>?text=Olá,%20gostaria%20de%20mais%20informações%20sobre%20o%20imóvel%20com%20Cód.%20imóvel:%20<%= imovel.id %>" target="_blank" class="btn btn-success">
+                    <i class="fab fa-whatsapp"></i> Enviar WhatsApp
+                </a>
+            </div>
+        </div>
+        
+        
+          
+        
+          <div id="emailForm" class="hidden fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
+            <div class="bg-white p-6 rounded-lg shadow-md w-96">
+              <h2 class="text-xl font-semibold mb-4">Enviar E-mail</h2>
+              <form id="messageForm" class="flex flex-col space-y-4">
+                <label for="to" class="text-sm font-medium">Seu E-mail</label>
+                <input type="email" id="to" name="to" class="border rounded-lg px-3 py-2" required>
+          
+                <label for="name" class="text-sm font-medium">Seu Nome</label>
+                <input type="text" id="name" name="name" class="border rounded-lg px-3 py-2" required>
+          
+                <label for="message" class="text-sm font-medium">Mensagem</label>
+                <textarea id="message" name="message" rows="4" class="border rounded-lg px-3 py-2" required>Olá, estou interessado no imóvel com Cód. imóvel: <%= imovel.id %>. Gostaria de obter mais informações.
+                </textarea>
+          
+                <div class="flex justify-between">
+                  <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Enviar</button>
+                  <button id="closeEmailForm" type="button" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">Cancelar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+        </div>
+  
+        <!-- Informações do Imóvel e Descrição -->
+        <div class="w-full md:w-1/2 mb-3 pr-3">
+            <div class="border rounded-lg p-4 bg-white shadow-md">
+                <h2 class="section-title mb-2 flex items-center justify-between">
+                    <span class="bg-yellow-300 px-2 py-1 rounded text-white font-bold"><%= 'Cód. ' + imovel.id %></span>
+                    <button id="likeButton" class="p-1 rounded bg-white hover:bg-red-500 text-gray-600 focus:outline-none">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </h2>
+                <div class="flex items-center mb-2">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt text-blue-500"></i>
+                    </div>
+                    <p class="text-lg">
+                        <strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>
+                    </p>
+                </div>
+                <div class="flex items-center mb-2">
+                    <div class="info-icon">
+                        <i class="fas fa-city text-blue-500"></i>
+                    </div>
+                    <p class="text-lg">
+                        <strong>Bairro:</strong> <%= imovel.enderecoBairro %>
+                    </p>
+                </div>
+                <div class="flex items-center mb-2">
+                    <div class="info-icon">
+                        <i class="fas fa-building text-blue-500"></i>
+                    </div>
+                    <p class="text-lg">
+                        <strong>Cidade:</strong> <%= imovel.enderecoCidade %>
+                    </p>
+                </div>
+                <div class="flex items-center mb-2">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt text-blue-500"></i>
+                    </div>
+                    <p class="text-lg">
+                        <strong>CEP:</strong> <%= imovel.enderecoCEP %>
+                    </p>
+                </div>
+                <div class="flex items-center mb-2">
+                    <div class="info-icon">
+                        <i class="fas fa-bed text-blue-500"></i>
+                    </div>
+                    <p class="text-lg">
+                        <strong>Quartos:</strong> <%= imovel.quantidadeComodos %>
+                    </p>
+                </div>
+                <div class="flex items-center mb-2">
+                    <div class="info-icon">
+                        <i class="fas fa-expand-arrows-alt text-blue-500"></i>
+                    </div>
+                    <p class="text-lg">
+                        <strong>Tamanho:</strong> <%= imovel.tamanho %> m²
+                    </p>
+                </div>
+                <div class="flex items-center mb-2">
+                    <div class="info-icon">
+                        <% switch (imovel.tipoImovel) {
+                            case 'salao':
+                                %> <i class="fas fa-store text-blue-500"></i> <% break;
+                            case 'casa':
+                                %> <i class="fas fa-home text-blue-500"></i> <% break;
+                            case 'apartamento':
+                                %> <i class="fas fa-building text-blue-500"></i> <% break;
+                            case 'chacara':
+                                %> <i class="fas fa-tree text-blue-500"></i> <% break;
+                            case 'loft':
+                                %> <i class="fas fa-building text-blue-500"></i> <% break;
+                            case 'studio':
+                                %> <i class="fas fa-music text-blue-500"></i> <% break;
+                            case 'condominio':
+                                %> <i class="fas fa-house-user"></i> <% break;
+                            case 'quitinete':
+                                %> <i class="fas fa-bed text-blue-500"></i> <% break;
+                            case 'flat':
+                                %> <i class="fas fa-building text-blue-500"></i> <% break;
+                            default:
+                                %> <i class="fas fa-building text-blue-500"></i> <% break;
+                        } %>
+                    </div>
+                    <p class="text-lg">
+                        <strong>Tipo:</strong> <%= imovel.tipoImovel %>
+                    </p>
+                </div>
+            </div>
+              
+              <div class="border rounded-lg p-4 mt-3 bg-white shadow-md">
+                <h2 class="section-title mb-2">Descrição do Imóvel</h2>
+                <div class="flex flex-wrap">
+                    <% if (imovel.mobiliado) { %>
+                        <div class="flex items-center mb-2 mr-4">
+                            <i class="fas fa-couch text-blue-500 mr-2"></i>
+                            <p class="text-lg font-semibold text-gray-800" style="font-size: 14px;">Mobiliado</p>
+                        </div>
+                    <% } %>
+                    <% if (imovel.aguaGratuita) { %>
+                        <div class="flex items-center mb-2 mr-4">
+                            <i class="fas fa-tint text-blue-500 mr-2"></i>
+                            <p class="text-lg font-semibold text-gray-800" style="font-size: 14px;">Água Inclusa</p>
+                        </div>
+                    <% } %>
+                    <% if (imovel.estacionamento) { %>
+                        <div class="flex items-center mb-2 mr-4">
+                            <i class="fas fa-car text-blue-500 mr-2"></i>
+                            <p class="text-lg font-semibold text-gray-800" style="font-size: 14px;">Estacionamento</p>
+                        </div>
+                    <% } %>
+                    <% if (imovel.bemLocalizado) { %>
+                        <div class="flex items-center mb-2 mr-4">
+                            <i class="fas fa-umbrella-beach text-blue-500 mr-2"></i>
+                            <p class="text-lg font-semibold text-gray-800" style="font-size: 14px;">Bem Localizado</p>
+                        </div>
+                    <% } %>
+                    <% if (imovel.condominioFechado) { %>
+                        <div class="flex items-center mb-2 mr-4">
+                            <i class="fas fa-door-closed text-blue-500 mr-2"></i>
+                            <p class="text-lg font-semibold text-gray-800" style="font-size: 14px;">Condomínio Fechado</p>
+                        </div>
+                    <% } %>
+                    <% if (imovel.iptuIncluso) { %>
+                        <div class="flex items-center mb-2 mr-4">
+                            <i class="fas fa-file-invoice-dollar text-blue-500 mr-2"></i>
+                            <p class="text-lg font-semibold text-gray-800" style="font-size: 14px;">IPTU Incluso</p>
+                        </div>
+                    <% } %>
+                    <% if (imovel.novo) { %>
+                        <div class="flex items-center mb-2 mr-4">
+                            <i class="fas fa-star text-blue-500 mr-2"></i>
+                            <p class="text-lg font-semibold text-gray-800" style="font-size: 14px;">Novo</p>
+                        </div>
+                    <% } %>
+                    <% if (imovel.grande) { %>
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-expand text-blue-500 mr-2"></i>
+                            <p class="text-lg font-semibold text-gray-800" style="font-size: 14px;">Grande</p>
+                        </div>
+                    <% } %>
+                </div>
+                <p class="text-lg mt-2"><%= imovel.descricao %></p>
+            </div>
+            
+
+          
+          <!-- Mapa da Região -->
+          <div class="border rounded-lg p-4 mt-3 bg-white shadow-md">
+            <h2 class="section-title mb-2">Mapa da Região</h2>
+            <div id="mapaResultado" style="width: 100%;"></div>
+            <div id="mapaIndisponivel" class="text-center mt-3">
+              <i class="fas fa-map-marked-alt text-gray-500 text-4xl"></i>
+              <p>Mapa indisponível</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Scripts JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+  <script>
+    $(document).ready(function() {
+        var rua = '<%= imovel.enderecoRua %>';
+        var bairro = '<%= imovel.enderecoBairro %>';
+        var numero = '<%= imovel.enderecoNumero %>';
+        var cep = '<%= imovel.enderecoCEP %>';
+        var cidade = '<%= imovel.enderecoCidade %>';
+        var estado = '<%= imovel.nomeEstado %>';
+    
+        var enderecoCompleto = rua + ', ' + numero + ', ' + bairro + ', ' + cidade + ', ' + estado + ', ' + cep;
+        var enderecoCodificado = encodeURIComponent(enderecoCompleto);
+        var linkMapaAmpliado = 'https://www.google.com/maps/search/?api=1&query=' + enderecoCodificado;
+    
+        var iframeCode = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d0!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s' + enderecoCodificado + '!5e0!3m2!1spt-BR!2sbr!4v1685123429625" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>' +
+            '<p class="mt-2"><i class="fas fa-map-marked-alt mr-2"></i><a href="' + linkMapaAmpliado + '" target="_blank">Ver mapa ampliado</a></p>';
+    
+        $('#mapaResultado').html(iframeCode);
+    
+        // Verificar se o mapa foi carregado corretamente
+        var iframe = $('#mapaResultado iframe')[0];
+        iframe.onload = function() {
+            // Mapa carregado com sucesso, ocultar o elemento de mapa indisponível
+            $('#mapaIndisponivel').hide();
+        };
+    
+        iframe.onerror = function() {
+            // Erro ao carregar o mapa, ajustar o tamanho da div inteira e mostrar o elemento de mapa indisponível
+            $('#mapaResultado').css('height', '100px'); // Ajustar a altura da div
+            $('#mapaIndisponivel').show();
+        };
+    });
+</script>
+
+<script>
+    const openEmailFormButton = document.getElementById('openEmailForm');
+    const closeEmailFormButton = document.getElementById('closeEmailForm');
+    const emailForm = document.getElementById('emailForm');
+    const messageForm = document.getElementById('messageForm');
+
+    openEmailFormButton.addEventListener('click', () => {
+        emailForm.classList.remove('hidden');
+    });
+
+    closeEmailFormButton.addEventListener('click', () => {
+        emailForm.classList.add('hidden');
+    });
+
+    messageForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(messageForm);
+        const emailTo = '<%= imovel.emailContato %>'; // Use o e-mail do imóvel
+        const name = formData.get('name');
+        const message = formData.get('message');
+
+        const mailtoLink = `mailto:${emailTo}?subject=Contato%20via%20site&body=${encodeURIComponent(`Olá ${name},%0D%0A%0D%0A${message}`)}`;
+
+        window.location.href = mailtoLink;
+    });
+</script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const likeButton = document.getElementById('likeButton');
+        const heartIcon = document.querySelector('.fa-heart');
+        const favoritesCountSpan = document.getElementById('favoritesCount'); // Elemento do contador de favoritos
+        const imovelId = '<%= imovel.id %>';
+        const likedKey = 'liked_' + imovelId;
+      
+        // Verifica se o imóvel já foi curtido anteriormente
+        if (localStorage.getItem(likedKey) === 'true') {
+          likeButton.classList.add('pulse');
+          heartIcon.classList.add('red-heart');
+        }
+      
+        // Adiciona o evento de clique ao botão de curtir
+        likeButton.addEventListener('click', () => {
+          if (likeButton.classList.contains('pulse')) {
+            likeButton.classList.remove('pulse');
+            heartIcon.classList.remove('red-heart');
+            localStorage.setItem(likedKey, 'false');
+          } else {
+            likeButton.classList.add('pulse');
+            heartIcon.classList.add('red-heart');
+            localStorage.setItem(likedKey, 'true');
+          }
+      
+          // Atualiza o contador de favoritos
+          updateFavoritesCount();
+        });
+      
+        // Função para atualizar o contador de favoritos
+        function updateFavoritesCount() {
+          const likedImoveis = Object.keys(localStorage).filter(key => key.startsWith('liked_') && localStorage.getItem(key) === 'true');
+          favoritesCountSpan.textContent = likedImoveis.length.toString();
+        }
+      
+        // Chama a função para atualizar o contador de favoritos ao carregar a página
+        updateFavoritesCount();
+      });
+  </script>
+
+  
+  <script>
+    // Chamando a função quando a página carrega
+    window.addEventListener('load', () => {
+      populateFavoritesList();
+      
+      
+    });
+  </script>
+  <script>
+      
+    const favoritesList = document.getElementById('favoritesList');
+
+    async function getImovelData(imovelId) {
+        try {
+          const response = await fetch(`/imoveis/${imovelId}/relevant-fields`);
+          if (response.ok) {
+            const data = await response.json();
+            const relevantData = {
+              id: data.id,
+              enderecoRua: data.enderecoRua,
+              enderecoNumero: data.enderecoNumero,
+              enderecoBairro: data.enderecoBairro,
+              enderecoCidade: data.enderecoCidade,
+              valor: data.valor
+            };
+            return relevantData;
+          } else {
+            console.error('Failed to fetch property data');
+            return null;
+          }
+        } catch (error) {
+          console.error('Error fetching property data:', error);
+          return null;
+        }
+      }
+    
+    async function populateFavoritesList() {
+      favoritesList.innerHTML = '';
+    
+      let hasFavoritedProperties = false;
+      let favoritesCount = 0;
+    
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('liked_') && localStorage.getItem(key) === 'true') {
+          const imovelId = key.substring(6);
+          const imovel = await getImovelData(imovelId);
+          if (imovel) {
+            hasFavoritedProperties = true;
+            favoritesCount++;
+            
+            
+    
+            const listItem = document.createElement('div');
+            listItem.className = 'dropdown-item';
+            const link = document.createElement('a');
+            link.href = `/imoveis/informacoes-imovel/${imovelId}`;
+    
+            let propertyImage = '';
+            if (imovel.fotos && imovel.fotos.length > 0) {
+              propertyImage = `<img src="${imovel.fotos[0]}" alt="Property Image" class="property-image">`;
+            } else {
+              propertyImage = '<i class="fas fa-image property-placeholder"></i>';
+            }
+            
+    
+            link.innerHTML = `
+              ${propertyImage}
+              <p><strong>Endereço:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoBairro}, ${imovel.enderecoCidade}</p>
+              <p><strong>Valor:</strong> R$ ${imovel.valor}</p>
+              <hr>
+            `;
+            listItem.appendChild(link);
+            favoritesList.appendChild(listItem);
+          }
+        }
+      }
+    
+      const favoritesCountSpan = document.getElementById('favoritesCount');
+      favoritesCountSpan.textContent = favoritesCount;
+    
+      if (!hasFavoritedProperties) {
+        const noFavoritesMessage = document.createElement('div');
+        noFavoritesMessage.className = 'dropdown-item';
+        noFavoritesMessage.innerText = 'Nenhum imóvel curtido ainda ( ´•︵•` )';
+        favoritesList.appendChild(noFavoritesMessage);
+      }
+    }
+    
+    const favoritesDropdown = document.getElementById('favoritesDropdown');
+    favoritesDropdown.addEventListener('click', populateFavoritesList);
+    
+
+  </script>
+
+  
+  
+
+
+
+  
+</body>
+</html>

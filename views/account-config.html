@@ -183,6 +183,15 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="/">Home</a>
             </li>
+            <li class="nav-item dropdown relative">
+              <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-star text-white mr-2"></i> Favoritos  <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
+              </a>
+              
+              <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
+                <div id="favoritesList"></div>
+              </div>
+            </li>
             <% if (userIsLoggedIn && user.imagemPerfil) { %>
              
               <li class="nav-item dropdown relative">
@@ -225,6 +234,97 @@
         <a href="/users/delete-account" class="text-red-500 link-transition py-1 px-2 rounded-full text-center transition duration-300 hover:bg-gray-100 text-decoration-none">Apagar Conta</a>
       </div>
     </div>
+
+
+    <script>
+      // Chamando a função quando a página carrega
+      window.addEventListener('load', () => {
+        populateFavoritesList();
+      });
+    </script>
+    <script>
+        
+      const favoritesList = document.getElementById('favoritesList');
+  
+      async function getImovelData(imovelId) {
+        try {
+          const response = await fetch(`/imoveis/${imovelId}/relevant-fields`);
+          if (response.ok) {
+            const data = await response.json();
+            const relevantData = {
+              id: data.id,
+              enderecoRua: data.enderecoRua,
+              enderecoNumero: data.enderecoNumero,
+              enderecoBairro: data.enderecoBairro,
+              enderecoCidade: data.enderecoCidade,
+              valor: data.valor
+            };
+            return relevantData;
+          } else {
+            console.error('Failed to fetch property data');
+            return null;
+          }
+        } catch (error) {
+          console.error('Error fetching property data:', error);
+          return null;
+        }
+      }
+      
+      async function populateFavoritesList() {
+        favoritesList.innerHTML = '';
+      
+        let hasFavoritedProperties = false;
+        let favoritesCount = 0;
+      
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key.startsWith('liked_') && localStorage.getItem(key) === 'true') {
+            const imovelId = key.substring(6);
+            const imovel = await getImovelData(imovelId);
+            if (imovel) {
+              hasFavoritedProperties = true;
+              favoritesCount++;
+      
+              const listItem = document.createElement('div');
+              listItem.className = 'dropdown-item';
+              const link = document.createElement('a');
+              link.href = `/imoveis/informacoes-imovel/${imovelId}`;
+      
+              let propertyImage = '';
+              if (imovel.fotos && imovel.fotos.length > 0) {
+                propertyImage = `<img src="${imovel.fotos[0]}" alt="Property Image" class="property-image">`;
+              } else {
+                propertyImage = '<i class="fas fa-image property-placeholder"></i>';
+              }
+      
+              link.innerHTML = `
+                ${propertyImage}
+                <p><strong>Endereço:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoBairro}, ${imovel.enderecoCidade}</p>
+                <p><strong>Valor:</strong> R$ ${imovel.valor}</p>
+                <hr>
+              `;
+              listItem.appendChild(link);
+              favoritesList.appendChild(listItem);
+            }
+          }
+        }
+      
+        const favoritesCountSpan = document.getElementById('favoritesCount');
+        favoritesCountSpan.textContent = favoritesCount;
+      
+        if (!hasFavoritedProperties) {
+          const noFavoritesMessage = document.createElement('div');
+          noFavoritesMessage.className = 'dropdown-item';
+          noFavoritesMessage.innerText = 'Nenhum imóvel curtido ainda ( ´•︵•` )';
+          favoritesList.appendChild(noFavoritesMessage);
+        }
+      }
+      
+      const favoritesDropdown = document.getElementById('favoritesDropdown');
+      favoritesDropdown.addEventListener('click', populateFavoritesList);
+      
+  
+    </script>
 
   <!-- Scripts JavaScript -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

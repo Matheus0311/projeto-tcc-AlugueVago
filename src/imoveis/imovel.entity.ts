@@ -65,6 +65,30 @@ export class Imovel {
   @Column()
   estadoNome: string;
 
+  @Column()
+  tipoImovel: string;
+
+  @Column({ nullable: true })
+  novo: boolean;
+
+  @Column({ nullable: true })
+  grande: boolean;
+
+  @Column({ nullable: true })
+  bemLocalizado: boolean;
+
+  @Column({ nullable: true })
+  condominioFechado: boolean;
+
+  @Column({ nullable: true })
+  estacionamento: boolean;
+
+  @Column({ nullable: true })
+  aguaGratuita: boolean;
+
+  @Column({ nullable: true })
+  iptuIncluso: boolean;
+
   @ManyToOne(() => User, user => user.imoveis)
   usuario: User;
 
