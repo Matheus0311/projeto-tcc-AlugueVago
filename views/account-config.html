@@ -192,7 +192,7 @@
                 <div id="favoritesList"></div>
               </div>
             </li>
-            <% if (userIsLoggedIn && user.imagemPerfil) { %>
+            <% if (userIsLoggedIn) { %>
              
               <li class="nav-item dropdown relative">
                 <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
@@ -205,8 +205,13 @@
                   <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
                 </div>
               </li>
-              <img class="profile-image-navbar " src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
-            
+              <div>
+                <% if (user.imagemPerfil) { %>
+                  <img class="profile-image-navbar" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+                <% } else { %>
+                  <i class="profile-image-navbar fas fa-user-circle fa-2x bg-blue-300 text-gray-500"></i>
+                <% } %>
+              </div>              
               <% } else { %>
               <li class="nav-item">
                 <a class="nav-link profile-link text-white" href="/users/login">
@@ -225,7 +230,13 @@
     <div class="container mx-auto mt-8 p-4 max-w-md">
       <!-- Foto do usuário e nome no topo -->
       <div class="text-center mb-4">
-        <img class="profile-image-framed w-24 h-24 rounded-full mx-auto" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+        <% if (user.imagemPerfil) { %>
+          <img class="profile-image-framed w-24 h-24 rounded-full mx-auto" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+        <% } else { %>
+          <div class="w-24 h-24 rounded-full mx-auto bg-blue-300 flex items-center justify-center">
+            <i class="fas fa-user-circle fa-6x text-gray-500"></i>
+          </div>
+        <% } %>
         <h1 class="text-xl font-semibold mt-2"><%= user.nomeUsuario %></h1>
       </div>
   

@@ -160,6 +160,42 @@
         color: red ;
       }
 
+        .rating-stars {
+          cursor: pointer;
+        }
+        .star {
+          font-size: 1.5rem;
+          margin-right: 5px;
+        }
+        .highlight {
+          color: gold;
+        }
+
+        #averageRating {
+          float: right;
+          font-size: 4rem;
+        }
+        #numAvaliacoes{
+          float: right;
+        }
+
+        /* Estilo para a navbar 
+        .navbar {
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          background-color: #ffffff;
+          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+          transition: top 0.3s ease-in-out;
+        }/*
+
+        /* Estilo para a classe que adiciona o efeito de esconder a navbar 
+        .hide-nav {
+          top: -100px; /* Move a navbar para fora da tela 
+        }*/
+
+
+        
 
   </style>
 </head>
@@ -187,7 +223,7 @@
             </div>
           </li>
 
-          <% if (userIsLoggedIn && user.imagemPerfil) { %>
+          <% if (userIsLoggedIn) { %>
           <li class="nav-item dropdown relative">
             <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
@@ -199,8 +235,13 @@
               <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
             </div>
           </li>
-          <img class="profile-image-navbar " src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
-          <% } else { %>
+          <div>
+            <% if (user.imagemPerfil) { %>
+              <img class="profile-image-navbar" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+            <% } else { %>
+              <i class="profile-image-navbar fas fa-user-circle fa-2x bg-blue-300 text-gray-500"></i>
+            <% } %>
+          </div>            <% } else { %>
           <li class="nav-item">
             <a class="nav-link profile-link text-white" href="/users/login">
               <i class="fas fa-user"></i>
@@ -214,7 +255,6 @@
     </div>
   </nav>
 
-  <!-- Conteúdo da página -->
  <!-- Conteúdo da página -->
 <div class="container mx-auto mt-8">
     <div class="content-container">
@@ -259,11 +299,55 @@
               <span class="sr-only">Próximo</span>
             </a>
           </div>
+
           <div class="text-center mt-3">
             <p class="text-3xl font-bold text-blue-500">
               <span class="text-5xl">R$<%= imovel.valor %></span> <span class="text-sm text-gray-500">/mês</span>
             </p>
           </div>
+
+
+<!-- Seção de Avaliações -->
+<div class="border rounded-lg p-4 mt-3 bg-white shadow-md" data-imovel-id="<%= imovel.id %>">
+  <div class="flex justify-between items-center">
+    <h2 class="section-title mb-2">Avaliações</h2>
+    <div class="flex items-center">
+      <span id="numAvaliacoes" class="text-gray-600 text-sm"></span>
+      <span id="averageRating" class="text-4xl text-blue-500 font-semibold ml-2"></span>
+    </div>
+  </div>
+  
+  <!-- Verifica se o usuário está logado -->
+  <% if (userIsLoggedIn) { %>
+    <!-- Formulário para inserir avaliações -->
+    <form id="reviewForm" class="mb-4" data-imovel-id="<%= imovel.id %>" data-user-id="<%= user ? user.id : null %>">
+      <label class="text-sm font-medium">Avaliação:</label>
+      <div class="flex items-center mt-2">
+        <div class="rating-stars">
+          <span class="star" data-rating="1">&#9733;</span>
+          <span class="star" data-rating="2">&#9733;</span>
+          <span class="star" data-rating="3">&#9733;</span>
+          <span class="star" data-rating="4">&#9733;</span>
+          <span class="star" data-rating="5">&#9733;</span>
+        </div>
+      </div>
+      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mt-2">Enviar Avaliação</button>
+    </form>
+  <% } else { %>
+    <p>Faça login para avaliar.</p>
+  <% } %>
+  
+  <!-- Lista de avaliações existentes -->
+  <!-- <div id="reviewsList"></div> -->
+</div>
+
+
+
+
+
+
+
+
           <div class="contact-info border rounded-lg p-4 mt-3 bg-white shadow-md">
             <h2 class="section-title mb-2">Informações de Contato</h2>
             <div class="flex items-center mb-2">
@@ -677,14 +761,166 @@
     const favoritesDropdown = document.getElementById('favoritesDropdown');
     favoritesDropdown.addEventListener('click', populateFavoritesList);
     
-
   </script>
-
   
   
-
-
-
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      const reviewForm = document.getElementById('reviewForm');
+      const reviewsList = document.getElementById('reviewsList');
+      const averageRatingElement = document.getElementById('averageRating');
+      const numAvaliacoesElement = document.getElementById('numAvaliacoes');
+      const stars = document.querySelectorAll('.star');
+      //const imovelId = reviewForm.getAttribute('data-imovel-id');
+      const imovelId = "<%= imovel.id %>"
   
+      function clearStars() {
+        stars.forEach(star => {
+          star.classList.remove('highlight');
+        });
+      }
+  
+      function highlightStars(rating) {
+        clearStars();
+        for (let i = 0; i < rating; i++) {
+          stars[i].classList.add('highlight');
+        }
+      }
+  
+      stars.forEach(star => {
+        star.addEventListener('click', function () {
+          const rating = parseInt(star.getAttribute('data-rating'), 10);
+          highlightStars(rating);
+        });
+      });
+  
+      function addReview(rating) {
+        if (typeof rating !== 'undefined') {
+          const reviewItem = document.createElement('div');
+        //  reviewItem.className = 'mb-4';
+        //  reviewItem.innerHTML = `
+        //    <div class="flex items-center mb-2">
+        //      <strong class="text-gray-800">${rating} estrela(s)</strong>
+        //    </div>
+        //    <hr>
+        //  `;
+        //  reviewsList.appendChild(reviewItem);
+        //} else {
+        //  console.error('Avaliação inválida:', rating);
+        }
+      }
+  
+      async function updateAverageAndUserRating() {
+        // Fetch average rating
+        const averageResponse = await fetch(`/imoveis/<%= imovel.id %>/media-notas`, {
+          method: 'GET',
+        });
+  
+        if (averageResponse.ok) {
+          const averageData = await averageResponse.json();
+          updateAverageRating(averageData.mediaNotas, averageData.numAvaliacoes);
+          console.log(averageData);
+        }
+  
+        const userId = reviewForm.getAttribute('data-user-id');
+
+        // Fetch user's rating if user is logged in
+        if (userId) {
+          const userRatingResponse = await fetch(`/avaliacoes/user-rating?imovelId=<%= imovel.id %>&userId=${userId}`, {
+            method: 'GET',
+          });
+  
+          if (userRatingResponse.ok) {
+            try {
+              const userRatingText = await userRatingResponse.text();
+              if (userRatingText) {
+                const userRatingData = JSON.parse(userRatingText);
+                const userRating = userRatingData ? parseFloat(userRatingData.nota) : 0;
+                highlightStars(userRating);
+              } else {
+                console.error('Resposta vazia ao obter avaliação do usuário');
+              }
+            } catch (error) {
+              console.error('Erro ao analisar JSON da avaliação do usuário:', error);
+            }
+          } else {
+            console.error('Erro na resposta do servidor:', userRatingResponse.status);
+          }
+        }
+      }
+  
+      async function updateAverageRating(averageRating, numAvaliacoes) {
+        const formattedAverageRating = parseFloat(averageRating).toFixed(1);
+  
+        if (!isNaN(formattedAverageRating)) {
+          averageRatingElement.textContent = formattedAverageRating;
+          averageRatingElement.style.display = 'inline';
+  
+          numAvaliacoesElement.textContent = `(${numAvaliacoes} avaliações)`;
+          numAvaliacoesElement.style.display = 'inline';
+        } else {
+          averageRatingElement.textContent = '';
+          averageRatingElement.style.display = 'none';
+  
+          numAvaliacoesElement.style.display = 'none';
+        }
+      }
+  
+      if (reviewForm) {
+        reviewForm.addEventListener('submit', async function (event) {
+          event.preventDefault();
+          const rating = document.querySelectorAll('.star.highlight').length;
+          const userId = reviewForm.getAttribute('data-user-id');
+  
+          clearStars();
+  
+          try {
+            const response = await fetch('/avaliacoes', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                avaliacao: { nota: rating },
+                imovelId: imovelId,
+                userId: userId,
+              }),
+            });
+  
+            if (response.ok) {
+              try {
+                const savedAvaliacao = await response.json();
+                console.log('Saved Avaliação:', savedAvaliacao);
+                addReview(savedAvaliacao.nota);
+                console.log("savedAvaliação2 = ", savedAvaliacao.nota);
+                updateAverageAndUserRating(); // Update average and user's rating
+              } catch (error) {
+                console.error('Erro ao analisar JSON da resposta do servidor:', error);
+              }
+            } else {
+              console.error('Erro ao enviar a avaliação');
+            }
+          } catch (error) {
+            console.error('Erro ao enviar a avaliação:', error);
+          }
+        });
+      }
+  
+      // Initialize the page when it loads
+      updateAverageAndUserRating();
+    });
+  </script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
 </body>
 </html>

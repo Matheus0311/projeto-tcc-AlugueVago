@@ -12,14 +12,20 @@ import { useBeforeUnload } from 'react-router-dom';
 export interface ExtendedUser extends User {
   userImoveis: Imovel[];
 }
+export interface AverageRating {
+  imovelId: number;
+  mediaNotas: number;
+  numAvaliacoes: number;
+}
 import { NotFoundException } from '@nestjs/common';
 import { AdminGuard } from 'src/auth/admin.guard';
+import { AvaliacaoService } from 'src/avaliacoes/avaliacoes.service';
 
 
 
 @Controller('imoveis')
 export class ImovelController {
-  constructor(private readonly imovelService: ImovelService, private readonly usersService: UsersService) {}
+  constructor(private readonly imovelService: ImovelService, private readonly usersService: UsersService, private readonly avaliacaoService: AvaliacaoService) {}
 
   @Post()
   @UseGuards(AuthenticatedGuard)
@@ -170,7 +176,7 @@ export class ImovelController {
   async showMeusImoveisPage(@Request() req, @Res() res): Promise<{ userIsLoggedIn: boolean, user: User, userImoveis: Imovel[] }> {
     const userIsLoggedIn = req.isAuthenticated(); 
     const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
-    //if(!user){res.redirect('/');}
+    if(!user){res.redirect('/');}
 
     let userImoveis: Imovel[] = [];
     if (userIsLoggedIn) {
@@ -198,13 +204,17 @@ export class ImovelController {
 
     await this.imovelService.delete(id);
     return res.redirect('/imoveis/meus-imoveis');
-    // return { message: 'Imóvel excluído com sucesso' };
   }
 
 
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<Imovel> {
     return this.imovelService.findOne(id);
+  }
+
+  @Get(':id/media-notas')
+  async getAverageRating(@Param('id', ParseIntPipe) id: number): Promise<AverageRating> {
+    return this.avaliacaoService.calculateAverageRating(id);
   }
 
   @Get(':id/relevant-fields')
@@ -235,8 +245,7 @@ async findRelevantFields(@Param('id') id: number): Promise<{
 
 
   @Get('informacoes-imovel/:id')
-
-  @Render('informacoes-imovel') // Substitua pelo nome do seu arquivo de visualização
+  @Render('informacoes-imovel')
   async showInformacoesImovelPage(@Param('id') id: number, @Res() res, @Request() req): Promise<{ imovel: Imovel, user: User, userIsLoggedIn: boolean }> {
     const userIsLoggedIn = req.isAuthenticated(); 
     const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
