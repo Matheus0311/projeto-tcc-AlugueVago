@@ -57,6 +57,8 @@ export class UsersService {
   }
 
   async update(id: number, user: User): Promise<User | undefined> {
+    const hashedPassword = await this.hashPassword(user.senhaUsuario);
+    user.senhaUsuario = hashedPassword;
     await this.userRepository.update(id, user);
     return this.findById(id); // Recupera o usuário atualizado após a atualização
   }

@@ -89,9 +89,9 @@ export class Imovel {
   @Column({ nullable: true })
   iptuIncluso: boolean;
 
-  @ManyToOne(() => User, user => user.imoveis)
+  @ManyToOne(() => User, user => user.imoveis, { onDelete: 'CASCADE' })
   usuario: User;
 
-  @OneToMany(() => Avaliacao, avaliacao => avaliacao.imovel)
+  @OneToMany(() => Avaliacao, avaliacao => avaliacao.imovel, { onDelete: 'CASCADE' })
   avaliacoes: Avaliacao[];
 }

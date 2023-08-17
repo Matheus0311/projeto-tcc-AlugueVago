@@ -8,17 +8,18 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('login')
-  @Render('login') // Renderiza a página de login
+  @Render('login.ejs') // Renderiza a página de login
   showLoginPage(@Query('error') error: string) { // Captura o parâmetro 'error' da URL
     return { error }; // Passa a variável 'error' para a renderização
   }
 
   //@UseGuards(LocalAuthGuard)
   @Post('login')
-  @Render('login')
+  @Render('login.ejs')
   async login(@Request() req) {
     try {
       const user = await this.authService.validateUser(req.body.email, req.body.senha);
+      console.log(user);
       if (user) {
         return { message: 'Login bem-sucedido', user };
       } else {

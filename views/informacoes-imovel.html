@@ -462,23 +462,23 @@
                 <div class="flex items-center mb-2">
                     <div class="info-icon">
                         <% switch (imovel.tipoImovel) {
-                            case 'salao':
+                            case 'Salão':
                                 %> <i class="fas fa-store text-blue-500"></i> <% break;
-                            case 'casa':
+                            case 'Casa':
                                 %> <i class="fas fa-home text-blue-500"></i> <% break;
-                            case 'apartamento':
+                            case 'Apartamento':
                                 %> <i class="fas fa-building text-blue-500"></i> <% break;
-                            case 'chacara':
+                            case 'Chácara':
                                 %> <i class="fas fa-tree text-blue-500"></i> <% break;
-                            case 'loft':
+                            case 'Loft':
                                 %> <i class="fas fa-building text-blue-500"></i> <% break;
-                            case 'studio':
+                            case 'Studio':
                                 %> <i class="fas fa-music text-blue-500"></i> <% break;
-                            case 'condominio':
+                            case 'Condomínio':
                                 %> <i class="fas fa-house-user"></i> <% break;
-                            case 'quitinete':
+                            case 'Quitinete':
                                 %> <i class="fas fa-bed text-blue-500"></i> <% break;
-                            case 'flat':
+                            case 'Flat':
                                 %> <i class="fas fa-building text-blue-500"></i> <% break;
                             default:
                                 %> <i class="fas fa-building text-blue-500"></i> <% break;
@@ -548,14 +548,17 @@
 
           
           <!-- Mapa da Região -->
-          <div class="border rounded-lg p-4 mt-3 bg-white shadow-md">
+          <div class="border rounded-lg p-4 mt-3 bg-white shadow-md text-center">
             <h2 class="section-title mb-2">Mapa da Região</h2>
             <div id="mapaResultado" style="width: 100%;"></div>
-            <div id="mapaIndisponivel" class="text-center mt-3">
-              <i class="fas fa-map-marked-alt text-gray-500 text-4xl"></i>
-              <p>Mapa indisponível</p>
+            <div id="mapaIndisponivel" class="mt-3">
+                <i class="fas fa-map-marked-alt text-gray-500 text-4xl"></i>
+                <p class="text-base">Mapa indisponível</p>
+                <p class="text-xs text-gray-400">Dados de endereço incompletos ou incorretos.</p>
             </div>
-          </div>
+        </div>
+        
+
         </div>
       </div>
     </div>
@@ -574,9 +577,9 @@
         var numero = '<%= imovel.enderecoNumero %>';
         var cep = '<%= imovel.enderecoCEP %>';
         var cidade = '<%= imovel.enderecoCidade %>';
-        var estado = '<%= imovel.nomeEstado %>';
+        var estado = '<%= imovel.estadoNome %>';
     
-        var enderecoCompleto = rua + ', ' + numero + ', ' + bairro + ', ' + cidade + ', ' + estado + ', ' + cep;
+        var enderecoCompleto = rua + ', ' + numero + ' - ' + bairro + ', ' + cidade + ' - ' + estado + ', ' + cep;
         var enderecoCodificado = encodeURIComponent(enderecoCompleto);
         var linkMapaAmpliado = 'https://www.google.com/maps/search/?api=1&query=' + enderecoCodificado;
     
@@ -629,81 +632,60 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const likeButton = document.getElementById('likeButton');
-        const heartIcon = document.querySelector('.fa-heart');
-        const favoritesCountSpan = document.getElementById('favoritesCount'); // Elemento do contador de favoritos
-        const imovelId = '<%= imovel.id %>';
-        const likedKey = 'liked_' + imovelId;
-      
-        // Verifica se o imóvel já foi curtido anteriormente
-        if (localStorage.getItem(likedKey) === 'true') {
+      const likeButton = document.getElementById('likeButton');
+      const heartIcon = document.querySelector('.fa-heart');
+      const favoritesCountSpan = document.getElementById('favoritesCount'); // Elemento do contador de favoritos
+      const imovelId = '<%= imovel.id %>';
+      const likedKey = 'liked_' + imovelId;
+    
+      // Verifica se o imóvel já foi curtido anteriormente
+      if (localStorage.getItem(likedKey) === 'true') {
+        likeButton.classList.add('pulse');
+        heartIcon.classList.add('red-heart');
+      }
+    
+      // Adiciona o evento de clique ao botão de curtir
+      likeButton.addEventListener('click', () => {
+        if (likeButton.classList.contains('pulse')) {
+          likeButton.classList.remove('pulse');
+          heartIcon.classList.remove('red-heart');
+          localStorage.setItem(likedKey, 'false');
+        } else {
           likeButton.classList.add('pulse');
           heartIcon.classList.add('red-heart');
+          localStorage.setItem(likedKey, 'true');
         }
-      
-        // Adiciona o evento de clique ao botão de curtir
-        likeButton.addEventListener('click', () => {
-          if (likeButton.classList.contains('pulse')) {
-            likeButton.classList.remove('pulse');
-            heartIcon.classList.remove('red-heart');
-            localStorage.setItem(likedKey, 'false');
-          } else {
-            likeButton.classList.add('pulse');
-            heartIcon.classList.add('red-heart');
-            localStorage.setItem(likedKey, 'true');
-          }
-      
-          // Atualiza o contador de favoritos
-          updateFavoritesCount();
-        });
-      
-        // Função para atualizar o contador de favoritos
-        function updateFavoritesCount() {
-          const likedImoveis = Object.keys(localStorage).filter(key => key.startsWith('liked_') && localStorage.getItem(key) === 'true');
-          favoritesCountSpan.textContent = likedImoveis.length.toString();
-        }
-      
-        // Chama a função para atualizar o contador de favoritos ao carregar a página
-        updateFavoritesCount();
       });
-  </script>
-
-  
-  <script>
-    // Chamando a função quando a página carrega
-    window.addEventListener('load', () => {
-      populateFavoritesList();
-      
-      
+    
+      // Chama a função para atualizar o contador de favoritos ao carregar a página
+      updateFavoritesCount();
     });
-  </script>
-  <script>
-      
+    
     const favoritesList = document.getElementById('favoritesList');
-
+    
     async function getImovelData(imovelId) {
-        try {
-          const response = await fetch(`/imoveis/${imovelId}/relevant-fields`);
-          if (response.ok) {
-            const data = await response.json();
-            const relevantData = {
-              id: data.id,
-              enderecoRua: data.enderecoRua,
-              enderecoNumero: data.enderecoNumero,
-              enderecoBairro: data.enderecoBairro,
-              enderecoCidade: data.enderecoCidade,
-              valor: data.valor
-            };
-            return relevantData;
-          } else {
-            console.error('Failed to fetch property data');
-            return null;
-          }
-        } catch (error) {
-          console.error('Error fetching property data:', error);
+      try {
+        const response = await fetch(`/imoveis/${imovelId}/relevant-fields`);
+        if (response.ok) {
+          const data = await response.json();
+          const relevantData = {
+            id: data.id,
+            enderecoRua: data.enderecoRua,
+            enderecoNumero: data.enderecoNumero,
+            enderecoBairro: data.enderecoBairro,
+            enderecoCidade: data.enderecoCidade,
+            valor: data.valor
+          };
+          return relevantData;
+        } else {
+          console.error('Failed to fetch property data');
           return null;
         }
+      } catch (error) {
+        console.error('Error fetching property data:', error);
+        return null;
       }
+    }
     
     async function populateFavoritesList() {
       favoritesList.innerHTML = '';
@@ -719,8 +701,6 @@
           if (imovel) {
             hasFavoritedProperties = true;
             favoritesCount++;
-            
-            
     
             const listItem = document.createElement('div');
             listItem.className = 'dropdown-item';
@@ -733,7 +713,6 @@
             } else {
               propertyImage = '<i class="fas fa-image property-placeholder"></i>';
             }
-            
     
             link.innerHTML = `
               ${propertyImage}
@@ -748,18 +727,25 @@
       }
     
       const favoritesCountSpan = document.getElementById('favoritesCount');
-      favoritesCountSpan.textContent = favoritesCount;
-    
+      
       if (!hasFavoritedProperties) {
         const noFavoritesMessage = document.createElement('div');
         noFavoritesMessage.className = 'dropdown-item';
         noFavoritesMessage.innerText = 'Nenhum imóvel curtido ainda ( ´•︵•` )';
         favoritesList.appendChild(noFavoritesMessage);
       }
+    
+      // Atualiza o contador de favoritos apenas no final da função
+      favoritesCountSpan.textContent = favoritesCount;
     }
     
     const favoritesDropdown = document.getElementById('favoritesDropdown');
     favoritesDropdown.addEventListener('click', populateFavoritesList);
+    
+    // Chamando a função para atualizar a lista de favoritos e o contador ao carregar a página
+    window.addEventListener('load', () => {
+      populateFavoritesList();
+    });
     
   </script>
   
@@ -850,21 +836,32 @@
       }
   
       async function updateAverageRating(averageRating, numAvaliacoes) {
-        const formattedAverageRating = parseFloat(averageRating).toFixed(1);
-  
-        if (!isNaN(formattedAverageRating)) {
-          averageRatingElement.textContent = formattedAverageRating;
-          averageRatingElement.style.display = 'inline';
-  
-          numAvaliacoesElement.textContent = `(${numAvaliacoes} avaliações)`;
-          numAvaliacoesElement.style.display = 'inline';
-        } else {
+        if (averageRating === 'sem avaliação') {
           averageRatingElement.textContent = '';
           averageRatingElement.style.display = 'none';
-  
-          numAvaliacoesElement.style.display = 'none';
+          numAvaliacoesElement.textContent = 'Nenhuma avaliação ainda';
+          numAvaliacoesElement.style.display = 'inline';
+        } else {
+          const formattedAverageRating = parseFloat(averageRating).toFixed(1);
+      
+          if (!isNaN(formattedAverageRating)) {
+            averageRatingElement.textContent = formattedAverageRating;
+            averageRatingElement.style.display = 'inline';
+      
+            if (numAvaliacoes === 0) {
+              numAvaliacoesElement.textContent = 'Nenhuma avaliação ainda';
+            } else {
+              numAvaliacoesElement.textContent = `(${numAvaliacoes} avaliações)`;
+            }
+            numAvaliacoesElement.style.display = 'inline';
+          } else {
+            averageRatingElement.textContent = '';
+            averageRatingElement.style.display = 'none';
+            numAvaliacoesElement.style.display = 'none';
+          }
         }
       }
+      
   
       if (reviewForm) {
         reviewForm.addEventListener('submit', async function (event) {

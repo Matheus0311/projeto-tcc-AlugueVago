@@ -125,7 +125,7 @@ export class UsersController {
     // Atualiza os campos do usuário com os dados do formulário
     user.nomeUsuario = req.body.nomeUsuario || user.nomeUsuario;
     user.emailUsuario = req.body.emailUsuario || user.emailUsuario;
-    user.senhaUsuario = req.body.senhaUsuario.hashedPassword || user.senhaUsuario;
+    user.senhaUsuario = req.body.senhaUsuario || user.senhaUsuario;
     user.rendaMensalUsuario = req.body.rendaMensalUsuario || user.rendaMensalUsuario;
     user.rgUsuario = req.body.rgUsuario || user.rgUsuario;
     user.cpfUsuario = req.body.cpfUsuario || user.cpfUsuario;
@@ -146,25 +146,34 @@ export class UsersController {
   }
   
   @Get('login')
-  @Render('login')
+  @Render('login.ejs')
   loginPage(@Query('error') error: string) {
     return { error };
   }
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  async login(@Request() req, @Res() res) {
+  @Render('login.ejs')
+  async login(@Request() req, @Res() res, @Query('error') error: string) {
     try {
       // O LocalAuthGuard já fez a validação e autenticação
       // Se chegou aqui, o usuário é válido
-      console.log("login")
+      console.log(req.user)
+      if (req.user === false) {
+        console.log(req.user)
+        // Autenticação falhou, redirecionar para a página de login com mensagem de erro
+        return { error: 'Usuário ou senha incorretos. Tente novamente.' };
+      }
+      
       res.redirect('/');
     } catch (error) {
       console.error('Login error:', error);
-      const errorMessage = 'Usuário ou senha incorretos. Tente novamente.';
-      return res.redirect(`/users/login?error=${encodeURIComponent(errorMessage)}`);
+      return { error: 'Ocorreu um erro durante o login. Tente novamente.' };
     }
   }
+  
+  
+  
 
   @Get('/protected')
   @UseGuards(AuthenticatedGuard, AdminGuard)

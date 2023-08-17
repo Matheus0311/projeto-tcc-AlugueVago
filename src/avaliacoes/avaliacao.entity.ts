@@ -13,11 +13,12 @@ export class Avaliacao {
   @IsNumber({}, { message: 'A nota deve ser um valor numérico.' })
   nota: number;
 
-  @ManyToOne(() => User, user => user.avaliacoes)
+  @ManyToOne(() => User, user => user.avaliacoes, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'usuarioId' })
   usuario: User;
+  
 
-  @ManyToOne(() => Imovel, imovel => imovel.avaliacoes)
+  @ManyToOne(() => Imovel, imovel => imovel.avaliacoes, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'imovelId' })
   imovel: Imovel;
 }

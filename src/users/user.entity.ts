@@ -37,10 +37,11 @@ export class User {
   cpfUsuario: string;
   
 
-  @OneToMany(() => Imovel, imovel => imovel.usuario)
-  imoveis: Imovel[];
+@OneToMany(() => Imovel, imovel => imovel.usuario, { cascade: true })
+imoveis: Imovel[];
 
-  @OneToMany(() => Avaliacao, avaliacao => avaliacao.usuario)
+
+  @OneToMany(() => Avaliacao, avaliacao => avaliacao.usuario, { cascade: true })
   avaliacoes: Avaliacao[];
 
 }
