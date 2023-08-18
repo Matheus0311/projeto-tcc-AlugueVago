@@ -13,12 +13,17 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(emailUsuario: string, senhaUsuario: string): Promise<any> {
     const user = await this.authService.validateUser(emailUsuario, senhaUsuario);
-
+    const errorMessage = 'Usuário ou senha incorretos. Tente novamente.';
+    const redirectUrl = '/users/login';
+    
     if (!user) {
       console.log("user: ", user)
-      const errorMessage = 'Usuário ou senha incorretos. Tente novamente.';
-      const redirectUrl = '/users/login';
       throw new UnauthorizedRedirectException(errorMessage, redirectUrl);
+    }
+
+    if (user.passwordIsNotValid) {
+      console.log(user.passwordIsNotValid)
+      throw new UnauthorizedRedirectException(errorMessage, redirectUrl)
     }
 
     return user;

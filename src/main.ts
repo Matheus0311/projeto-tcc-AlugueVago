@@ -5,11 +5,12 @@ import { NestExpressApplication } from '@nestjs/platform-express'; // Importe Ne
 import { join } from 'path';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import { AuthExceptionFilter } from './auth/auth-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule); // Especifique o tipo de aplicação
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new AuthExceptionFilter());
 
   // Configure o módulo ServeStatic para servir arquivos estáticos
   app.useStaticAssets(join(__dirname, '..', 'public'));

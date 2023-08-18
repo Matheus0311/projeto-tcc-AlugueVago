@@ -5,6 +5,8 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcryptjs';
 import { ConflictException } from '@nestjs/common';
 import * as crypto from 'crypto';
+import { UserValidationException } from './user-validation.exception';
+import { UserValidationExceptionFilter } from './validation-exception.filter';
 
 @Injectable()
 export class UsersService {
@@ -47,6 +49,7 @@ export class UsersService {
       if (errorMessages.length > 0) {
         throw new ConflictException(errorMessages);
       }
+      
     }
 
     // Hash the password and save the user

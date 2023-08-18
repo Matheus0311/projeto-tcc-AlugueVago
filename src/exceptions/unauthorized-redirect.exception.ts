@@ -1,5 +1,3 @@
-// src/exceptions/unauthorized-redirect.exception.ts
-
 import { UnauthorizedException } from '@nestjs/common';
 
 export class UnauthorizedRedirectException extends UnauthorizedException {

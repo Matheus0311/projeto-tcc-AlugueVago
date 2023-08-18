@@ -91,33 +91,45 @@
   <div class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
     <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Usuário</h1>
 
-    <form action="/users" method="POST" enctype="multipart/form-data">
+    <% if (errorMessages && errorMessages.length > 0) { %>
+      <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+        <% for (const errorMessage of errorMessages) { %>
+          <%= errorMessage %><br />
+        <% } %>
+      </div>
+    <% } %>
+    <form action="/users/cadastro" method="POST" enctype="multipart/form-data" id="userForm">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Seção 1 -->
         <div>
           <div class="grid grid-cols-1 gap-4">
             <div class="input-container">
-              <label for="nomeUsuario"><span class="text-red-500">*</span> Nome:</label>
+              <label for="nomeUsuario">Nome:</label>
               <input
                 type="text"
                 id="nomeUsuario"
                 name="nomeUsuario"
                 class="rounded-md focus:border-blue-500"
                 required
+                pattern=".{3,64}"
+                title="Digite um nome com 3 a 64 caracteres"
               />
+              <div class="error-message" id="nomeError"></div>
             </div>
             <div class="input-container">
-              <label for="emailUsuario"><span class="text-red-500">*</span> Email:</label>
+              <label for="emailUsuario">Email:</label>
               <input
                 type="email"
                 id="emailUsuario"
                 name="emailUsuario"
                 class="rounded-md focus:border-blue-500"
                 required
+                title="Digite um email válido"
               />
+              <div class="error-message" id="emailError"></div>
             </div>
             <div class="input-container">
-              <label for="senhaUsuario"><span class="text-red-500">*</span> Senha:</label>
+              <label for="senhaUsuario">Senha:</label>
               <input
                 type="password"
                 id="senhaUsuario"
@@ -126,7 +138,9 @@
                 minlength="6"
                 required
                 oninput="updatePasswordStrength(this.value)"
+                title="Mínimo 6 caracteres, pelo menos 1 letra e 1 número"
               />
+              <div class="error-message" id="senhaError"></div>
               <div class="helper-text">Mínimo 6 caracteres</div>
               <div class="mt-1 relative">
                 <div class="h-2 w-70 rounded-full bg-gray-300">
@@ -135,14 +149,27 @@
                 <div class="absolute text-xs font-semibold" id="password-strength-label">Fraca</div>
               </div>
             </div>
+            <div class="input-container">
+              <label for="confirmaSenha">Confirme a Senha:</label>
+              <input
+                type="password"
+                id="confirmaSenha"
+                name="confirmaSenha"
+                class="rounded-md focus:border-blue-500"
+                minlength="6"
+                required
+                title="Digite a mesma senha novamente"
+              />
+              <div class="error-message" id="confirmaSenhaError"></div>
+            </div>
           </div>
         </div>
-
+    
         <!-- Seção 2 -->
         <div>
           <div class="grid grid-cols-1 gap-4">
             <div class="input-container">
-              <label for="rgUsuario"><span class="text-red-500">*</span> RG:</label>
+              <label for="rgUsuario">RG:</label>
               <input
                 type="text"
                 id="rgUsuario"
@@ -150,10 +177,13 @@
                 placeholder="Digite sem pontuação"
                 class="rounded-md focus:border-blue-500"
                 required
+                pattern="[0-9]{8}"
+                title="Digite um RG válido com 8 dígitos"
               />
+              <div class="error-message" id="rgError"></div>
             </div>
             <div class="input-container">
-              <label for="cpfUsuario"><span class="text-red-500">*</span> CPF:</label>
+              <label for="cpfUsuario">CPF:</label>
               <input
                 type="text"
                 id="cpfUsuario"
@@ -161,17 +191,22 @@
                 placeholder="Digite sem pontuação"
                 class="rounded-md focus:border-blue-500"
                 required
+                pattern="[0-9]{11}"
+                title="Digite um CPF válido com 11 dígitos"
               />
+              <div class="error-message" id="cpfError"></div>
             </div>
             <div class="input-container">
-              <label for="rendaMensalUsuario"><span class="text-red-500">*</span> Renda Mensal:</label>
+              <label for="rendaMensalUsuario">Renda Mensal:</label>
               <input
                 type="number"
                 id="rendaMensalUsuario"
                 name="rendaMensalUsuario"
                 class="rounded-md focus:border-blue-500"
                 required
+                title="Digite a renda mensal"
               />
+              <div class="error-message" id="rendaMensalError"></div>
             </div>
           </div>
           <div class="upload-container">
@@ -190,13 +225,112 @@
           </div>
         </div>
       </div>
-
-      <div class="mt-4">
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Cadastrar</button>
+    
+      <div class="mt-4 flex justify-between">
+        <button
+          type="submit"
+          class="w-1/2 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
+        >
+          Salvar Alterações
+        </button>
+    
+        <button
+          type="button"
+          onclick="window.location.href='/users/account-config'"
+          class="w-1/2 bg-red-500 hover:bg-red-600 text-black py-2 rounded-md transition duration-300 ml-2"
+        >
+          Cancelar Edição
+        </button>
       </div>
     </form>
   </div>
 </div>
+
+
+<script>
+  const form = document.getElementById('userForm');
+  const nomeInput = document.getElementById('nomeUsuario');
+  const emailInput = document.getElementById('emailUsuario');
+  const senhaInput = document.getElementById('senhaUsuario');
+  const confirmaSenhaInput = document.getElementById('confirmaSenha');
+  const rgInput = document.getElementById('rgUsuario');
+  const cpfInput = document.getElementById('cpfUsuario');
+  const rendaInput = document.getElementById('rendaMensalUsuario');
+
+  form.addEventListener('submit', (event) => {
+    let isValid = true;
+
+    if (nomeInput.value.length < 3 || nomeInput.value.length > 64) {
+      isValid = false;
+      displayError(nomeInput, 'Digite um nome com 3 a 64 caracteres');
+    }
+
+    if (!validateEmail(emailInput.value)) {
+      isValid = false;
+      displayError(emailInput, 'Digite um email válido');
+    }
+
+    if (!validateSenha(senhaInput.value)) {
+      isValid = false;
+      displayError(senhaInput, 'Mínimo 6 caracteres, pelo menos 1 letra e 1 número');
+    }
+
+    if (senhaInput.value !== confirmaSenhaInput.value) {
+      isValid = false;
+      displayError(confirmaSenhaInput, 'As senhas não coincidem');
+    }
+
+    if (!/^[0-9]{8}$/.test(rgInput.value)) {
+      isValid = false;
+      displayError(rgInput, 'Digite um RG válido com 8 dígitos');
+    }
+
+    if (!/^[0-9]{11}$/.test(cpfInput.value)) {
+      isValid = false;
+      displayError(cpfInput, 'Digite um CPF válido com 11 dígitos');
+    }
+
+    if (!rendaInput.value) {
+      isValid = false;
+      displayError(rendaInput, 'Digite a renda mensal');
+    }
+
+    if (!isValid) {
+      event.preventDefault();
+    }
+  });
+
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function validateSenha(senha) {
+    const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+    return senhaRegex.test(senha);
+  }
+
+  function displayError(input, message) {
+    const errorDiv = input.nextElementSibling;
+    errorDiv.textContent = message;
+    input.classList.add('border', 'border-red-500');
+  }
+
+  function clearError(input) {
+    const errorDiv = input.nextElementSibling;
+    errorDiv.textContent = '';
+    input.classList.remove('border', 'border-red-500');
+  }
+
+  nomeInput.addEventListener('input', () => clearError(nomeInput));
+  emailInput.addEventListener('input', () => clearError(emailInput));
+  senhaInput.addEventListener('input', () => clearError(senhaInput));
+  confirmaSenhaInput.addEventListener('input', () => clearError(confirmaSenhaInput));
+  rgInput.addEventListener('input', () => clearError(rgInput));
+  cpfInput.addEventListener('input', () => clearError(cpfInput));
+  rendaInput.addEventListener('input', () => clearError(rendaInput));
+</script>
+
 
 <script>
 
@@ -218,7 +352,7 @@
     const colors = ['#FF0000', '#FF4500', '#FFD700', '#32CD32', '#00FF00'];
     const labels = ['Fraca', 'Média', 'Forte', 'Muito Forte'];
 
-    strengthIndicator.style.width = `${strength * 33.33}%`;
+    strengthIndicator.style.width = `${strength * 25}%`;
     strengthIndicator.style.backgroundColor = colors[strength];
     strengthLabel.textContent = labels[strength];
     strengthLabel.style.color = colors[strength];

@@ -26,6 +26,7 @@ import { diskStorage } from 'multer';
 import { LocalAuthGuard } from 'src/auth/local.auth.guard';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { AdminGuard } from 'src/auth/admin.guard';
+import { UserValidationException } from './user-validation.exception';
 
 @Controller('users')
 export class UsersController {
@@ -37,7 +38,14 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Post()
+  @Get('cadastro')
+  @Render('cadastro.ejs')
+  showCadastroPage(@Query('errorMessages') errorMessages: string) {
+    const errorMessagesArray = errorMessages ? JSON.parse(errorMessages) : [];
+    return { errorMessages: errorMessagesArray };
+  }
+
+  @Post('/cadastro')
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
     FileInterceptor('imagemPerfil', {
@@ -58,14 +66,23 @@ export class UsersController {
       user.imagemPerfil = imagePath;
     }
 
+    console.log("Antes do try");
+    
     try {
       const createdUser = await this.usersService.create(user);
-      res.redirect('/users/login');
+
+      // Redirecionar para rota de sucesso ou qualquer outra rota
+      res.redirect('/users');
       return createdUser;
     } catch (error) {
-      const errorMessages = error instanceof Array ? error : [error.message];
-      return res.render('cadastro.html', { errorMessages });
-  }
+      console.log("Caiu no erro do cadastro")
+      const errorMessages = error.response.message;
+      const errorMessagesString = JSON.stringify(errorMessages);
+
+      // Redirecionar para a rota de cadastro com as mensagens de erro
+      res.redirect(`/users/cadastro?errorMessages=${errorMessagesString}`);
+    }
+  
 
   }
 
@@ -75,24 +92,23 @@ export class UsersController {
     return this.usersService.delete(Number(id));
   }
 
-  @Get('cadastro')
-  @Render('cadastro.html') // Renderiza a página 'cadastro.html'
-  showCadastroPage() {
-    return {};
-  }
+
 
 
   @Get('/edit')
-  @Render('edit-user.html')
-  async showEditUserPage(@Request() req, @Res() res): Promise<{ user: User, userIsLoggedIn: boolean }> {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @Render('edit-user.ejs')
+  async showEditUserPage(@Request() req, @Res() res, @Query('errorMessages') errorMessages: string): Promise<{ user: User, userIsLoggedIn: boolean, errorMessages: string }> {
     const userIsLoggedIn = req.isAuthenticated();
     const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+    const errorMessagesArray = errorMessages ? JSON.parse(errorMessages) : [];
     if(!user){res.redirect('/');}
-    return { user: user, userIsLoggedIn };
+    return { user: user, userIsLoggedIn, errorMessages: errorMessagesArray  };
   }
 
 
   @Post('/edit/:id')
+  @UsePipes(new ValidationPipe({ transform: true }))
   @UseInterceptors(
     FileInterceptor('imagemPerfil', {
       storage: diskStorage({

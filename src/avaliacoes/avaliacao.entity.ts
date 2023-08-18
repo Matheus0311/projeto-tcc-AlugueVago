@@ -13,6 +13,8 @@ export class Avaliacao {
   @IsNumber({}, { message: 'A nota deve ser um valor numérico.' })
   nota: number;
 
+
+  //tirar cascade e deixar nullable
   @ManyToOne(() => User, user => user.avaliacoes, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'usuarioId' })
   usuario: User;
