@@ -72,7 +72,7 @@ export class UsersController {
       const createdUser = await this.usersService.create(user);
 
       // Redirecionar para rota de sucesso ou qualquer outra rota
-      res.redirect('/users');
+      res.redirect('/users/login');
       return createdUser;
     } catch (error) {
       console.log("Caiu no erro do cadastro")

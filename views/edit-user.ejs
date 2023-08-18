@@ -205,21 +205,32 @@
           <div>
             <div class="grid grid-cols-1 gap-4">
               <div class="input-container">
-                <label for="nomeUsuario">Nome:</label>
+                <label for="nomeUsuario">
+                  Nome: 
+                  <span class="info-icon" title="Digite um nome com 3 a 64 caracteres">
+                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
                 <input
                   type="text"
                   id="nomeUsuario"
                   name="nomeUsuario"
                   class="rounded-md focus:border-blue-500"
-                  value="<%= user.nomeUsuario %>"
+                  maxlength="64"
                   required
+                  value="<%= user.nomeUsuario %>"
                   pattern=".{3,64}"
                   title="Digite um nome com 3 a 64 caracteres"
                 />
                 <div class="error-message" id="nomeError"></div>
               </div>
               <div class="input-container">
-                <label for="emailUsuario">Email:</label>
+                <label for="emailUsuario">
+                  Email: 
+                  <span class="info-icon" title="Digite um nome email válido com @ e .">
+                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
                 <input
                   type="email"
                   id="emailUsuario"
@@ -227,12 +238,17 @@
                   class="rounded-md focus:border-blue-500"
                   value="<%= user.emailUsuario %>"
                   required
-                  title="Digite um email válido"
+                  title="Digite um email válido com @ e ."
                 />
                 <div class="error-message" id="emailError"></div>
               </div>
               <div class="input-container">
-                <label for="senhaUsuario">Senha:</label>
+                <label for="senhaUsuario">
+                  Senha: <span class="text-red-500">*</span>
+                  <span class="info-icon" title="Mínimo 6 caracteres, pelo menos 1 letra e 1 número">
+                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
                 <input
                   type="password"
                   id="senhaUsuario"
@@ -241,7 +257,6 @@
                   minlength="6"
                   required
                   oninput="updatePasswordStrength(this.value)"
-                  title="Mínimo 6 caracteres, pelo menos 1 letra e 1 número"
                 />
                 <div class="error-message" id="senhaError"></div>
                 <div class="helper-text">Mínimo 6 caracteres</div>
@@ -253,7 +268,12 @@
                 </div>
               </div>
               <div class="input-container">
-                <label for="confirmaSenha">Confirme a Senha:</label>
+                <label for="confirmaSenha">
+                  Confirme a Senha: <span class="text-red-500">*</span>
+                  <span class="info-icon" title="Digite a mesma senha novamente">
+                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
                 <input
                   type="password"
                   id="confirmaSenha"
@@ -261,7 +281,6 @@
                   class="rounded-md focus:border-blue-500"
                   minlength="6"
                   required
-                  title="Digite a mesma senha novamente"
                 />
                 <div class="error-message" id="confirmaSenhaError"></div>
               </div>
@@ -272,37 +291,54 @@
           <div>
             <div class="grid grid-cols-1 gap-4">
               <div class="input-container">
-                <label for="rgUsuario">RG:</label>
+                <label for="rgUsuario">
+                  RG: 
+                  <span class="info-icon" title="Digite um RG válido com 8 a 9 dígitos">
+                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
                 <input
                   type="text"
                   id="rgUsuario"
                   name="rgUsuario"
                   placeholder="Digite sem pontuação"
                   class="rounded-md focus:border-blue-500"
-                  value="<%= user.rgUsuario %>"
+                  maxlength="9"
                   required
-                  pattern="[0-9]{8}"
-                  title="Digite um RG válido com 8 dígitos"
+                  value="<%= user.rgUsuario %>"
+                  pattern="[0-9]{8,9}"
+                  title="Digite um RG válido com 8 a 9 dígitos"
                 />
                 <div class="error-message" id="rgError"></div>
               </div>
               <div class="input-container">
-                <label for="cpfUsuario">CPF:</label>
+                <label for="cpfUsuario">
+                  CPF: 
+                  <span class="info-icon" title="Digite um CPF válido com 11 dígitos">
+                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
                 <input
                   type="text"
                   id="cpfUsuario"
                   name="cpfUsuario"
                   placeholder="Digite sem pontuação"
                   class="rounded-md focus:border-blue-500"
-                  value="<%= user.cpfUsuario %>"
+                  maxlength="11"
                   required
+                  value="<%= user.cpfUsuario %>"
                   pattern="[0-9]{11}"
                   title="Digite um CPF válido com 11 dígitos"
                 />
                 <div class="error-message" id="cpfError"></div>
               </div>
               <div class="input-container">
-                <label for="rendaMensalUsuario">Renda Mensal:</label>
+                <label for="rendaMensalUsuario">
+                  Renda Mensal: 
+                  <span class="info-icon" title="Digite sua renda mensal">
+                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
                 <input
                   type="number"
                   id="rendaMensalUsuario"
@@ -310,7 +346,7 @@
                   class="rounded-md focus:border-blue-500"
                   value="<%= user.rendaMensalUsuario %>"
                   required
-                  title="Digite a renda mensal"
+                  title="Digite sua renda mensal"
                 />
                 <div class="error-message" id="rendaMensalError"></div>
               </div>
@@ -349,103 +385,169 @@
           </button>
         </div>
       </form>
+      
+    </div>
   </div>
-</div>
+  
+  
+  <script>
+    const form = document.getElementById('userForm');
+    const nomeInput = document.getElementById('nomeUsuario');
+    const emailInput = document.getElementById('emailUsuario');
+    const senhaInput = document.getElementById('senhaUsuario');
+    const confirmaSenhaInput = document.getElementById('confirmaSenha');
+    const rgInput = document.getElementById('rgUsuario');
+    const cpfInput = document.getElementById('cpfUsuario');
+    const rendaInput = document.getElementById('rendaMensalUsuario');
+    
+  
+    form.addEventListener('submit', (event) => {
+      let isValid = true;
+  
+      if (nomeInput.value.length < 3 || nomeInput.value.length > nomeInput.maxLength) {
+        isValid = false;
+        displayError(nomeInput, 'Digite um nome com 3 a ' + nomeInput.maxLength + ' caracteres');
+      }
+  
+      if (!validateEmail(emailInput.value)) {
+        isValid = false;
+        displayError(emailInput, 'Digite um email válido');
+      }
+  
+      if (!validateSenha(senhaInput.value)) {
+        isValid = false;
+        displayError(senhaInput, 'Mínimo 6 caracteres, pelo menos 1 letra e 1 número');
+      }
+  
+      if (senhaInput.value !== confirmaSenhaInput.value) {
+        isValid = false;
+        displayError(confirmaSenhaInput, 'As senhas não coincidem');
+      }
+  
+      if (!/^[0-9]{8,9}$/.test(rgInput.value) || rgInput.value.length > rgInput.maxLength) {
+        isValid = false;
+        displayError(rgInput, 'Digite um RG válido com 8 a 9 dígitos');
+      }
+      
+      if (!/^[0-9]{11}$/.test(cpfInput.value) || cpfInput.value.length > cpfInput.maxLength) {
+        isValid = false;
+        displayError(cpfInput, 'Digite um CPF válido com 11 dígitos');
+      }
+  
+      if (!isValidCPF(cpfInput.value)) {
+        isValid = false;
+        displayError(cpfInput, 'Digite um CPF válido');
+      }
+      
+  
+      if (!rendaInput.value) {
+        isValid = false;
+        displayError(rendaInput, 'Digite a renda mensal');
+      }
+  
+      if (!isValid) {
+        event.preventDefault();
+      }
+  
+    });
+  
+    function validateEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+  
+    function validateSenha(senha) {
+      const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+      return senhaRegex.test(senha);
+    }
+  
+    function displayError(input, message) {
+      const errorDiv = input.nextElementSibling;
+      errorDiv.textContent = message;
+      input.classList.add('border', 'border-red-500');
+    }
+  
+    function clearError(input) {
+      const errorDiv = input.nextElementSibling;
+      errorDiv.textContent = '';
+      input.classList.remove('border', 'border-red-500');
+    }
+  
+    
+  
+    nomeInput.addEventListener('input', () => clearError(nomeInput));
+    emailInput.addEventListener('input', () => clearError(emailInput));
+    senhaInput.addEventListener('input', () => clearError(senhaInput));
+    confirmaSenhaInput.addEventListener('input', () => clearError(confirmaSenhaInput));
+    rgInput.addEventListener('input', () => clearError(rgInput));
+    cpfInput.addEventListener('input', () => clearError(cpfInput));
+    rendaInput.addEventListener('input', () => clearError(rendaInput));
+  
+    rgInput.addEventListener('input', (event) => {
+      event.target.value = event.target.value.replace(/\D/g, ''); 
+    });
+  
+    
+    
+    rendaInput.addEventListener('input', (event) => {
+      event.target.value = event.target.value.replace(/\D/g, ''); 
+    });
+  
+  
+    function isValidCPF(cpf) {
+      cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+      if (cpf.length !== 11) {
+        return false;
+      }
+    
+      // Verifica se todos os dígitos são iguais (situação inválida)
+      if (/^(\d)\1+$/.test(cpf)) {
+        return false;
+      }
+    
+      const cpfArray = cpf.split('').map(Number);
+    
+      // Calcula o primeiro dígito verificador
+      let sum = 0;
+      for (let i = 0; i < 9; i++) {
+        sum += cpfArray[i] * (10 - i);
+      }
+      let remainder = (sum * 10) % 11;
+      if (remainder === 10 || remainder === 11) {
+        remainder = 0;
+      }
+      if (remainder !== cpfArray[9]) {
+        return false;
+      }
+    
+      // Calcula o segundo dígito verificador
+      sum = 0;
+      for (let i = 0; i < 10; i++) {
+        sum += cpfArray[i] * (11 - i);
+      }
+      remainder = (sum * 10) % 11;
+      if (remainder === 10 || remainder === 11) {
+        remainder = 0;
+      }
+      if (remainder !== cpfArray[10]) {
+        return false;
+      }
+    
+      return true;
+    }
+    
+    // Exemplos de uso:
+    const cpf1 = '123.456.789-09';
+    console.log(isValidCPF(cpf1)); // Deve retornar true
+    
+    const cpf2 = '111.222.333-44';
+    console.log(isValidCPF(cpf2)); // Deve retornar false
+    
+  
+  
+  </script>
 
 <script>
-  const form = document.getElementById('userForm');
-  const nomeInput = document.getElementById('nomeUsuario');
-  const emailInput = document.getElementById('emailUsuario');
-  const senhaInput = document.getElementById('senhaUsuario');
-  const confirmaSenhaInput = document.getElementById('confirmaSenha');
-  const rgInput = document.getElementById('rgUsuario');
-  const cpfInput = document.getElementById('cpfUsuario');
-  const rendaInput = document.getElementById('rendaMensalUsuario');
-
-  form.addEventListener('submit', (event) => {
-    let isValid = true;
-
-    if (nomeInput.value.length < 3 || nomeInput.value.length > 64) {
-      isValid = false;
-      displayError(nomeInput, 'Digite um nome com 3 a 64 caracteres');
-    }
-
-    if (!validateEmail(emailInput.value)) {
-      isValid = false;
-      displayError(emailInput, 'Digite um email válido');
-    }
-
-    if (!validateSenha(senhaInput.value)) {
-      isValid = false;
-      displayError(senhaInput, 'Mínimo 6 caracteres, pelo menos 1 letra e 1 número');
-    }
-
-    if (senhaInput.value !== confirmaSenhaInput.value) {
-      isValid = false;
-      displayError(confirmaSenhaInput, 'As senhas não coincidem');
-    }
-
-    if (!/^[0-9]{8}$/.test(rgInput.value)) {
-      isValid = false;
-      displayError(rgInput, 'Digite um RG válido com 8 dígitos');
-    }
-
-    if (!/^[0-9]{11}$/.test(cpfInput.value)) {
-      isValid = false;
-      displayError(cpfInput, 'Digite um CPF válido com 11 dígitos');
-    }
-
-    if (!rendaInput.value) {
-      isValid = false;
-      displayError(rendaInput, 'Digite a renda mensal');
-    }
-
-    if (!isValid) {
-      event.preventDefault();
-    }
-  });
-
-  function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  function validateSenha(senha) {
-    const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
-    return senhaRegex.test(senha);
-  }
-
-  function displayError(input, message) {
-    const errorDiv = input.nextElementSibling;
-    errorDiv.textContent = message;
-    input.classList.add('border', 'border-red-500');
-  }
-
-  function clearError(input) {
-    const errorDiv = input.nextElementSibling;
-    errorDiv.textContent = '';
-    input.classList.remove('border', 'border-red-500');
-  }
-
-  nomeInput.addEventListener('input', () => clearError(nomeInput));
-  emailInput.addEventListener('input', () => clearError(emailInput));
-  senhaInput.addEventListener('input', () => clearError(senhaInput));
-  confirmaSenhaInput.addEventListener('input', () => clearError(confirmaSenhaInput));
-  rgInput.addEventListener('input', () => clearError(rgInput));
-  cpfInput.addEventListener('input', () => clearError(cpfInput));
-  rendaInput.addEventListener('input', () => clearError(rendaInput));
-</script>
-
-<script>
-  function updateImageLabel(input) {
-    const label = document.getElementById('imagemPerfilLabel');
-    if (input.files.length > 0) {
-      label.textContent = `${input.files[0].name} selecionado`;
-    } else {
-      label.textContent = 'Clique para selecionar uma imagem';
-    }
-  }
-
   function updatePasswordStrength(password) {
     const strengthIndicator = document.getElementById('password-strength');
     const strengthLabel = document.getElementById('password-strength-label');
@@ -469,12 +571,9 @@
   }
 </script>
 
-<script>
-  // Chamando a função quando a página carrega
-  window.addEventListener('load', () => {
-    populateFavoritesList();
-  });
-</script>
+
+
+
 <script>
     
   const favoritesList = document.getElementById('favoritesList');
