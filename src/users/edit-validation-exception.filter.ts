@@ -19,7 +19,7 @@ export class UserValidationAndEditExceptionFilter extends BaseExceptionFilter {
         errorMessages.push(validationErrors.message);
       }
 
-      console.log("Está no validation: ", errorMessages);
+      console.log("Está no validation de edit: ", errorMessages);
 
       response.render('edit-user.ejs', { errorMessages });
     } else {

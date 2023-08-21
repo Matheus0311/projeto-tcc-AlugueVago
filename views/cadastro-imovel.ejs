@@ -188,8 +188,16 @@
   <div class="container mx-auto mt-4">
     <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl mx-auto">
       <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Imóveis</h1>
+      <% if (errorMessages && errorMessages.length > 0) { %>
+        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+          <% for (const errorMessage of errorMessages) { %>
+            <%= errorMessage %><br />
+          <% } %>
+        </div>
+      <% } %>
   
-      <form action="/imoveis" method="POST" enctype="multipart/form-data">
+      <form action="/imoveis/cadastro-imovel" method="POST" enctype="multipart/form-data">
+     
         <!-- Parte 1 - Informações do Imóvel -->
         <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel</h2>
         
@@ -198,19 +206,19 @@
             <!-- Tamanho -->
             <div class="input-container">
               <label for="tamanho"><span class="text-red-500">*</span> Tamanho (m²):</label>
-              <input type="number" id="tamanho" name="tamanho" class="rounded-md focus:border-blue-500" required>
+              <input value="400" type="number" id="tamanho" name="tamanho" class="rounded-md focus:border-blue-500" required >
             </div>
             <!-- Quantidade de Cômodos -->
             <div class="input-container">
               <label for="quantidadeComodos"><span class="text-red-500">*</span> Quantidade de Cômodos:</label>
-              <input type="number" id="quantidadeComodos" name="quantidadeComodos" class="rounded-md focus:border-blue-500" required>
+              <input value="400" type="number" id="quantidadeComodos" name="quantidadeComodos" class="rounded-md focus:border-blue-500" required>
             </div>
             <!-- Mobiliado -->
             <div class="input-container">
               <label for="mobiliado"><span class="text-red-500">*</span> Mobiliado:</label>
               <select id="mobiliado" name="mobiliado" class="rounded-md focus:border-blue-500" required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="true" selected>Sim</option>
                 <option value="false">Não</option>
               </select>
             </div>
@@ -218,25 +226,25 @@
             <div class="input-container">
               <label for="statusNegociacao"><span class="text-red-500">*</span> Status de Negociação:</label>
               <select id="statusNegociacao" name="statusNegociacao" class="rounded-md focus:border-blue-500" required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Disponível</option>
+                <option value="" >Escolha a opção</option>
+                <option value="true" selected>Disponível</option>
                 <option value="false">Indisponível</option>
               </select>
             </div>
             <!-- Valor -->
             <div class="input-container">
               <label for="valor"><span class="text-red-500">*</span> Valor Mensal:</label>
-              <input type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" required>
+              <input value="400" type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" required>
             </div>
             <!-- RG do Proprietário -->
             <div class="input-container">
               <label for="rgProprietario"><span class="text-red-500">*</span> RG do Proprietário:</label>
-              <input type="text" id="rgProprietario" name="rgProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <input value="12345678" type="text" id="rgProprietario" name="rgProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
             </div>
             <!-- CPF do Proprietário -->
             <div class="input-container">
               <label for="cpfProprietario"><span class="text-red-500">*</span> CPF do Proprietário:</label>
-              <input type="text" id="cpfProprietario" name="cpfProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <input value="12345678909" type="text" id="cpfProprietario" name="cpfProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
             </div>
             
           </div>
@@ -244,7 +252,7 @@
             <!-- Descrição -->
             <div class="input-container">
               <label for="descricao"><span class="text-red-500">*</span> Descrição:</label>
-              <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4" required></textarea>
+              <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4" required>Oloco</textarea>
             </div>
             <!-- Fotos do Imóvel -->
             <div class="upload-container">
@@ -263,17 +271,18 @@
               </div>
             </div>
 
+
             <!-- Número de Inscrição -->
             <div class="input-container">
               <label for="numeroInscricao"><span class="text-red-500">*</span> Número de Inscrição do Imóvel:</label>
-              <input type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <input value="123456789" type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
             </div>
             <!-- Tipo de Imóvel -->
             <div class="input-container">
               <label for="tipoImovel"><span class="text-red-500">*</span> Tipo de Imóvel:</label>
               <select id="tipoImovel" name="tipoImovel" class="rounded-md focus:border-blue-500" required>
-                <option value="" selected>Escolha o tipo</option>
-                <option value="Salão">Salão Comercial</option>
+                <option value="" >Escolha o tipo</option>
+                <option value="Salão" selected>Salão Comercial</option>
                 <option value="Casa">Casa</option>
                 <option value="Apartamento">Apartamento</option>
                 <option value="Chácara">Chácara</option>
@@ -291,8 +300,8 @@
             <div class="input-container">
               <label for="grande"><span class="text-red-500">*</span> Grande:</label>
               <select id="grande" name="grande" class="rounded-md focus:border-blue-500">
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="true" selected>Sim</option>
                 <option value="false">Não</option>
               </select>
             </div>
@@ -300,8 +309,8 @@
             <div class="input-container">
               <label for="bemLocalizado"><span class="text-red-500">*</span> Bem Localizado:</label>
               <select id="bemLocalizado" name="bemLocalizado" class="rounded-md focus:border-blue-500">
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="true" selected>Sim</option>
                 <option value="false">Não</option>
               </select>
             </div>
@@ -309,8 +318,8 @@
             <div class="input-container">
               <label for="condominioFechado"><span class="text-red-500">*</span> Condomínio Fechado:</label>
               <select id="condominioFechado" name="condominioFechado" class="rounded-md focus:border-blue-500">
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="true" selected>Sim</option>
                 <option value="false">Não</option>
               </select>
             </div>
@@ -318,8 +327,8 @@
             <div class="input-container">
               <label for="novo"><span class="text-red-500">*</span> Novo:</label>
               <select id="novo" name="novo" class="rounded-md focus:border-blue-500">
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="true" selected>Sim</option>
                 <option value="false">Não</option>
               </select>
             </div>
@@ -327,8 +336,8 @@
             <div class="input-container">
               <label for="estacionamento"><span class="text-red-500">*</span> Estacionamento:</label>
               <select id="estacionamento" name="estacionamento" class="rounded-md focus:border-blue-500">
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="true" selected>Sim</option>
                 <option value="false">Não</option>
               </select>
             </div>
@@ -336,8 +345,8 @@
             <div class="input-container">
               <label for="aguaGratuita"><span class="text-red-500">*</span> Água Inclusa:</label>
               <select id="aguaGratuita" name="aguaGratuita" class="rounded-md focus:border-blue-500">
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="true" selected>Sim</option>
                 <option value="false">Não</option>
               </select>
             </div>
@@ -345,8 +354,8 @@
             <div class="input-container">
               <label for="iptuIncluso"><span class="text-red-500">*</span> IPTU Incluso:</label>
               <select id="iptuIncluso" name="iptuIncluso" class="rounded-md focus:border-blue-500">
-                <option value="" selected>Escolha a opção</option>
-                <option value="true">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="true" selected>Sim</option>
                 <option value="false">Não</option>
               </select>
             </div>
@@ -368,18 +377,18 @@
             <!-- CEP -->
             <div class="input-container">
               <label for="enderecoCEP"><span class="text-red-500">*</span> CEP:</label>
-              <input type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <input value="79740000" type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
             </div>
             <!-- Cidade -->
             <div class="input-container">
               <label for="enderecoCidade"><span class="text-red-500">*</span> Cidade:</label>
-              <input type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" required>
+              <input value="Ivinhema" type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" required>
             </div>
             <!-- Estado -->
             <div class="input-container">
               <label for="estadoNome"><span class="text-red-500">*</span> Estado:</label>
               <select id="estadoNome" name="estadoNome" class="rounded-md focus:border-blue-500" required>
-                <option value="" selected>Selecione o estado</option>
+                <option value="" >Selecione o estado</option>
                 <option value="AC">Acre</option>
                 <option value="AL">Alagoas</option>
                 <option value="AP">Amapá</option>
@@ -391,7 +400,7 @@
                 <option value="GO">Goiás</option>
                 <option value="MA">Maranhão</option>
                 <option value="MT">Mato Grosso</option>
-                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MS" selected>Mato Grosso do Sul</option>
                 <option value="MG">Minas Gerais</option>
                 <option value="PA">Pará</option>
                 <option value="PB">Paraíba</option>
@@ -416,17 +425,17 @@
             <!-- Rua -->
             <div class="input-container">
               <label for="enderecoRua"><span class="text-red-500">*</span> Rua:</label>
-              <input type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" required>
+              <input value="Egas Bonilha de Toledo" type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" required>
             </div>
             <!-- Número -->
             <div class="input-container">
               <label for="enderecoNumero"><span class="text-red-500">*</span> Número:</label>
-              <input type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" required>
+              <input value="810" type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" required>
             </div>
             <!-- Bairro -->
             <div class="input-container">
               <label for="enderecoBairro"><span class="text-red-500">*</span> Bairro:</label>
-              <input type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" required>
+              <input value="Guiraí" type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" required>
             </div>
           </div>
           
@@ -440,12 +449,12 @@
         <!-- Telefone de Contato -->
         <div class="input-container">
           <label for="telefoneContato"><span class="text-red-500">*</span> Telefone de Contato:</label>
-          <input type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação">
+          <input value="12345678" type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação">
         </div>
         <!-- Email de Contato -->
         <div class="input-container">
           <label for="emailContato"><span class="text-red-500">*</span> Email de Contato:</label>
-          <input type="email" id="emailContato" name="emailContato" class="rounded-md focus:border-blue-500" placeholder="exemplo@exemplo.com">
+          <input value="123@456.com" type="email" id="emailContato" name="emailContato" class="rounded-md focus:border-blue-500" placeholder="exemplo@exemplo.com">
         </div>
       </div>
     </div>

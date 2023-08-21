@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <style>
   .nav-link {
@@ -73,58 +75,69 @@
 </head>
 <body class="bg-gray-100">
 <!-- Navbar -->
-<nav class="bg-gradient-to-r from-blue-300 to-blue-500 py-3 navbar">
-  <div class="container mx-auto flex justify-between items-center">
-    <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
-    <ul class="flex space-x-6">
-      <li><a class="nav-link" href="/">Home</a></li>
-      <li><a class="nav-link" href="/users/cadastro">Cadastro</a></li>
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-gradient-to-r from-blue-300 to-blue-500 py-2">
+  <div class="container mx-auto">
+    <a class="navbar-brand text-lg font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/users/cadastro">Cadastro</a></li>
+      </ul>
+    </div>
   </div>
 </nav>
+
+
 <div class="container mx-auto mt-4">
-  <div class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
-    <h1 class="text-2xl font-semibold text-center mb-6">Login</h1>
-
-    
-    <% if (error) { %>
-      <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
-        <%= error %>
-      </div>
-    <% } %>
-
-    <form action="/users/login" method="POST">
-      <div class="grid grid-cols-1 gap-4">
-        <div class="input-container">
-          <label for="email"><span class="text-red-500">*</span> Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="rounded-md focus:border-blue-500"
-            required
-          />
+  <div class="card max-w-md mx-auto">
+    <div class="card-body bg-white p-8 py-3 px-4 rounded-lg shadow-md w-100">
+      <h1 class="text-2xl font-semibold text-center mb-6">Login</h1>
+      
+      <% if (error) { %>
+        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+          <%= error %>
         </div>
-        <div class="input-container">
-          <label for="senha"><span class="text-red-500">*</span> Senha:</label>
-          <input
-            type="password"
-            id="senha"
-            name="senha"
-            class="rounded-md focus:border-blue-500"
-            required
-          />
-        </div>
-      </div>
+      <% } %>
 
-      <div class="mt-4">
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Login</button>
-      </div>
-    </form>
+      <form action="/users/login" method="POST">
+        <div class="grid grid-cols-1 gap-4">
+          <div class="input-container">
+            <label for="email"><span class="text-red-500">*</span> Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value="bracin@exemplo.com"
+              class="rounded-md focus:border-blue-500"
+              required
+            />
+          </div>
+          <div class="input-container">
+            <label for="senha"><span class="text-red-500">*</span> Senha:</label>
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              value="123456a"
+              class="rounded-md focus:border-blue-500"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Login</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 </body>
 </html>

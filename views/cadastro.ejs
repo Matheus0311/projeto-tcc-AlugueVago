@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Usuário</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   
 </head>
 <style>
@@ -79,210 +81,207 @@
 </head>
 <body class="bg-gray-100">
 <!-- Navbar -->
-<nav class="bg-gradient-to-r from-blue-300 to-blue-500 py-3 navbar">
-  <div class="container mx-auto flex justify-between items-center">
-    <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
-    <ul class="flex space-x-6">
-      <li><a class="nav-link" href="/">Home</a></li>
-      <li><a class="nav-link" href="/users/login">Login</a></li>
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-gradient-to-r from-blue-300 to-blue-500 py-2">
+  <div class="container mx-auto">
+    <a class="navbar-brand text-lg font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/users/login">Login</a></li>
+      </ul>
+    </div>
   </div>
 </nav>
-<div class="container mx-auto mt-4">
-  <div class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
-    <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Usuário</h1>
 
-    <% if (errorMessages && errorMessages.length > 0) { %>
-      <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
-        <% for (const errorMessage of errorMessages) { %>
-          <%= errorMessage %><br />
-        <% } %>
-      </div>
-    <% } %>
-    <form action="/users/cadastro" method="POST" enctype="multipart/form-data" id="userForm">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Seção 1 -->
-        <div>
-          <div class="grid grid-cols-1 gap-4">
-            <div class="input-container">
-              <label for="nomeUsuario">
-                Nome: <span class="text-red-500">*</span>
-                <span class="info-icon" title="Digite um nome com 3 a 64 caracteres">
-                  <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input
-                type="text"
-                id="nomeUsuario"
-                name="nomeUsuario"
-                class="rounded-md focus:border-blue-500"
-                maxlength="64"
-                required
-                pattern=".{3,64}"
-                title="Digite um nome com 3 a 64 caracteres"
-              />
-              <div class="error-message" id="nomeError"></div>
-            </div>
-            <div class="input-container">
-              <label for="emailUsuario">
-                Email: <span class="text-red-500">*</span>
-                <span class="info-icon" title="Digite um nome email válido com @ e .">
-                  <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input
-                type="email"
-                id="emailUsuario"
-                name="emailUsuario"
-                class="rounded-md focus:border-blue-500"
-               
-                required
-                title="Digite um email válido com @ e ."
-              />
-              <div class="error-message" id="emailError"></div>
-            </div>
-            <div class="input-container">
-              <label for="senhaUsuario">
-                Senha: <span class="text-red-500">*</span>
-                <span class="info-icon" title="Mínimo 6 caracteres, pelo menos 1 letra e 1 número">
-                  <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input
-                type="password"
-                id="senhaUsuario"
-                name="senhaUsuario"
-                class="rounded-md focus:border-blue-500"
-                minlength="6"
-                required
-                oninput="updatePasswordStrength(this.value)"
-              />
-              <div class="error-message" id="senhaError"></div>
-              <div class="helper-text">Mínimo 6 caracteres</div>
-              <div class="mt-1 relative">
-                <div class="h-2 w-70 rounded-full bg-gray-300">
-                  <div id="password-strength" class="h-full rounded-full transition-all"></div>
+<div class="container mx-auto mt-4">
+  <div class="card max-w-md mx-auto mb-4">
+    <div class="card-body bg-white p-8 py-3 px-4 rounded-lg shadow-md w-100">
+      <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Usuário</h1>
+
+      <% if (errorMessages && errorMessages.length > 0) { %>
+        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+          <% for (const errorMessage of errorMessages) { %>
+            <%= errorMessage %><br />
+          <% } %>
+        </div>
+      <% } %>
+      <form action="/users/cadastro" method="POST" enctype="multipart/form-data" id="userForm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Seção 1 -->
+          <div>
+            <div class="grid grid-cols-1 gap-4">
+              <div class="input-container">
+                <label for="nomeUsuario">
+                  Nome: <span class="text-red-500">*</span>
+                  <span class="info-icon" title="Digite um nome com 3 a 64 caracteres">
+                    <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  id="nomeUsuario"
+                  name="nomeUsuario"
+                  class="rounded-md focus:border-blue-500"
+                  maxlength="64"
+                  required
+                  pattern=".{3,64}"
+                  title="Digite um nome com 3 a 64 caracteres"
+                />
+                <div class="error-message" id="nomeError"></div>
+              </div>
+              <div class="input-container">
+                <label for="emailUsuario">
+                  Email: <span class="text-red-500">*</span>
+                  <span class="info-icon" title="Digite um nome email válido com @ e .">
+                    <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
+                <input
+                  type="email"
+                  id="emailUsuario"
+                  name="emailUsuario"
+                  class="rounded-md focus:border-blue-500"
+                
+                  required
+                  title="Digite um email válido com @ e ."
+                />
+                <div class="error-message" id="emailError"></div>
+              </div>
+              <div class="input-container">
+                <label for="senhaUsuario">
+                  Senha: <span class="text-red-500">*</span>
+                  <span class="info-icon" title="Mínimo 6 caracteres, pelo menos 1 letra e 1 número">
+                    <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
+                <input
+                  type="password"
+                  id="senhaUsuario"
+                  name="senhaUsuario"
+                  class="rounded-md focus:border-blue-500"
+                  minlength="6"
+                  required
+                  oninput="updatePasswordStrength(this.value)"
+                />
+                <div class="error-message" id="senhaError"></div>
+                <div class="helper-text">Mínimo 6 caracteres</div>
+                <div class="mt-1 relative">
+                  <div class="h-2 w-70 rounded-full bg-gray-300">
+                    <div id="password-strength" class="h-full rounded-full transition-all"></div>
+                  </div>
+                  <div class="absolute text-xs font-semibold" id="password-strength-label">Fraca</div>
                 </div>
-                <div class="absolute text-xs font-semibold" id="password-strength-label">Fraca</div>
+              </div>
+              <div class="input-container">
+                <label for="confirmaSenha">
+                  Confirme a Senha: <span class="text-red-500">*</span>
+                  <span class="info-icon" title="Digite a mesma senha novamente">
+                    <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
+                <input
+                  type="password"
+                  id="confirmaSenha"
+                  name="confirmaSenha"
+                  class="rounded-md focus:border-blue-500"
+                  minlength="6"
+                  required
+                />
+                <div class="error-message" id="confirmaSenhaError"></div>
               </div>
             </div>
-            <div class="input-container">
-              <label for="confirmaSenha">
-                Confirme a Senha: <span class="text-red-500">*</span>
-                <span class="info-icon" title="Digite a mesma senha novamente">
-                  <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input
-                type="password"
-                id="confirmaSenha"
-                name="confirmaSenha"
-                class="rounded-md focus:border-blue-500"
-                minlength="6"
-                required
-              />
-              <div class="error-message" id="confirmaSenhaError"></div>
+          </div>
+      
+          <!-- Seção 2 -->
+          <div>
+            <div class="grid grid-cols-1 gap-4">
+              <div class="input-container">
+                <label for="rgUsuario">
+                  RG: <span class="text-red-500">*</span>
+                  <span class="info-icon" title="Digite um RG válido com 8 a 9 dígitos">
+                    <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  id="rgUsuario"
+                  name="rgUsuario"
+                  placeholder="Digite sem pontuação"
+                  class="rounded-md focus:border-blue-500"
+                  maxlength="9"
+                  required
+                  pattern="[0-9]{8,9}"
+                  title="Digite um RG válido com 8 a 9 dígitos"
+                />
+                <div class="error-message" id="rgError"></div>
+              </div>
+              <div class="input-container">
+                <label for="cpfUsuario">
+                  CPF: <span class="text-red-500">*</span>
+                  <span class="info-icon" title="Digite um CPF válido com 11 dígitos">
+                    <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  id="cpfUsuario"
+                  name="cpfUsuario"
+                  placeholder="Digite sem pontuação"
+                  class="rounded-md focus:border-blue-500"
+                  maxlength="11"
+                  required
+                  pattern="[0-9]{11}"
+                  title="Digite um CPF válido com 11 dígitos"
+                />
+                <div class="error-message" id="cpfError"></div>
+              </div>
+              <div class="input-container">
+                <label for="rendaMensalUsuario">
+                  Renda Mensal: <span class="text-red-500">*</span>
+                  <span class="info-icon" title="Digite sua renda mensal">
+                    <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
+                  </span>
+                </label>
+                <input
+                  type="number"
+                  id="rendaMensalUsuario"
+                  name="rendaMensalUsuario"
+                  class="rounded-md focus:border-blue-500"
+                  
+                  required
+                  title="Digite sua renda mensal"
+                />
+                <div class="error-message" id="rendaMensalError"></div>
+              </div>
+            </div>
+            <div class="upload-container">
+              <label for="imagemPerfil" class="block text-gray-700 font-semibold mb-2">Imagem de Perfil:</label>
+              <div class="relative">
+                <input
+                  type="file"
+                  id="imagemPerfil"
+                  name="imagemPerfil"
+                  class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  accept="image/*"
+                  onchange="updateImageLabel(this)"
+                />
+                <p id="imagemPerfilLabel">Clique para selecionar uma imagem</p>
+              </div>
             </div>
           </div>
         </div>
-    
-        <!-- Seção 2 -->
-        <div>
-          <div class="grid grid-cols-1 gap-4">
-            <div class="input-container">
-              <label for="rgUsuario">
-                RG: <span class="text-red-500">*</span>
-                <span class="info-icon" title="Digite um RG válido com 8 a 9 dígitos">
-                  <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input
-                type="text"
-                id="rgUsuario"
-                name="rgUsuario"
-                placeholder="Digite sem pontuação"
-                class="rounded-md focus:border-blue-500"
-                maxlength="9"
-                required
-                pattern="[0-9]{8,9}"
-                title="Digite um RG válido com 8 a 9 dígitos"
-              />
-              <div class="error-message" id="rgError"></div>
-            </div>
-            <div class="input-container">
-              <label for="cpfUsuario">
-                CPF: <span class="text-red-500">*</span>
-                <span class="info-icon" title="Digite um CPF válido com 11 dígitos">
-                  <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input
-                type="text"
-                id="cpfUsuario"
-                name="cpfUsuario"
-                placeholder="Digite sem pontuação"
-                class="rounded-md focus:border-blue-500"
-                maxlength="11"
-                required
-                pattern="[0-9]{11}"
-                title="Digite um CPF válido com 11 dígitos"
-              />
-              <div class="error-message" id="cpfError"></div>
-            </div>
-            <div class="input-container">
-              <label for="rendaMensalUsuario">
-                Renda Mensal: <span class="text-red-500">*</span>
-                <span class="info-icon" title="Digite sua renda mensal">
-                  <i class="fas fa-info-circle text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input
-                type="number"
-                id="rendaMensalUsuario"
-                name="rendaMensalUsuario"
-                class="rounded-md focus:border-blue-500"
-                
-                required
-                title="Digite sua renda mensal"
-              />
-              <div class="error-message" id="rendaMensalError"></div>
-            </div>
-          </div>
-          <div class="upload-container">
-            <label for="imagemPerfil" class="block text-gray-700 font-semibold mb-2">Imagem de Perfil:</label>
-            <div class="relative">
-              <input
-                type="file"
-                id="imagemPerfil"
-                name="imagemPerfil"
-                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                accept="image/*"
-                onchange="updateImageLabel(this)"
-              />
-              <p id="imagemPerfilLabel">Clique para selecionar uma imagem</p>
-            </div>
-          </div>
+      
+       
+          <div class="mt-4">
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Cadastrar</button>
+          
         </div>
+      </form>
       </div>
-    
-      <div class="mt-4 flex justify-between">
-        <button
-          type="submit"
-          class="w-1/2 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
-        >
-          Salvar Alterações
-        </button>
-    
-        <button
-          type="button"
-          onclick="window.location.href='/users/account-config'"
-          class="w-1/2 bg-red-500 hover:bg-red-600 text-black py-2 rounded-md transition duration-300 ml-2"
-        >
-          Cancelar Edição
-        </button>
-      </div>
-    </form>
-    
+    </div>
   </div>
 </div>
 
@@ -478,6 +477,8 @@
   }
 </script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 </body>
 </html>

@@ -171,145 +171,149 @@
 <body class="bg-gray-100">
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500 navbar-light bg-light">
-    <!-- <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500"> -->
-      <div class="container-fluid">
-        <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link text-white" href="/">Home</a>
-            </li>
+  <!-- <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500"> -->
+    <div class="container-fluid">
+      <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/">Home</a>
+          </li>
+          <li class="nav-item dropdown relative">
+            <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-star text-white mr-2"></i> Favoritos  <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
+            </a>
+            
+            <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
+              <div id="favoritesList"></div>
+            </div>
+          </li>
+
+          <% if (userIsLoggedIn) { %>
+            
             <li class="nav-item dropdown relative">
-              <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-star text-white mr-2"></i> Favoritos  <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
-              </a>
-              
-              <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
-                <div id="favoritesList"></div>
+              <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="text-white"><%= user.nomeUsuario %></span>
+              </a>  
+              <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
+                  <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/imoveis/meus-imoveis">Meus Imoveis</a>
+                  <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
+                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
               </div>
             </li>
-
-            <% if (userIsLoggedIn) { %>
-             
-              <li class="nav-item dropdown relative">
-                <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-                  <span class="text-white"><%= user.nomeUsuario %></span>
-                </a>  
-                <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
-                    <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/imoveis/meus-imoveis">Meus Imoveis</a>
-                    <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
-                  <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
-                </div>
-              </li>
-              <div>
-                <% if (user.imagemPerfil) { %>
-                  <img class="profile-image-navbar" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
-                <% } else { %>
-                  <i class="profile-image-navbar fas fa-user-circle fa-2x bg-blue-300 text-gray-500"></i>
-                <% } %>
-              </div>            
+            <div>
+              <% if (user.imagemPerfil) { %>
+                <img class="profile-image-navbar" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
               <% } else { %>
-              <li class="nav-item">
-                <a class="nav-link profile-link text-white" href="/users/login">
-                  <i class="fas fa-user"></i>
-                  Fazer Login
-                </a>
-                <li><a class="nav-link text-white" href="/users/cadastro">Cadastro</a></li>
-              </li>
-            <% } %>
-            
-          </ul>
-        </div>
+                <i class="profile-image-navbar fas fa-user-circle fa-2x bg-blue-300 text-gray-500"></i>
+              <% } %>
+            </div>            
+            <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link profile-link text-white" href="/users/login">
+                <i class="fas fa-user"></i>
+                Fazer Login
+              </a>
+              <li><a class="nav-link text-white" href="/users/cadastro">Cadastro</a></li>
+            </li>
+          <% } %>
+          
+        </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
    
 
-    <div class="container mx-auto mt-8 p-4 max-w-md">
-      <div class="text-center mb-4">
-        <% if (user.imagemPerfil) { %>
-          <img class="profile-image-framed w-24 h-24 rounded-full mx-auto" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
-        <% } else { %>
-          <div class="w-24 h-24 rounded-full mx-auto bg-blue-300 flex items-center justify-center">
-            <i class="fas fa-user-circle fa-6x text-gray-500"></i>
-          </div>
-        <% } %>
-        <h1 class="text-xl font-semibold mt-2"><%= user.nomeUsuario %></h1>
-      </div>
-    
-      <div class="mt-8">
-        <% if (userImoveis.length > 0) { %>
-          <div class="text-center mb-4">
-            <a href="/imoveis/cadastro-imovel" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-lg font-semibold hover:bg-blue-600">
-              Adicionar <i class="fas fa-plus ml-1"></i>
-            </a>
-          </div>
-    
-          <h2 class="text-xl font-semibold mb-4">
-            Seus Imóveis (<%= userImoveis.length %>):
-          </h2>
-    
-          <ul class="space-y-4">
-            <% userImoveis.forEach(imovel => { %>
-              <li class="border border-gray-200 rounded-lg p-4 flex flex-col md:flex-row items-center md:space-x-4">
-                <div class="w-full md:w-1/4 mb-4 md:mb-0">
-                  <% if (imovel.fotos && imovel.fotos.length > 0) { %>
-                    <img src="/uploads/fotos-imoveis/<%= imovel.fotos[0].filename %>" alt="Imagem do Imóvel" class="w-full rounded-lg shadow-md">
-                  <% } else { %>
-                    <div class="w-full h-40 bg-gray-200 rounded-lg shadow-md"></div>
-                  <% } %>
-                </div>
-                <div class="w-full md:w-3/4 pl-4">
-                  <h3 class="text-lg font-semibold mb-2"><%= imovel.descricao %></h3>
-                  <p class="mb-2 text-sm"><strong>Tamanho:</strong> <%= imovel.tamanho %> m²</p>
-                  <p class="mb-2 text-sm"><strong>Valor:</strong> R$ <%= imovel.valor %></p>
-                  <p class="mb-2 text-sm"><strong>Status de Negociação:</strong>
-                    <%= imovel.statusNegociacao ? 'Negociável' : 'Não negociável' %></p>
-                  <p class="mb-2 text-sm"><strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>, <%= imovel.enderecoCidade %></p>
-                  <div class="flex flex-wrap justify-start space-x-2 space-y-2 md:space-y-0 md:space-x-2">
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal<%= imovel._id %>">Deletar</button>
-                    <a href="/imoveis/edit-imovel/<%= imovel._id %>" class="btn btn-primary">Editar</a>
-                    <a href="/imoveis/informacoes-imovel/<%= imovel.id %>" class="btn btn-primary">Ver Detalhes</a>
+  <div class="container-fluid mx-auto mt-4">
+    <div class="card w-3/4 mx-auto mb-4">
+      <div class="card-body bg-white p-8 py-3 px-4 rounded-lg shadow-md">
+        <div class="text-center mb-4">
+          <% if (user.imagemPerfil) { %>
+            <img class="profile-image-framed w-24 h-24 rounded-full mx-auto" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+          <% } else { %>
+            <div class="w-24 h-24 rounded-full mx-auto bg-blue-300 flex items-center justify-center">
+              <i class="fas fa-user-circle fa-6x text-gray-500"></i>
+            </div>
+          <% } %>
+          <h1 class="text-xl font-semibold mt-2"><%= user.nomeUsuario %></h1>
+        </div>
+      
+        <div class="mt-8">
+          <% if (userImoveis.length > 0) { %>
+            <div class="text-center mb-4">
+              <a href="/imoveis/cadastro-imovel" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-lg font-semibold hover:bg-blue-600">
+                Adicionar <i class="fas fa-plus ml-1"></i>
+              </a>
+            </div>
+      
+            <h2 class="text-xl font-semibold mb-4">
+              Seus Imóveis (<%= userImoveis.length %>):
+            </h2>
+      
+            <ul class="space-y-4">
+              <% userImoveis.forEach(imovel => { %>
+                <li class="border border-gray-200 rounded-lg p-4 flex flex-col md:flex-row items-center md:space-x-4">
+                  <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                    <% if (imovel.fotos && imovel.fotos.length > 0) { %>
+                      <img src="/uploads/fotos-imoveis/<%= imovel.fotos[0].filename %>" alt="Imagem do Imóvel" class="w-full rounded-lg shadow-md">
+                    <% } else { %>
+                      <div class="w-full h-40 bg-gray-200 rounded-lg shadow-md"></div>
+                    <% } %>
                   </div>
+                  <div class="w-full md:w-3/4 pl-4">
+                    <h3 class="text-lg font-semibold mb-2"><%= imovel.descricao %></h3>
+                    <p class="mb-2 text-sm"><strong>Tamanho:</strong> <%= imovel.tamanho %> m²</p>
+                    <p class="mb-2 text-sm"><strong>Valor:</strong> R$ <%= imovel.valor %></p>
+                    <p class="mb-2 text-sm"><strong>Status de Negociação:</strong>
+                      <%= imovel.statusNegociacao ? 'Negociável' : 'Não negociável' %></p>
+                    <p class="mb-2 text-sm"><strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>, <%= imovel.enderecoCidade %></p>
+                    <div class="flex flex-wrap justify-start space-x-2 space-y-2 md:space-y-0 md:space-x-2">
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal<%= imovel._id %>">Deletar</button>
+                      <a href="/imoveis/edit-imovel/<%= imovel._id %>" class="btn btn-primary">Editar</a>
+                      <a href="/imoveis/informacoes-imovel/<%= imovel.id %>" class="btn btn-primary">Ver Detalhes</a>
+                    </div>
+                  </div>
+                </li>
+              <% }); %>
+            </ul>
+          <% } else { %>
+            <h2 class="text-xl font-semibold mb-4 text-center">Comece a fazer seu imóvel parado render!</h2>
+            <p class="text-center"><a href="/imoveis/cadastro-imovel" class="text-blue-500">Clique aqui para cadastrar um imóvel</a></p>
+          <% } %>
+        </div>
+      
+        <!-- Modal de Confirmação de Exclusão -->
+        <% userImoveis.forEach(imovel => { %>
+          <div class="modal fade" id="confirmDeleteModal<%= imovel._id %>" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
                 </div>
-              </li>
-            <% }); %>
-          </ul>
-        <% } else { %>
-          <h2 class="text-xl font-semibold mb-4 text-center">Comece a fazer seu imóvel parado render!</h2>
-          <p class="text-center"><a href="/imoveis/cadastro-imovel" class="text-blue-500">Clique aqui para cadastrar um imóvel</a></p>
-        <% } %>
-      </div>
-    
-      <!-- Modal de Confirmação de Exclusão -->
-      <% userImoveis.forEach(imovel => { %>
-        <div class="modal fade" id="confirmDeleteModal<%= imovel._id %>" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                Você tem certeza que deseja excluir este imóvel?
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <form method="POST" action="/imoveis/delete-imovel/<%= imovel.id %>">
-                  <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
-                </form>
+                <div class="modal-body">
+                  Você tem certeza que deseja excluir este imóvel?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  <form method="POST" action="/imoveis/delete-imovel/<%= imovel.id %>">
+                    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      <% }); %>
+        <% }); %>
+      </div>
     </div>
+  </div>
     
 
   <!-- Scripts JavaScript -->

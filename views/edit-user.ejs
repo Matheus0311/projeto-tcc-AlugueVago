@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+
 </head>
 <style>
 
@@ -125,267 +126,263 @@
 }
 
 
+
 </style>
 </head>
 <body class="bg-gray-100">
 <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500 navbar-light bg-light">
-  <!-- <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500"> -->
-    <div class="container-fluid">
-      <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link text-white" href="/">Home</a>
-          </li>
+<nav class="navbar navbar-expand-lg navbar-light bg-gradient-to-r from-blue-300 to-blue-500 py-2">
+  <div class="container mx-auto">
+    <a class="navbar-brand text-lg font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/">Home</a>
+        </li>
+        <li class="nav-item dropdown relative">
+          <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-star text-white mr-2"></i> Favoritos <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
+          </a>
+          
+          <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
+            <div id="favoritesList"></div>
+          </div>
+        </li>
+        
+        <% if (userIsLoggedIn) { %>
+         
           <li class="nav-item dropdown relative">
-            <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-star text-white mr-2"></i> Favoritos <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
-            </a>
-            
-            <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
-              <div id="favoritesList"></div>
+            <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <span class="text-white"><%= user.nomeUsuario %></span>
+            </a>  
+            <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
+              <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/imoveis/meus-imoveis">Meus Imoveis</a>
+              <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
+              <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
             </div>
           </li>
-
-          <% if (userIsLoggedIn) { %>
-           
-            <li class="nav-item dropdown relative">
-              <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <span class="text-white"><%= user.nomeUsuario %></span>
-              </a>  
-              <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
-                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/imoveis/meus-imoveis">Meus Imoveis</a>
-                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
-                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
-              </div>
-            </li>
-            <div>
-              <% if (user.imagemPerfil) { %>
-                <img class="profile-image-navbar" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
-              <% } else { %>
-                <i class="profile-image-navbar fas fa-user-circle fa-2x bg-blue-300 text-gray-500"></i>
-              <% } %>
-            </div>  
-            <% } else { %>
-            <li class="nav-item">
-              <a class="nav-link profile-link text-white" href="/users/login">
-                <i class="fas fa-user"></i>
-                Fazer Login
-              </a>
-              <li><a class="nav-link text-white" href="/users/cadastro">Cadastro</a></li>
-            </li>
-          <% } %>
-          
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container mx-auto mt-3">
-    <div class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
-      <h1 class="text-2xl font-semibold text-center mb-6">Editar Usuário</h1>
-
-      <% if (errorMessages && errorMessages.length > 0) { %>
-        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
-          <% for (const errorMessage of errorMessages) { %>
-            <%= errorMessage %><br />
-          <% } %>
-        </div>
-      <% } %>
-
-      <form action="/users/edit/<%= user.id %>" method="POST" enctype="multipart/form-data" id="userForm">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Seção 1 -->
           <div>
-            <div class="grid grid-cols-1 gap-4">
-              <div class="input-container">
-                <label for="nomeUsuario">
-                  Nome: 
-                  <span class="info-icon" title="Digite um nome com 3 a 64 caracteres">
-                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  id="nomeUsuario"
-                  name="nomeUsuario"
-                  class="rounded-md focus:border-blue-500"
-                  maxlength="64"
-                  required
-                  value="<%= user.nomeUsuario %>"
-                  pattern=".{3,64}"
-                  title="Digite um nome com 3 a 64 caracteres"
-                />
-                <div class="error-message" id="nomeError"></div>
-              </div>
-              <div class="input-container">
-                <label for="emailUsuario">
-                  Email: 
-                  <span class="info-icon" title="Digite um nome email válido com @ e .">
-                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                  </span>
-                </label>
-                <input
-                  type="email"
-                  id="emailUsuario"
-                  name="emailUsuario"
-                  class="rounded-md focus:border-blue-500"
-                  value="<%= user.emailUsuario %>"
-                  required
-                  title="Digite um email válido com @ e ."
-                />
-                <div class="error-message" id="emailError"></div>
-              </div>
-              <div class="input-container">
-                <label for="senhaUsuario">
-                  Senha: <span class="text-red-500">*</span>
-                  <span class="info-icon" title="Mínimo 6 caracteres, pelo menos 1 letra e 1 número">
-                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                  </span>
-                </label>
-                <input
-                  type="password"
-                  id="senhaUsuario"
-                  name="senhaUsuario"
-                  class="rounded-md focus:border-blue-500"
-                  minlength="6"
-                  required
-                  oninput="updatePasswordStrength(this.value)"
-                />
-                <div class="error-message" id="senhaError"></div>
-                <div class="helper-text">Mínimo 6 caracteres</div>
-                <div class="mt-1 relative">
-                  <div class="h-2 w-70 rounded-full bg-gray-300">
-                    <div id="password-strength" class="h-full rounded-full transition-all"></div>
+            <% if (user.imagemPerfil) { %>
+              <img class="profile-image-navbar" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+            <% } else { %>
+              <i class="profile-image-navbar fas fa-user-circle fa-2x bg-blue-300 text-gray-500"></i>
+            <% } %>
+          </div>  
+                    
+          <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link profile-link text-white" href="/users/login">
+              <i class="fas fa-user"></i>
+              Fazer Login
+            </a>
+            <li><a class="nav-link text-white" href="/users/cadastro">Cadastro</a></li>
+          </li>
+        <% } %>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="container mx-auto mt-4">
+    <div class="card max-w-md mx-auto mb-4">
+      <div class="card-body bg-white p-8 py-3 px-4 rounded-lg shadow-md w-100">
+        <h1 class="text-2xl font-semibold text-center mb-6">Editar Usuário</h1>
+
+      
+        <form action="/users/edit/<%= user.id %>" method="POST" enctype="multipart/form-data" id="userForm">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Seção 1 -->
+            <div>
+              <div class="grid grid-cols-1 gap-4">
+                <div class="input-container">
+                  <label for="nomeUsuario">
+                    Nome: 
+                    <span class="info-icon" title="Digite um nome com 3 a 64 caracteres">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    id="nomeUsuario"
+                    name="nomeUsuario"
+                    class="rounded-md focus:border-blue-500"
+                    maxlength="64"
+                    required
+                    value="<%= user.nomeUsuario %>"
+                    pattern=".{3,64}"
+                    title="Digite um nome com 3 a 64 caracteres"
+                  />
+                  <div class="error-message" id="nomeError"></div>
+                </div>
+                <div class="input-container">
+                  <label for="emailUsuario">
+                    Email: 
+                    <span class="info-icon" title="Digite um nome email válido com @ e .">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input
+                    type="email"
+                    id="emailUsuario"
+                    name="emailUsuario"
+                    class="rounded-md focus:border-blue-500"
+                    value="<%= user.emailUsuario %>"
+                    required
+                    title="Digite um email válido com @ e ."
+                  />
+                  <div class="error-message" id="emailError"></div>
+                </div>
+                <div class="input-container">
+                  <label for="senhaUsuario">
+                    Senha: <span class="text-red-500">*</span>
+                    <span class="info-icon" title="Mínimo 6 caracteres, pelo menos 1 letra e 1 número">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input
+                    type="password"
+                    id="senhaUsuario"
+                    name="senhaUsuario"
+                    class="rounded-md focus:border-blue-500"
+                    minlength="6"
+                    required
+                    oninput="updatePasswordStrength(this.value)"
+                  />
+                  <div class="error-message" id="senhaError"></div>
+                  <div class="helper-text">Mínimo 6 caracteres</div>
+                  <div class="mt-1 relative">
+                    <div class="h-2 w-70 rounded-full bg-gray-300">
+                      <div id="password-strength" class="h-full rounded-full transition-all"></div>
+                    </div>
+                    <div class="absolute text-xs font-semibold" id="password-strength-label">Fraca</div>
                   </div>
-                  <div class="absolute text-xs font-semibold" id="password-strength-label">Fraca</div>
+                </div>
+                <div class="input-container">
+                  <label for="confirmaSenha">
+                    Confirme a Senha: <span class="text-red-500">*</span>
+                    <span class="info-icon" title="Digite a mesma senha novamente">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input
+                    type="password"
+                    id="confirmaSenha"
+                    name="confirmaSenha"
+                    class="rounded-md focus:border-blue-500"
+                    minlength="6"
+                    required
+                  />
+                  <div class="error-message" id="confirmaSenhaError"></div>
                 </div>
               </div>
-              <div class="input-container">
-                <label for="confirmaSenha">
-                  Confirme a Senha: <span class="text-red-500">*</span>
-                  <span class="info-icon" title="Digite a mesma senha novamente">
-                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                  </span>
-                </label>
-                <input
-                  type="password"
-                  id="confirmaSenha"
-                  name="confirmaSenha"
-                  class="rounded-md focus:border-blue-500"
-                  minlength="6"
-                  required
-                />
-                <div class="error-message" id="confirmaSenhaError"></div>
+            </div>
+        
+            <!-- Seção 2 -->
+            <div>
+              <div class="grid grid-cols-1 gap-4">
+                <div class="input-container">
+                  <label for="rgUsuario">
+                    RG: 
+                    <span class="info-icon" title="Digite um RG válido com 8 a 9 dígitos">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    id="rgUsuario"
+                    name="rgUsuario"
+                    placeholder="Digite sem pontuação"
+                    class="rounded-md focus:border-blue-500"
+                    maxlength="9"
+                    required
+                    value="<%= user.rgUsuario %>"
+                    pattern="[0-9]{8,9}"
+                    title="Digite um RG válido com 8 a 9 dígitos"
+                  />
+                  <div class="error-message" id="rgError"></div>
+                </div>
+                <div class="input-container">
+                  <label for="cpfUsuario">
+                    CPF: 
+                    <span class="info-icon" title="Digite um CPF válido com 11 dígitos">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    id="cpfUsuario"
+                    name="cpfUsuario"
+                    placeholder="Digite sem pontuação"
+                    class="rounded-md focus:border-blue-500"
+                    maxlength="11"
+                    required
+                    value="<%= user.cpfUsuario %>"
+                    pattern="[0-9]{11}"
+                    title="Digite um CPF válido com 11 dígitos"
+                  />
+                  <div class="error-message" id="cpfError"></div>
+                </div>
+                <div class="input-container">
+                  <label for="rendaMensalUsuario">
+                    Renda Mensal: 
+                    <span class="info-icon" title="Digite sua renda mensal">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input
+                    type="number"
+                    id="rendaMensalUsuario"
+                    name="rendaMensalUsuario"
+                    class="rounded-md focus:border-blue-500"
+                    value="<%= user.rendaMensalUsuario %>"
+                    required
+                    title="Digite sua renda mensal"
+                  />
+                  <div class="error-message" id="rendaMensalError"></div>
+                </div>
+              </div>
+              <div class="upload-container">
+                <label for="imagemPerfil" class="block text-gray-700 font-semibold mb-2">Imagem de Perfil:</label>
+                <div class="relative">
+                  <input
+                    type="file"
+                    id="imagemPerfil"
+                    name="imagemPerfil"
+                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    accept="image/*"
+                    onchange="updateImageLabel(this)"
+                  />
+                  <p id="imagemPerfilLabel">Clique para selecionar uma imagem</p>
+                </div>
               </div>
             </div>
           </div>
-      
-          <!-- Seção 2 -->
-          <div>
-            <div class="grid grid-cols-1 gap-4">
-              <div class="input-container">
-                <label for="rgUsuario">
-                  RG: 
-                  <span class="info-icon" title="Digite um RG válido com 8 a 9 dígitos">
-                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  id="rgUsuario"
-                  name="rgUsuario"
-                  placeholder="Digite sem pontuação"
-                  class="rounded-md focus:border-blue-500"
-                  maxlength="9"
-                  required
-                  value="<%= user.rgUsuario %>"
-                  pattern="[0-9]{8,9}"
-                  title="Digite um RG válido com 8 a 9 dígitos"
-                />
-                <div class="error-message" id="rgError"></div>
-              </div>
-              <div class="input-container">
-                <label for="cpfUsuario">
-                  CPF: 
-                  <span class="info-icon" title="Digite um CPF válido com 11 dígitos">
-                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  id="cpfUsuario"
-                  name="cpfUsuario"
-                  placeholder="Digite sem pontuação"
-                  class="rounded-md focus:border-blue-500"
-                  maxlength="11"
-                  required
-                  value="<%= user.cpfUsuario %>"
-                  pattern="[0-9]{11}"
-                  title="Digite um CPF válido com 11 dígitos"
-                />
-                <div class="error-message" id="cpfError"></div>
-              </div>
-              <div class="input-container">
-                <label for="rendaMensalUsuario">
-                  Renda Mensal: 
-                  <span class="info-icon" title="Digite sua renda mensal">
-                    <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                  </span>
-                </label>
-                <input
-                  type="number"
-                  id="rendaMensalUsuario"
-                  name="rendaMensalUsuario"
-                  class="rounded-md focus:border-blue-500"
-                  value="<%= user.rendaMensalUsuario %>"
-                  required
-                  title="Digite sua renda mensal"
-                />
-                <div class="error-message" id="rendaMensalError"></div>
-              </div>
-            </div>
-            <div class="upload-container">
-              <label for="imagemPerfil" class="block text-gray-700 font-semibold mb-2">Imagem de Perfil:</label>
-              <div class="relative">
-                <input
-                  type="file"
-                  id="imagemPerfil"
-                  name="imagemPerfil"
-                  class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  accept="image/*"
-                  onchange="updateImageLabel(this)"
-                />
-                <p id="imagemPerfilLabel">Clique para selecionar uma imagem</p>
-              </div>
-            </div>
+        
+          <div class="mt-4 flex justify-between">
+            <button
+              type="submit"
+              class="w-1/2 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
+            >
+              Salvar Alterações
+            </button>
+        
+            <button
+              type="button"
+              onclick="window.location.href='/users/account-config'"
+              class="w-1/2 bg-red-500 hover:bg-red-600 text-black py-2 rounded-md transition duration-300 ml-2"
+            >
+              Cancelar Edição
+            </button>
           </div>
-        </div>
-      
-        <div class="mt-4 flex justify-between">
-          <button
-            type="submit"
-            class="w-1/2 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
-          >
-            Salvar Alterações
-          </button>
-      
-          <button
-            type="button"
-            onclick="window.location.href='/users/account-config'"
-            class="w-1/2 bg-red-500 hover:bg-red-600 text-black py-2 rounded-md transition duration-300 ml-2"
-          >
-            Cancelar Edição
-          </button>
-        </div>
-      </form>
-      
+        </form>
+        
+      </div>
     </div>
   </div>
   
@@ -572,7 +569,12 @@
 </script>
 
 
-
+<script>
+  // Chamando a função quando a página carrega
+  window.addEventListener('load', () => {
+    populateFavoritesList();
+  });
+</script>
 
 <script>
     

@@ -18,6 +18,9 @@ import { AvaliacaoService } from './avaliacoes/avaliacoes.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { HomeController } from './users/home.controller';
+import { PhotosModule } from './photos/photos.module';
+import { PhotosService } from './photos/photos.service';
+import { Photo } from './photos/photo.entity';
 
 
 
@@ -33,10 +36,10 @@ import { HomeController } from './users/home.controller';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, Estado, Endereco, Imovel, Avaliacao]),
-    AuthModule, UsersModule,
+    TypeOrmModule.forFeature([User, Estado, Endereco, Imovel, Avaliacao, Photo]),
+    AuthModule, UsersModule, PhotosModule,
   ],
   controllers: [UsersController, EstadoController, EnderecoController, ImovelController, AvaliacaoController, HomeController],
-  providers: [UsersService, EstadoService, EnderecoService, ImovelService, AvaliacaoService],
+  providers: [UsersService, EstadoService, EnderecoService, ImovelService, AvaliacaoService, PhotosService],
 })
 export class AppModule {}

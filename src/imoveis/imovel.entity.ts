@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { Avaliacao } from '../avaliacoes/avaliacao.entity';
 import { User } from '../users/user.entity';
+import { Photo } from 'src/photos/photo.entity';
 
 @Entity()
 export class Imovel {
@@ -25,8 +26,11 @@ export class Imovel {
   @Column()
   emailContato: string;
 
-  @Column('json', { nullable: true })
-  fotos: { filename: string; originalname: string }[];
+  // @Column('json', { nullable: true })
+  // fotos: { filename: string; originalname: string }[];
+
+  @OneToMany(() => Photo, (photo) => photo.imovel)
+  photos: Photo[]
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   valor: number;

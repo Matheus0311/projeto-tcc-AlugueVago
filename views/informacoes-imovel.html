@@ -256,124 +256,124 @@
   </nav>
 
  <!-- Conteúdo da página -->
-<div class="container mx-auto mt-8">
-    <div class="content-container">
-      <div class="flex flex-wrap">
-        <!-- Carousel de Imagens -->
-        <div class="w-full md:w-1/2 mb-4 pr-4 relative">
-          <div id="propertyCarousel" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-              <% if (imovel.fotos && imovel.fotos.length > 0) { %>
-                <% for (let i = 0; i < imovel.fotos.length; i++) { %>
-                  <li data-target="#propertyCarousel" data-slide-to="<%= i %>" <% if (i === 0) { %>class="active"<% } %>></li>
+  <div class="container mx-auto mt-8">
+      <div class="content-container">
+        <div class="flex flex-wrap">
+          <!-- Carousel de Imagens -->
+          <div class="w-full md:w-1/2 mb-4 pr-4 relative">
+            <div id="propertyCarousel" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <% if (imovel.fotos && imovel.fotos.length > 0) { %>
+                  <% for (let i = 0; i < imovel.fotos.length; i++) { %>
+                    <li data-target="#propertyCarousel" data-slide-to="<%= i %>" <% if (i === 0) { %>class="active"<% } %>></li>
+                  <% } %>
                 <% } %>
-              <% } %>
-            </ol>
-            <div class="carousel-inner">
-              <% if (imovel.fotos && imovel.fotos.length > 0) { %>
-                <% for (let i = 0; i < imovel.fotos.length; i++) { %>
-                  <div class="carousel-item <% if (i === 0) { %>active<% } %>">
-                    <img src="/imoveis/fotos/<%= imovel.fotos[i].filename %>" class="d-block w-100" alt="Imagem do Imóvel">
+              </ol>
+              <div class="carousel-inner">
+                <% if (imovel.fotos && imovel.fotos.length > 0) { %>
+                  <% for (let i = 0; i < imovel.fotos.length; i++) { %>
+                    <div class="carousel-item <% if (i === 0) { %>active<% } %>">
+                      <img src="/imoveis/fotos/<%= imovel.fotos[i].filename %>" class="d-block w-100" alt="Imagem do Imóvel">
+                      <div class="carousel-caption d-none d-md-block">
+                        <p class="photo-title"><%= imovel.fotos[i].originalname %></p>
+                      </div>
+                    </div>
+                  <% } %>
+                <% } else { %>
+                  <div class="carousel-item active">
+                    <div class="h-64 flex items-center justify-center bg-gray-300">
+                      <i class="fas fa-image text-gray-500 text-4xl"></i>
+                    </div>
                     <div class="carousel-caption d-none d-md-block">
-                      <p class="photo-title"><%= imovel.fotos[i].originalname %></p>
+                      <p class="photo-title">Nenhuma foto disponível</p>
                     </div>
                   </div>
                 <% } %>
+              </div>
+              <a class="carousel-control-prev" href="#propertyCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Anterior</span>
+              </a>
+              <a class="carousel-control-next" href="#propertyCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Próximo</span>
+              </a>
+            </div>
+
+            <div class="text-center mt-3">
+              <p class="text-3xl font-bold text-blue-500">
+                <span class="text-5xl">R$<%= imovel.valor %></span> <span class="text-sm text-gray-500">/mês</span>
+              </p>
+            </div>
+        
+    
+
+
+            <div class="border rounded-lg p-4 mt-3 bg-white shadow-md">
+              <h2 class="section-title mb-2">Avaliações</h2>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span id="numAvaliacoes" class="text-gray-600 text-sm"></span>
+                <span id="averageRating" class="text-4xl text-blue-500 font-semibold text-md-right text-lg-right"></span>
+              </div>
+            
+              <!-- Verifica se o usuário está logado -->
+              <% if (userIsLoggedIn) { %>
+                <!-- Formulário para inserir avaliações -->
+                <form id="reviewForm" class="mb-4" data-imovel-id="<%= imovel.id %>" data-user-id="<%= user ? user.id : null %>">
+                  <div class="flex items-center mt-2">
+                    <div class="rating-stars">
+                      <span class="star" data-rating="1">&#9733;</span>
+                      <span class="star" data-rating="2">&#9733;</span>
+                      <span class="star" data-rating="3">&#9733;</span>
+                      <span class="star" data-rating="4">&#9733;</span>
+                      <span class="star" data-rating="5">&#9733;</span>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary mt-2">Enviar Avaliação</button>
+                </form>
               <% } else { %>
-                <div class="carousel-item active">
-                  <div class="h-64 flex items-center justify-center bg-gray-300">
-                    <i class="fas fa-image text-gray-500 text-4xl"></i>
-                  </div>
-                  <div class="carousel-caption d-none d-md-block">
-                    <p class="photo-title">Nenhuma foto disponível</p>
-                  </div>
-                </div>
+                <p>Faça login para avaliar.</p>
               <% } %>
+              
+              <!-- Lista de avaliações existentes -->
+              <!-- <div id="reviewsList"></div> -->
             </div>
-            <a class="carousel-control-prev" href="#propertyCarousel" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Anterior</span>
-            </a>
-            <a class="carousel-control-next" href="#propertyCarousel" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Próximo</span>
-            </a>
-          </div>
-
-          <div class="text-center mt-3">
-            <p class="text-3xl font-bold text-blue-500">
-              <span class="text-5xl">R$<%= imovel.valor %></span> <span class="text-sm text-gray-500">/mês</span>
-            </p>
-          </div>
+            
 
 
-<!-- Seção de Avaliações -->
-<div class="border rounded-lg p-4 mt-3 bg-white shadow-md" data-imovel-id="<%= imovel.id %>">
-  <div class="flex justify-between items-center">
-    <h2 class="section-title mb-2">Avaliações</h2>
-    <div class="flex items-center">
-      <span id="numAvaliacoes" class="text-gray-600 text-sm"></span>
-      <span id="averageRating" class="text-4xl text-blue-500 font-semibold ml-2"></span>
-    </div>
-  </div>
-  
-  <!-- Verifica se o usuário está logado -->
-  <% if (userIsLoggedIn) { %>
-    <!-- Formulário para inserir avaliações -->
-    <form id="reviewForm" class="mb-4" data-imovel-id="<%= imovel.id %>" data-user-id="<%= user ? user.id : null %>">
-      <label class="text-sm font-medium">Avaliação:</label>
-      <div class="flex items-center mt-2">
-        <div class="rating-stars">
-          <span class="star" data-rating="1">&#9733;</span>
-          <span class="star" data-rating="2">&#9733;</span>
-          <span class="star" data-rating="3">&#9733;</span>
-          <span class="star" data-rating="4">&#9733;</span>
-          <span class="star" data-rating="5">&#9733;</span>
-        </div>
-      </div>
-      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mt-2">Enviar Avaliação</button>
-    </form>
-  <% } else { %>
-    <p>Faça login para avaliar.</p>
-  <% } %>
-  
-  <!-- Lista de avaliações existentes -->
-  <!-- <div id="reviewsList"></div> -->
-</div>
-
-
-
-
-
-
-
-
-          <div class="contact-info border rounded-lg p-4 mt-3 bg-white shadow-md">
-            <h2 class="section-title mb-2">Informações de Contato</h2>
-            <div class="flex items-center mb-2">
+            <div class="contact-info border rounded-lg p-4 mt-3 bg-white shadow-md">
+              <h2 class="section-title mb-2">Informações de Contato</h2>
+              <div class="flex flex-wrap items-center mb-2">
                 <div class="info-icon">
-                    <i class="fas fa-envelope text-blue-500"></i>
+                  <i class="fas fa-envelope text-blue-500"></i>
                 </div>
-                <p class="text-lg"><strong>E-mail:</strong> <%= imovel.emailContato %></p>
-            </div>
-            <div class="flex items-center mb-2">
+                <div class="contact-text">
+                  <p class="text-lg"><strong class="mr-2">E-mail:</strong></p>
+                  <p class="text-lg"><%= imovel.emailContato %></p>
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center mb-2">
                 <div class="info-icon">
-                    <i class="fas fa-phone-alt text-blue-500"></i>
+                  <i class="fas fa-phone-alt text-blue-500"></i>
                 </div>
-                <p class="text-lg"><strong>Telefone:</strong> <%= imovel.telefoneContato %></p>
-            </div>
-            <div class="d-flex justify-content-between align-items-center mt-3">
-                <button id="openEmailForm" class="btn btn-primary mr-2">
-                    <i class="fas fa-envelope"></i> Enviar E-mail
+                <div class="contact-text">
+                  <p class="text-lg"><strong class="mr-2">Telefone:</strong></p>
+                  <p class="text-lg"><%= imovel.telefoneContato %></p>
+                </div>
+              </div>
+              <div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
+                <button id="openEmailForm" class="btn btn-primary mb-2 mb-md-0 mr-md-2">
+                  <i class="fas fa-envelope"></i> Enviar E-mail
                 </button>
-                <a href="tel:<%= imovel.telefoneContato %>" class="btn btn-info mr-2">
-                    <i class="fas fa-phone"></i> Fazer Ligação
+                <a href="tel:<%= imovel.telefoneContato %>" class="btn btn-info mb-2 mb-md-0 mr-md-2">
+                  <i class="fas fa-phone"></i> Fazer Ligação
                 </a>
                 <a href="https://wa.me/<%= imovel.telefoneContato %>?text=Olá,%20gostaria%20de%20mais%20informações%20sobre%20o%20imóvel%20com%20Cód.%20imóvel:%20<%= imovel.id %>" target="_blank" class="btn btn-success">
-                    <i class="fab fa-whatsapp"></i> Enviar WhatsApp
+                  <i class="fab fa-whatsapp"></i> Enviar WhatsApp
                 </a>
+              </div>
             </div>
-        </div>
+            
         
         
           

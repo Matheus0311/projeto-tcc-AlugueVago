@@ -6,8 +6,8 @@
   <title>AlugueVago - Configurações</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-    <!-- Include Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Include Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
   <style>
     body {
       background-color: #e6f0ff;
@@ -170,176 +170,182 @@
 </head>
 <body class="bg-gray-100">
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500 navbar-light bg-light">
-    <!-- <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500"> -->
-      <div class="container-fluid">
-        <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link text-white" href="/">Home</a>
-            </li>
+  <nav class="navbar navbar-expand-lg navbar-light bg-gradient-to-r from-blue-300 to-blue-500 py-2">
+  <!-- <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500"> -->
+    <div class="container-fluid">
+      <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/">Home</a>
+          </li>
+          <li class="nav-item dropdown relative">
+            <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-star text-white mr-2"></i> Favoritos  <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
+            </a>
+            
+            <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
+              <div id="favoritesList"></div>
+            </div>
+          </li>
+          <% if (userIsLoggedIn) { %>
+            
             <li class="nav-item dropdown relative">
-              <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-star text-white mr-2"></i> Favoritos  <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
-              </a>
-              
-              <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
-                <div id="favoritesList"></div>
+              <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="text-white"><%= user.nomeUsuario %></span>
+              </a>  
+              <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
+                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/imoveis/meus-imoveis">Meus Imoveis</a>
+                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
+                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
               </div>
             </li>
-            <% if (userIsLoggedIn) { %>
-             
-              <li class="nav-item dropdown relative">
-                <a class="nav-link dropdown-toggle flex items-center" href="#" id="profileDropdownToggle" role="button" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-                  <span class="text-white"><%= user.nomeUsuario %></span>
-                </a>  
-                <div class="dropdown-menu hidden absolute right-0 mt-2 w-28 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="profileDropdownToggle">
-                  <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/imoveis/meus-imoveis">Meus Imoveis</a>
-                  <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/account-config">Configuração de Conta</a>
-                  <a class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-decoration-none" href="/users/logout">Deslogar</a>
-                </div>
-              </li>
-              <div>
-                <% if (user.imagemPerfil) { %>
-                  <img class="profile-image-navbar" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
-                <% } else { %>
-                  <i class="profile-image-navbar fas fa-user-circle fa-2x bg-blue-300 text-gray-500"></i>
-                <% } %>
-              </div>              
+            <div>
+              <% if (user.imagemPerfil) { %>
+                <img class="profile-image-navbar" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
               <% } else { %>
-              <li class="nav-item">
-                <a class="nav-link profile-link text-white" href="/users/login">
-                  <i class="fas fa-user"></i>
-                  Fazer Login
-                </a>
-                <li><a class="nav-link text-white" href="/users/cadastro">Cadastro</a></li>
-              </li>
-            <% } %>
-            
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container mx-auto mt-8 p-4 max-w-md">
-      <!-- Foto do usuário e nome no topo -->
-      <div class="text-center mb-4">
-        <% if (user.imagemPerfil) { %>
-          <img class="profile-image-framed w-24 h-24 rounded-full mx-auto" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
-        <% } else { %>
-          <div class="w-24 h-24 rounded-full mx-auto bg-blue-300 flex items-center justify-center">
-            <i class="fas fa-user-circle fa-6x text-gray-500"></i>
-          </div>
-        <% } %>
-        <h1 class="text-xl font-semibold mt-2"><%= user.nomeUsuario %></h1>
-      </div>
-  
-      <div class="flex flex-col space-y-2 items-start">
-        <a href="/users/edit" class="text-blue-500 link-transition py-1 px-2 rounded-full text-center transition duration-300 hover:bg-gray-100 text-decoration-none">Editar Dados</a>
-        <a href="/users/delete-account" class="text-red-500 link-transition py-1 px-2 rounded-full text-center transition duration-300 hover:bg-gray-100 text-decoration-none">Apagar Conta</a>
+                <i class="profile-image-navbar fas fa-user-circle fa-2x bg-blue-300 text-gray-500"></i>
+              <% } %>
+            </div>              
+            <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link profile-link text-white" href="/users/login">
+                <i class="fas fa-user"></i>
+                Fazer Login
+              </a>
+              <li><a class="nav-link text-white" href="/users/cadastro">Cadastro</a></li>
+            </li>
+          <% } %>
+          
+        </ul>
       </div>
     </div>
+  </nav>
 
 
-    <script>
-      // Chamando a função quando a página carrega
-      window.addEventListener('load', () => {
-        populateFavoritesList();
-      });
-    </script>
-    <script>
-        
-      const favoritesList = document.getElementById('favoritesList');
-  
-      async function getImovelData(imovelId) {
-        try {
-          const response = await fetch(`/imoveis/${imovelId}/relevant-fields`);
-          if (response.ok) {
-            const data = await response.json();
-            const relevantData = {
-              id: data.id,
-              enderecoRua: data.enderecoRua,
-              enderecoNumero: data.enderecoNumero,
-              enderecoBairro: data.enderecoBairro,
-              enderecoCidade: data.enderecoCidade,
-              valor: data.valor
-            };
-            return relevantData;
-          } else {
-            console.error('Failed to fetch property data');
-            return null;
-          }
-        } catch (error) {
-          console.error('Error fetching property data:', error);
+  <div class="container-fluid mx-auto mt-4">
+    <div class="card max-w-md mx-auto">
+      <div class="card-body bg-white p-8 py-3 px-4 rounded-lg shadow-md w-100">
+        <!-- Foto do usuário e nome no topo -->
+        <div class="text-center mb-4">
+          <% if (user.imagemPerfil) { %>
+            <img class="profile-image-framed w-24 h-24 rounded-full mx-auto" src="/users/<%= user.imagemPerfil %>" alt="Imagem de Perfil" />
+          <% } else { %>
+            <div class="w-24 h-24 rounded-full mx-auto bg-blue-300 flex items-center justify-center">
+              <i class="fas fa-user-circle fa-6x text-gray-500"></i>
+            </div>
+          <% } %>
+          <h1 class="text-xl font-semibold mt-2"><%= user.nomeUsuario %></h1>
+        </div>
+
+        <div class="flex flex-col space-y-2 items-start">
+          <a href="/users/edit" class="text-blue-500 link-transition py-1 px-2 rounded-full text-center transition duration-300 hover:bg-gray-100 text-decoration-none">Editar Dados</a>
+          <a href="/users/delete-account" class="text-red-500 link-transition py-1 px-2 rounded-full text-center transition duration-300 hover:bg-gray-100 text-decoration-none">Apagar Conta</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // Chamando a função quando a página carrega
+    window.addEventListener('load', () => {
+      populateFavoritesList();
+    });
+  </script>
+  <script>
+      
+    const favoritesList = document.getElementById('favoritesList');
+
+    async function getImovelData(imovelId) {
+      try {
+        const response = await fetch(`/imoveis/${imovelId}/relevant-fields`);
+        if (response.ok) {
+          const data = await response.json();
+          const relevantData = {
+            id: data.id,
+            enderecoRua: data.enderecoRua,
+            enderecoNumero: data.enderecoNumero,
+            enderecoBairro: data.enderecoBairro,
+            enderecoCidade: data.enderecoCidade,
+            valor: data.valor
+          };
+          return relevantData;
+        } else {
+          console.error('Failed to fetch property data');
           return null;
         }
+      } catch (error) {
+        console.error('Error fetching property data:', error);
+        return null;
       }
-      
-      async function populateFavoritesList() {
-        favoritesList.innerHTML = '';
-      
-        let hasFavoritedProperties = false;
-        let favoritesCount = 0;
-      
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key.startsWith('liked_') && localStorage.getItem(key) === 'true') {
-            const imovelId = key.substring(6);
-            const imovel = await getImovelData(imovelId);
-            if (imovel) {
-              hasFavoritedProperties = true;
-              favoritesCount++;
-      
-              const listItem = document.createElement('div');
-              listItem.className = 'dropdown-item';
-              const link = document.createElement('a');
-              link.href = `/imoveis/informacoes-imovel/${imovelId}`;
-      
-              let propertyImage = '';
-              if (imovel.fotos && imovel.fotos.length > 0) {
-                propertyImage = `<img src="${imovel.fotos[0]}" alt="Property Image" class="property-image">`;
-              } else {
-                propertyImage = '<i class="fas fa-image property-placeholder"></i>';
-              }
-      
-              link.innerHTML = `
-                ${propertyImage}
-                <p><strong>Endereço:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoBairro}, ${imovel.enderecoCidade}</p>
-                <p><strong>Valor:</strong> R$ ${imovel.valor}</p>
-                <hr>
-              `;
-              listItem.appendChild(link);
-              favoritesList.appendChild(listItem);
+    }
+    
+    async function populateFavoritesList() {
+      favoritesList.innerHTML = '';
+    
+      let hasFavoritedProperties = false;
+      let favoritesCount = 0;
+    
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('liked_') && localStorage.getItem(key) === 'true') {
+          const imovelId = key.substring(6);
+          const imovel = await getImovelData(imovelId);
+          if (imovel) {
+            hasFavoritedProperties = true;
+            favoritesCount++;
+    
+            const listItem = document.createElement('div');
+            listItem.className = 'dropdown-item';
+            const link = document.createElement('a');
+            link.href = `/imoveis/informacoes-imovel/${imovelId}`;
+    
+            let propertyImage = '';
+            if (imovel.fotos && imovel.fotos.length > 0) {
+              propertyImage = `<img src="${imovel.fotos[0]}" alt="Property Image" class="property-image">`;
+            } else {
+              propertyImage = '<i class="fas fa-image property-placeholder"></i>';
             }
+    
+            link.innerHTML = `
+              ${propertyImage}
+              <p><strong>Endereço:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoBairro}, ${imovel.enderecoCidade}</p>
+              <p><strong>Valor:</strong> R$ ${imovel.valor}</p>
+              <hr>
+            `;
+            listItem.appendChild(link);
+            favoritesList.appendChild(listItem);
           }
         }
-      
-        const favoritesCountSpan = document.getElementById('favoritesCount');
-        favoritesCountSpan.textContent = favoritesCount;
-      
-        if (!hasFavoritedProperties) {
-          const noFavoritesMessage = document.createElement('div');
-          noFavoritesMessage.className = 'dropdown-item';
-          noFavoritesMessage.innerText = 'Nenhum imóvel curtido ainda ( ´•︵•` )';
-          favoritesList.appendChild(noFavoritesMessage);
-        }
       }
-      
-      const favoritesDropdown = document.getElementById('favoritesDropdown');
-      favoritesDropdown.addEventListener('click', populateFavoritesList);
-      
-  
-    </script>
+    
+      const favoritesCountSpan = document.getElementById('favoritesCount');
+      favoritesCountSpan.textContent = favoritesCount;
+    
+      if (!hasFavoritedProperties) {
+        const noFavoritesMessage = document.createElement('div');
+        noFavoritesMessage.className = 'dropdown-item';
+        noFavoritesMessage.innerText = 'Nenhum imóvel curtido ainda ( ´•︵•` )';
+        favoritesList.appendChild(noFavoritesMessage);
+      }
+    }
+    
+    const favoritesDropdown = document.getElementById('favoritesDropdown');
+    favoritesDropdown.addEventListener('click', populateFavoritesList);
+    
+
+  </script>
 
   <!-- Scripts JavaScript -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 </body>
 </html>
