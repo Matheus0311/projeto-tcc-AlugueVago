@@ -126,6 +126,12 @@
     background-color: #4a90e2;
   }
 
+
+  .error-message {
+    color: red; 
+    font-size: 14px; 
+  }
+
 </style>
 <body class="bg-gray-100">
 <!-- Navbar -->
@@ -196,7 +202,7 @@
         </div>
       <% } %>
   
-      <form action="/imoveis/cadastro-imovel" method="POST" enctype="multipart/form-data">
+      <form action="/imoveis/cadastro-imovel" method="POST" enctype="multipart/form-data" id="imovelForm">
      
         <!-- Parte 1 - Informações do Imóvel -->
         <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel</h2>
@@ -205,18 +211,39 @@
           <div>
             <!-- Tamanho -->
             <div class="input-container">
-              <label for="tamanho"><span class="text-red-500">*</span> Tamanho (m²):</label>
-              <input value="400" type="number" id="tamanho" name="tamanho" class="rounded-md focus:border-blue-500" required >
+              <label for="tamanho">Tamanho (m²): <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe o tamanho do imóvel">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input type="number" id="tamanho" name="tamanho" class="rounded-md focus:border-blue-500" 
+              title="Informe o tamanho do imóvel"
+              required >
+              <div class="error-message" id="tamanhoError"></div>
             </div>
             <!-- Quantidade de Cômodos -->
             <div class="input-container">
-              <label for="quantidadeComodos"><span class="text-red-500">*</span> Quantidade de Cômodos:</label>
-              <input value="400" type="number" id="quantidadeComodos" name="quantidadeComodos" class="rounded-md focus:border-blue-500" required>
+              <label for="quantidadeComodos">Quantidade de Cômodos: <span class="text-red-500">*</span>
+                <span class="info-icon" title="Informe a quantidade cômodos">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+
+              <input type="number" id="quantidadeComodos" name="quantidadeComodos" class="rounded-md focus:border-blue-500" 
+              title="Informe a quantidade cômodos"
+              required>
+              <div class="error-message" id="quantidadeComodosError"></div>
             </div>
             <!-- Mobiliado -->
             <div class="input-container">
-              <label for="mobiliado"><span class="text-red-500">*</span> Mobiliado:</label>
-              <select id="mobiliado" name="mobiliado" class="rounded-md focus:border-blue-500" required>
+              <label for="mobiliado">Mobiliado: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe se o imóvel é mobiliado">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="mobiliado" name="mobiliado" class="rounded-md focus:border-blue-500" 
+              title="Informe se o imóvel é mobiliado" required>
+              <div class="error-message" id="mobiliadoError"></div>
                 <option value="" selected>Escolha a opção</option>
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
@@ -224,8 +251,15 @@
             </div>
             <!-- Status de Negociação -->
             <div class="input-container">
-              <label for="statusNegociacao"><span class="text-red-500">*</span> Status de Negociação:</label>
-              <select id="statusNegociacao" name="statusNegociacao" class="rounded-md focus:border-blue-500" required>
+              <label for="statusNegociacao">Status de Negociação: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe se o imóvel já está sendo negociado">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="statusNegociacao" name="statusNegociacao" class="rounded-md focus:border-blue-500" 
+              title="Informe se o imóvel já está sendo negociado"
+              required>
+              <div class="error-message" id="statusNegociacaoError"></div>
                 <option value="" selected >Escolha a opção</option>
                 <option value="1" >Disponível</option>
                 <option value="0">Indisponível</option>
@@ -233,54 +267,127 @@
             </div>
             <!-- Valor -->
             <div class="input-container">
-              <label for="valor"><span class="text-red-500">*</span> Valor Mensal:</label>
-              <input type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" required>
+              <label for="valor">Valor Mensal: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe o valor mensal do aluguel do imóvel">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" 
+              title="Informe o valor mensal do aluguel do imóvel"
+              required>
+              <div class="error-message" id="valorError"></div>
+
             </div>
             <!-- RG do Proprietário -->
             <div class="input-container">
-              <label for="rgProprietario"><span class="text-red-500">*</span> RG do Proprietário:</label>
-              <input type="text" id="rgProprietario" name="rgProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <label for="rgProprietario">
+                RG: <span class="text-red-500">*</span>
+                <span class="info-icon" title="Digite um RG válido com 8 a 9 dígitos">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input
+                type="text"
+                id="rgProprietario"
+                name="rgProprietario"
+                placeholder="Digite sem pontuação"
+                class="rounded-md focus:border-blue-500"
+                maxlength="9"
+                required
+                pattern="[0-9]{8,9}"
+                title="Digite um RG válido com 8 a 9 dígitos"
+              />
+              <div class="error-message" id="rgError"></div>
             </div>
             <!-- CPF do Proprietário -->
             <div class="input-container">
-              <label for="cpfProprietario"><span class="text-red-500">*</span> CPF do Proprietário:</label>
-              <input type="text" id="cpfProprietario" name="cpfProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <label for="cpfProprietario">
+                CPF: <span class="text-red-500">*</span>
+                <span class="info-icon" title="Digite um CPF válido com 11 dígitos">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input
+                type="text"
+                id="cpfProprietario"
+                name="cpfProprietario"
+                placeholder="Digite sem pontuação"
+                class="rounded-md focus:border-blue-500"
+                maxlength="11"
+                required
+                pattern="[0-9]{11}"
+                title="Digite um CPF válido com 11 dígitos"
+              />
+              <div class="error-message" id="cpfError"></div>
             </div>
             
           </div>
           <div>
             <!-- Descrição -->
             <div class="input-container">
-              <label for="descricao"><span class="text-red-500">*</span>Descrição</label>
-              <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4" required></textarea>
+              <label for="descricao">Descrição <span class="text-red-500">*</span>
+                <span class="info-icon" title="Informe uma pequena descrição com 3 a 200 caracteres">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4"  maxlength="200"
+              required
+              title="Informe uma pequena descrição com 3 a 200 caracteres"
+              pattern=".{3,200}"></textarea>
+              <div class="error-message" id="descricaoError"></div>
             </div>
             <!-- Fotos do Imóvel -->
             <div class="upload-container">
-              <label for="fotos" class="block text-gray-700 font-semibold mb-2">Fotos (até 6 fotos):</label>
+              <label for="fotos" class="block text-gray-700 font-semibold mb-2">Fotos (até 6 fotos): <span class="text-red-500">*</span>
+                <span class="info-icon" title="Forneça até 6 imagens do imóvel, de preferência do mesmo tamanho">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
               <div class="relative">
-                <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="updateImageLabel(this)">
+                <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="updateImageLabel(this)" required>
                 <p id="fotosLabel">Clique para selecionar fotos</p>
               </div>
+              <div class="error-message" id="fotosError"></div>
             </div>
             <!-- Documentos do Imóvel -->
             <div class="upload-container">
-              <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">PDF Document:</label>
+              <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">PDF Document: <span class="text-red-500">*</span>
+                <span class="info-icon" title="Forneça 1 PDF com os documentos principais do imóvel (Escritura)">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
               <div class="relative">
-                <input type="file" id="pdfDocument" name="pdfDocument" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" onchange="updatePDFLabel(this)">
+                <input type="file" id="pdfDocument" name="pdfDocument" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" onchange="updatePDFLabel(this)" required>
                 <p id="pdfDocumentLabel">Clique para selecionar um PDF</p>
               </div>
             </div>
 
 
+            <br>
             <!-- Número de Inscrição -->
             <div class="input-container">
-              <label for="numeroInscricao"><span class="text-red-500">*</span> Número de Inscrição do Imóvel:</label>
-              <input value="123456789" type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <label for="numeroInscricao">Número de Inscrição do Imóvel: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
+              title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU"
+              required>
+              <div class="error-message" id="numeroInscricaoError"></div>
+
             </div>
             <!-- Tipo de Imóvel -->
             <div class="input-container">
-              <label for="tipoImovel"><span class="text-red-500">*</span> Tipo de Imóvel:</label>
-              <select id="tipoImovel" name="tipoImovel" class="rounded-md focus:border-blue-500" required>
+              <label for="tipoImovel">Tipo de Imóvel: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe o tipo do imóvel">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="tipoImovel" name="tipoImovel" class="rounded-md focus:border-blue-500" 
+              title="Informe o tipo do imóvel"
+              required>
+              <div class="error-message" id="tipoImovelError"></div>
                 <option value="" selected>Escolha o tipo</option>
                 <option value="Salão">Salão Comercial</option>
                 <option value="Casa">Casa</option>
@@ -298,8 +405,14 @@
           <div>
             <!-- Grande -->
             <div class="input-container">
-              <label for="grande"><span class="text-red-500">*</span> Grande:</label>
-              <select id="grande" name="grande" class="rounded-md focus:border-blue-500">
+              <label for="grande">Grande: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe se o imóvel é considerado grande (só aparecerá esse atributo se for verdadeiro)">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="grande" name="grande" class="rounded-md focus:border-blue-500" 
+              title="Informe se o imóvel é considerado grande (só aparecerá esse atributo se for verdadeiro)"
+              required>
                 <option value="" selected>Escolha a opção</option>
                 <option value="1" >Sim</option>
                 <option value="0">Não</option>
@@ -307,8 +420,14 @@
             </div>
             <!-- Bem Localizado -->
             <div class="input-container">
-              <label for="bemLocalizado"><span class="text-red-500">*</span> Bem Localizado:</label>
-              <select id="bemLocalizado" name="bemLocalizado" class="rounded-md focus:border-blue-500">
+              <label for="bemLocalizado">Bem Localizado: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe se o imóvel é bem localizado (só aparecerá esse atributo se for verdadeiro)">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="bemLocalizado" name="bemLocalizado" class="rounded-md focus:border-blue-500" 
+              title="Informe se o imóvel é bem localizado (só aparecerá esse atributo se for verdadeiro)"
+              required>
                 <option value="" selected>Escolha a opção</option>
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
@@ -316,8 +435,14 @@
             </div>
             <!-- Condomínio Fechado -->
             <div class="input-container">
-              <label for="condominioFechado"><span class="text-red-500">*</span> Condomínio Fechado:</label>
-              <select id="condominioFechado" name="condominioFechado" class="rounded-md focus:border-blue-500">
+              <label for="condominioFechado">Condomínio Fechado: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe se o imóvel é em condomínio fechado (só aparecerá esse atributo se for verdadeiro)">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="condominioFechado" name="condominioFechado" class="rounded-md focus:border-blue-500" 
+              title="Informe se o imóvel é em condomínio fechado (só aparecerá esse atributo se for verdadeiro)"
+              required>
                 <option value="" selected>Escolha a opção</option>
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
@@ -325,8 +450,14 @@
             </div>
             <!-- Novo -->
             <div class="input-container">
-              <label for="novo"><span class="text-red-500">*</span> Novo:</label>
-              <select id="novo" name="novo" class="rounded-md focus:border-blue-500">
+              <label for="novo">Novo: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe se o imóvel é novo(só aparecerá esse atributo se for verdadeiro)">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="novo" name="novo" class="rounded-md focus:border-blue-500" 
+              title="Informe se o imóvel é novo(só aparecerá esse atributo se for verdadeiro)"
+              required>
                 <option value="" selected>Escolha a opção</option>
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
@@ -334,8 +465,14 @@
             </div>
             <!-- Estacionamento -->
             <div class="input-container">
-              <label for="estacionamento"><span class="text-red-500">*</span> Estacionamento:</label>
-              <select id="estacionamento" name="estacionamento" class="rounded-md focus:border-blue-500">
+              <label for="estacionamento">Estacionamento: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe se o imóvel tem estacionamento(só aparecerá esse atributo se for verdadeiro)">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="estacionamento" name="estacionamento" class="rounded-md focus:border-blue-500" 
+              title="Informe se o imóvel tem estacionamento(só aparecerá esse atributo se for verdadeiro)"
+              required>
                 <option value="" selected>Escolha a opção</option>
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
@@ -343,8 +480,14 @@
             </div>
             <!-- Água Gratuita -->
             <div class="input-container">
-              <label for="aguaGratuita"><span class="text-red-500">*</span> Água Inclusa:</label>
-              <select id="aguaGratuita" name="aguaGratuita" class="rounded-md focus:border-blue-500">
+              <label for="aguaGratuita">Água Inclusa: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe se a água é inclusa(só aparecerá esse atributo se for verdadeiro)">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="aguaGratuita" name="aguaGratuita" class="rounded-md focus:border-blue-500" 
+              title="Informe se a água é inclusa(só aparecerá esse atributo se for verdadeiro)"
+              required>
                 <option value="" selected>Escolha a opção</option>
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
@@ -352,8 +495,14 @@
             </div>
             <!-- IPTU Incluso -->
             <div class="input-container">
-              <label for="iptuIncluso"><span class="text-red-500">*</span> IPTU Incluso:</label>
-              <select id="iptuIncluso" name="iptuIncluso" class="rounded-md focus:border-blue-500">
+              <label for="iptuIncluso">IPTU Incluso: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe se o IPTU é incluso(só aparecerá esse atributo se for verdadeiro)">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="iptuIncluso" name="iptuIncluso" class="rounded-md focus:border-blue-500" 
+              title="Informe se o IPTU é incluso(só aparecerá esse atributo se for verdadeiro)"
+              required>
                 <option value="" selected>Escolha a opção</option>
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
@@ -361,10 +510,6 @@
             </div>
           </div>
         </div>
-
-        
-
-      
 
     <!-- Parte 2 e 3 - Informações de Endereço e Contato -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
@@ -376,19 +521,41 @@
           <div>
             <!-- CEP -->
             <div class="input-container">
-              <label for="enderecoCEP"><span class="text-red-500">*</span> CEP:</label>
-              <input value="79740000" type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <label for="enderecoCEP">CEP: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe o CEP correto">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
+              title="Informe o CEP correto"
+              required>
+              <div class="error-message" id="enderecoCEPError"></div>
+
             </div>
             <!-- Cidade -->
             <div class="input-container">
-              <label for="enderecoCidade"><span class="text-red-500">*</span> Cidade:</label>
-              <input value="Ivinhema" type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" required>
+              <label for="enderecoCidade">Cidade: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe a cidade correta">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" 
+              title="Informe a cidade correta"
+              required>
+              <div class="error-message" id="enderecoCidadeError"></div>
+
             </div>
             <!-- Estado -->
             <div class="input-container">
-              <label for="estadoNome"><span class="text-red-500">*</span> Estado:</label>
-              <select id="estadoNome" name="estadoNome" class="rounded-md focus:border-blue-500" required>
-                <option value="" >Selecione o estado</option>
+              <label for="estadoNome">Estado: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe o estado correto">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <select id="estadoNome" name="estadoNome" class="rounded-md focus:border-blue-500" 
+              title="Informe o estado correto"
+              required>
+                <option value="" selected >Selecione o estado</option>
                 <option value="AC">Acre</option>
                 <option value="AL">Alagoas</option>
                 <option value="AP">Amapá</option>
@@ -400,7 +567,7 @@
                 <option value="GO">Goiás</option>
                 <option value="MA">Maranhão</option>
                 <option value="MT">Mato Grosso</option>
-                <option value="MS" selected>Mato Grosso do Sul</option>
+                <option value="MS">Mato Grosso do Sul</option>
                 <option value="MG">Minas Gerais</option>
                 <option value="PA">Pará</option>
                 <option value="PB">Paraíba</option>
@@ -424,18 +591,42 @@
           <div>
             <!-- Rua -->
             <div class="input-container">
-              <label for="enderecoRua"><span class="text-red-500">*</span> Rua:</label>
-              <input value="Egas Bonilha de Toledo" type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" required>
+              <label for="enderecoRua">Rua: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe a rua correta">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" 
+              title="Informe a rua correta"
+              required>
+              <div class="error-message" id="enderecoRuaError"></div>
+
             </div>
             <!-- Número -->
             <div class="input-container">
-              <label for="enderecoNumero"><span class="text-red-500">*</span> Número:</label>
-              <input value="810" type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" required>
+              <label for="enderecoNumero">Número: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe o número do imóvel correto">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" 
+              title="Informe o número do imóvel correto"
+              required>
+              <div class="error-message" id="enderecoNumeroError"></div>
+
             </div>
             <!-- Bairro -->
             <div class="input-container">
-              <label for="enderecoBairro"><span class="text-red-500">*</span> Bairro:</label>
-              <input value="Guiraí" type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" required>
+              <label for="enderecoBairro">Bairro: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe o bairro correto">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" 
+              title="Informe o bairro correto"
+              required>
+              <div class="error-message" id="enderecoBairroError"></div>
+
             </div>
           </div>
           
@@ -448,23 +639,262 @@
         </h2>
         <!-- Telefone de Contato -->
         <div class="input-container">
-          <label for="telefoneContato"><span class="text-red-500">*</span> Telefone de Contato:</label>
-          <input value="12345678" type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação">
+          <label for="telefoneContato">Telefone de Contato: <span class="text-red-500">*</span> </label>
+          <input type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação" required>
         </div>
         <!-- Email de Contato -->
         <div class="input-container">
-          <label for="emailContato"><span class="text-red-500">*</span> Email de Contato:</label>
-          <input value="123@456.com" type="email" id="emailContato" name="emailContato" class="rounded-md focus:border-blue-500" placeholder="exemplo@exemplo.com">
+          <label for="emailContato">
+            Email: <span class="text-red-500">*</span>
+            <span class="info-icon" title="Digite um nome email válido com @ e .">
+              <i class="text-gray-500 cursor-pointer">&#9432;</i>
+            </span>
+          </label>
+          <input
+            type="email"
+            id="emailContato"
+            name="emailContato"
+            class="rounded-md focus:border-blue-500"
+            placeholder="exemplo@exemplo.com"
+            required
+            title="Digite um email válido com @ e ."
+          />
+          <div class="error-message" id="emailError"></div>
         </div>
       </div>
     </div>
 
-      <div class="mt-4">
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Cadastrar</button>
-      </div>
+    <div class="mt-4 flex justify-between">
+      <button
+        type="submit"
+        class="w-1/2 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
+      >
+        Cadastrar
+      </button>
+  
+      <button
+        type="button"
+        onclick="window.location.href='/imoveis/meus-imoveis'"
+        class="w-1/2 bg-red-500 hover:bg-red-600 text-black py-2 rounded-md transition duration-300 ml-2"
+      >
+        Cancelar
+      </button>
+    </div>
     </form>
   </div>
 </div>
+
+
+
+<script>
+  const form = document.getElementById('imovelForm');
+  const tamanhoInput = document.getElementById('tamanho');
+  
+  const quantidadeComodosInput = document.getElementById('quantidadeComodos');
+  const mobiliadoInput = document.getElementById('mobiliado');
+  const statusNegociacaoInput = document.getElementById('statusNegociacao');
+  const valorInput = document.getElementById('valor');
+  const rgInput = document.getElementById('rgProprietario');
+  const cpfInput = document.getElementById('cpfProprietario');
+  const descricaoInput = document.getElementById('descricao');
+  const emailInput = document.getElementById('emailContato');
+
+  const tipoImovelInput = document.getElementById('tipoImovel');
+  const novoInput = document.getElementById('novo');
+  const grandeInput = document.getElementById('grande');
+  const bemLocalizadoInput = document.getElementById('bemLocalizado');
+  const condominioFechadoInput = document.getElementById('condominioFechado');
+  const estacionamentoInput = document.getElementById('estacionamento');
+  const aguaGratuitaInput = document.getElementById('aguaGratuita');
+  const iptuInclusoInput = document.getElementById('iptuIncluso');
+
+  const enderecoCEPInput = document.getElementById("enderecoCEP");
+  const enderecoRuaInput = document.getElementById("enderecoRua");
+  const enderecoBairroInput = document.getElementById("enderecoBairro");
+  const enderecoCidadeInput = document.getElementById("enderecoCidade");
+  const estadoNomeInput = document.getElementById("estadoNome");
+  
+
+  form.addEventListener('submit', (event) => {
+    let isValid = true;
+
+
+    if (!validateEmail(emailInput.value)) {
+      isValid = false;
+      displayError(emailInput, 'Digite um email válido');
+    }
+
+
+    if (!/^[0-9]{8,9}$/.test(rgInput.value) || rgInput.value.length > rgInput.maxLength) {
+      isValid = false;
+      displayError(rgInput, 'Digite um RG válido com 8 a 9 dígitos');
+    }
+    
+    if (!/^[0-9]{11}$/.test(cpfInput.value) || cpfInput.value.length > cpfInput.maxLength) {
+      isValid = false;
+      displayError(cpfInput, 'Digite um CPF válido com 11 dígitos');
+    }
+
+    if (!isValidCPF(cpfInput.value)) {
+      isValid = false;
+      displayError(cpfInput, 'Digite um CPF válido');
+    }
+
+    if (tamanhoInput.value <= 0) {
+      isValid = false;
+      displayError(tamanhoInput, 'O tamanho deve ser maior que 0');
+    }
+
+    if (quantidadeComodosInput.value <= 0) {
+      isValid = false;
+      displayError(quantidadeComodosInput, 'A quantidade de cômodos deve ser maior que 0');
+    }
+
+    if (valorInput.value <= 0) {
+      isValid = false;
+      displayError(valorInput, 'O valor deve ser maior que 0');
+    }
+
+    if (descricaoInput.value.length < 3) {
+      isValid = false;
+      displayError(descricaoInput, 'A descrição deve ter pelo menos 3 caracteres');
+    }
+
+    if (!validateEmail(emailInput.value)) {
+      isValid = false;
+      displayError(emailInput, 'Digite um email válido');
+    }
+    
+
+
+    if (!isValid) {
+      event.preventDefault();
+    }
+
+  });
+
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function clearError(input) {
+    const errorDiv = input.nextElementSibling;
+    if (errorDiv) {
+      errorDiv.textContent = '';
+    }
+    input.classList.remove('border', 'border-red-500');
+  }
+
+  function displayError(input, message) {
+    const errorDiv = input.nextElementSibling;
+    errorDiv.textContent = message;
+    input.classList.add('border', 'border-red-500');
+  }
+
+
+  
+
+
+  tamanhoInput.addEventListener('input', () => clearError(tamanhoInput));
+  quantidadeComodosInput.addEventListener('input', () => clearError(quantidadeComodosInput));
+  mobiliadoInput.addEventListener('input', () => clearError(mobiliadoInput));
+  statusNegociacaoInput.addEventListener('input', () => clearError(statusNegociacaoInput));
+  valorInput.addEventListener('input', () => clearError(valorInput));
+  rgInput.addEventListener('input', () => clearError(rgInput));
+  cpfInput.addEventListener('input', () => clearError(cpfInput));
+  descricaoInput.addEventListener('input', () => clearError(descricaoInput));
+  emailInput.addEventListener('input', () => clearError(emailInput));
+
+  tipoImovelInput.addEventListener('input', () => clearError(tipoImovelInput));
+  novoInput.addEventListener('input', () => clearError(novoInput));
+  grandeInput.addEventListener('input', () => clearError(grandeInput));
+  bemLocalizadoInput.addEventListener('input', () => clearError(bemLocalizadoInput));
+  condominioFechadoInput.addEventListener('input', () => clearError(condominioFechadoInput));
+  estacionamentoInput.addEventListener('input', () => clearError(estacionamentoInput));
+  aguaGratuitaInput.addEventListener('input', () => clearError(aguaGratuitaInput));
+  iptuInclusoInput.addEventListener('input', () => clearError(iptuInclusoInput));
+
+  enderecoCEPInput.addEventListener('input', () => clearError(enderecoCEPInput));
+  enderecoRuaInput.addEventListener('input', () => clearError(enderecoRuaInput));
+  enderecoBairroInput.addEventListener('input', () => clearError(enderecoBairroInput));
+  enderecoCidadeInput.addEventListener('input', () => clearError(enderecoCidadeInput));
+  estadoNomeInput.addEventListener('input', () => clearError(estadoNomeInput));
+
+
+
+  rgInput.addEventListener('input', (event) => {
+    event.target.value = event.target.value.replace(/\D/g, ''); 
+  });
+
+  cpfInput.addEventListener('input', (event) => {
+    event.target.value = event.target.value.replace(/\D/g, ''); 
+  });
+
+  valorInput.addEventListener('input', (event) => {
+    event.target.value = event.target.value.replace(/\D/g, ''); 
+  });
+
+  enderecoCEPInput.addEventListener('input', (event) => {
+    event.target.value = event.target.value.replace(/\D/g, ''); 
+  });
+
+
+  function isValidCPF(cpf) {
+    cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+    if (cpf.length !== 11) {
+      return false;
+    }
+  
+    // Verifica se todos os dígitos são iguais (situação inválida)
+    if (/^(\d)\1+$/.test(cpf)) {
+      return false;
+    }
+  
+    const cpfArray = cpf.split('').map(Number);
+  
+    // Calcula o primeiro dígito verificador
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+      sum += cpfArray[i] * (10 - i);
+    }
+    let remainder = (sum * 10) % 11;
+    if (remainder === 10 || remainder === 11) {
+      remainder = 0;
+    }
+    if (remainder !== cpfArray[9]) {
+      return false;
+    }
+  
+    // Calcula o segundo dígito verificador
+    sum = 0;
+    for (let i = 0; i < 10; i++) {
+      sum += cpfArray[i] * (11 - i);
+    }
+    remainder = (sum * 10) % 11;
+    if (remainder === 10 || remainder === 11) {
+      remainder = 0;
+    }
+    if (remainder !== cpfArray[10]) {
+      return false;
+    }
+  
+    return true;
+  }
+  
+  // Exemplos de uso:
+  const cpf1 = '123.456.789-09';
+  console.log(isValidCPF(cpf1)); // Deve retornar true
+  
+  const cpf2 = '111.222.333-44';
+  console.log(isValidCPF(cpf2)); // Deve retornar false
+  
+
+
+</script>
+
+
+
 
 
 <script>
@@ -539,7 +969,7 @@
   "Loft espaçoso com pé-direito alto."
 ];
 
-  const descricaoInput = document.getElementById("descricao");
+  //const descricaoInput = document.getElementById("descricao");
   const randomIndex = Math.floor(Math.random() * examplePhrases.length);
   const randomPhrase = examplePhrases[randomIndex];
   descricaoInput.placeholder = randomPhrase;

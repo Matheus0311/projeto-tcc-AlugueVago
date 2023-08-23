@@ -45,20 +45,15 @@ export class ImovelService {
     return this.imovelRepository.findOne({ where: { id }, relations: ['usuario', 'photos'] });
   }
 
-  // async findImoveisByUserId(userId: number): Promise<Imovel[]> {
-  //   console.log("entrou aqui no findImoveisByUserId");
-  //   return this.imovelRepository.find({ where: { usuario: { id: userId } } });
-  // }
-
   async findImoveisByUserId(userId: number): Promise<Imovel[]> {
     console.log("entrou aqui no findImoveisByUserId");
   
     const userImoveis = await this.imovelRepository.find({
       where: { usuario: { id: userId } },
-      relations: ['photos'] // Certifique-se de usar o nome correto do relacionamento definido na entidade Imovel
+      relations: ['photos'] 
     });
   
-    console.log("userImoveis:", userImoveis); // Verifique se as fotos estão carregadas corretamente
+    console.log("userImoveis:", userImoveis); 
   
     return userImoveis;
   }

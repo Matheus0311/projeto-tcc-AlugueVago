@@ -44,7 +44,7 @@ export class ImovelController {
     if (!user) {
       res.redirect('/');
     }
-    return { user, userIsLoggedIn, errorMessages: errorMessagesArray };
+    return { user, userIsLoggedIn, errorMessages: errorMessagesArray, };
   }
   
 
@@ -52,34 +52,6 @@ export class ImovelController {
   @Post('/cadastro-imovel')
   @UseGuards(AuthenticatedGuard)
   @UseInterceptors(
-  //   FileInterceptor('pdfDocument', {
-  //   storage: diskStorage({
-  //     destination: './uploads/documentos-imoveis',
-  //     filename: (req, file, callback) => {
-  //       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-  //       callback(null, `${uniqueSuffix}${extname(file.originalname)}`);
-  //     },
-  //   }),
-  // }),
-  // FilesInterceptor('fotos', 6, {
-  //   storage: diskStorage({
-  //     destination: (req, file, callback) => {
-  //       // const user: User = req.user as User; 
-  //       console.log("fotos");
-  //       const uniqueToken = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-  //       const folder = `./uploads/fotos-imoveis/${uniqueToken}`;
-  //       if (!fs.existsSync(folder)) {
-  //         fs.mkdirSync(folder, { recursive: true });
-  //       }
-  //       callback(null, folder);
-  //     },
-  //     filename: (req, file, callback) => {
-  //       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-  //       callback(null, `${uniqueSuffix}${extname(file.originalname)}`);
-  //     },
-  //   }),
-  // })
-  // )
   AnyFilesInterceptor()
   )
  async create(
@@ -214,6 +186,7 @@ export class ImovelController {
     res.sendFile(imagePath, { root: '.' });
   }
 
+  // @UseGuards(AuthenticatedGuard, AdminGuard)
   @Get()
   async findAll(): Promise<Imovel[]> {
     return this.imovelService.findAll();
@@ -270,7 +243,7 @@ export class ImovelController {
     return res.redirect('/imoveis/meus-imoveis');
   }
 
-
+  @UseGuards(AuthenticatedGuard, AdminGuard)
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<Imovel> {
     return this.imovelService.findOne(id);
@@ -282,7 +255,7 @@ export class ImovelController {
   }
 
   @Get(':id/relevant-fields')
-async findRelevantFields(@Param('id') id: number): Promise<{
+  async findRelevantFields(@Param('id') id: number): Promise<{
   id: number;
   enderecoRua: string;
   enderecoNumero: string;
@@ -321,6 +294,7 @@ async findRelevantFields(@Param('id') id: number): Promise<{
     return { imovel, user, userIsLoggedIn };
   }
 
+  @UseGuards(AuthenticatedGuard, AdminGuard)
   @Put(':id')
   async update(@Param('id') id: number, @Body() imovel: Imovel): Promise<Imovel> {
     return this.imovelService.update(id, imovel);
