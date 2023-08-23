@@ -8,6 +8,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
 
+  <!-- Zoom -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+
  
 
   <style>
@@ -89,21 +97,33 @@
 
     .carousel-control-prev,
     .carousel-control-next {
-      color: #000;
+      width: 20px; /* Defina a largura do botão */
+      height: 100%; /* Mantenha a altura como 100% para cobrir a altura do carrossel */
+      top: 0; /* Posicione o botão no topo do carrossel */
+      background: transparent; /* Remova o fundo */
+      opacity: 0.5; /* Ajuste a opacidade conforme desejado */
+      transition: opacity 0.3s; /* Adicione uma transição de opacidade para efeito visual */
     }
-
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-      background-color: #ccc;
-      padding: 10px;
-      border-radius: 50%;
-      font-size: 18px;
-    }
-
+    
     .carousel-control-prev:hover,
     .carousel-control-next:hover {
-      background-color: #999;
+      opacity: 1; /* Aumente a opacidade no hover */
     }
+    
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      background-size: 100% 100%;
+    }
+    
+    /* Ajuste a posição do ícone dentro do botão */
+    .carousel-control-prev-icon {
+      background-position: center; /* Ajuste conforme necessário */
+    }
+    
+    .carousel-control-next-icon {
+      background-position: center; /* Ajuste conforme necessário */
+    }
+    
 
     .contact-info {
       width: 100%;
@@ -179,21 +199,42 @@
           float: right;
         }
 
-        /* Estilo para a navbar 
-        .navbar {
-          position: sticky;
-          top: 0;
-          z-index: 1000;
-          background-color: #ffffff;
-          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-          transition: top 0.3s ease-in-out;
-        }/*
+        .carousel-inner {
+          height: 400px; 
+          
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .carousel-item img {
+          max-width: 100%;
+          max-height: 100%;
+          width: auto;
+          height: auto;
+        }
+        
+        
+        .object-fit-cover {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
 
-        /* Estilo para a classe que adiciona o efeito de esconder a navbar 
-        .hide-nav {
-          top: -100px; /* Move a navbar para fora da tela 
-        }*/
+        .object-fit-contain {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
 
+        .zoom-icon {
+          position: absolute;
+          top: 10px;
+          right: 20px;
+          font-size: 20px;
+          color: white;
+          cursor: pointer;
+        }
+        
 
         
 
@@ -256,49 +297,48 @@
   </nav>
 
  <!-- Conteúdo da página -->
-  <div class="container mx-auto mt-8">
-      <div class="content-container">
-        <div class="flex flex-wrap">
-          <!-- Carousel de Imagens -->
-          <div class="w-full md:w-1/2 mb-4 pr-4 relative">
-            <div id="propertyCarousel" class="carousel slide" data-ride="carousel">
-              <ol class="carousel-indicators">
-                <% if (imovel.fotos && imovel.fotos.length > 0) { %>
-                  <% for (let i = 0; i < imovel.fotos.length; i++) { %>
-                    <li data-target="#propertyCarousel" data-slide-to="<%= i %>" <% if (i === 0) { %>class="active"<% } %>></li>
-                  <% } %>
-                <% } %>
-              </ol>
-              <div class="carousel-inner">
-                <% if (imovel.fotos && imovel.fotos.length > 0) { %>
-                  <% for (let i = 0; i < imovel.fotos.length; i++) { %>
-                    <div class="carousel-item <% if (i === 0) { %>active<% } %>">
-                      <img src="/imoveis/fotos/<%= imovel.fotos[i].filename %>" class="d-block w-100" alt="Imagem do Imóvel">
-                      <div class="carousel-caption d-none d-md-block">
-                        <p class="photo-title"><%= imovel.fotos[i].originalname %></p>
-                      </div>
-                    </div>
-                  <% } %>
-                <% } else { %>
-                  <div class="carousel-item active">
-                    <div class="h-64 flex items-center justify-center bg-gray-300">
-                      <i class="fas fa-image text-gray-500 text-4xl"></i>
-                    </div>
-                    <div class="carousel-caption d-none d-md-block">
-                      <p class="photo-title">Nenhuma foto disponível</p>
-                    </div>
-                  </div>
-                <% } %>
+<div class="container mx-auto mt-8">
+  <div class="content-container">
+    <div class="flex flex-wrap">
+      <!-- Carousel de Imagens -->
+      <div class="w-full md:w-1/2 mb-4 pr-4 relative">
+        <div id="propertyCarousel" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <% if (imovel.photos && imovel.photos.length > 0) { %>
+              <% for (let i = 0; i < imovel.photos.length; i++) { %>
+                <li data-target="#propertyCarousel" data-slide-to="<%= i %>" <% if (i === 0) { %>class="active"<% } %>></li>
+              <% } %>
+            <% } %>
+          </ol>
+          <div class="carousel-inner" id="propertyCarousel">
+            <% if (imovel.photos && imovel.photos.length > 0) { %>
+              <% for (let i = 0; i < imovel.photos.length; i++) { %>
+                <div class="carousel-item <% if (i === 0) { %>active<% } %>">
+                  <a href="<%= imovel.photos[i].url %>" class="image-link">
+                    <img src="<%= imovel.photos[i].url %>" class="d-block mx-auto" alt="Imagem do Imóvel">
+                  </a>
+                </div>
+              <% } %>
+            <% } else { %>
+          
+              <div class="carousel-item active">
+                <div class="h-64 flex items-center justify-center bg-gray-300">
+                  <i class="fas fa-image text-gray-500 text-4xl"></i>
+                </div>
+                <div class="carousel-caption d-none d-md-block">
+                  <p class="photo-title">Nenhuma foto disponível</p>
+                </div>
               </div>
-              <a class="carousel-control-prev" href="#propertyCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Anterior</span>
-              </a>
-              <a class="carousel-control-next" href="#propertyCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Próximo</span>
-              </a>
-            </div>
+            <% } %>
+          </div>
+          <a class="carousel-control-prev" href="#propertyCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </a>
+          <a class="carousel-control-next" href="#propertyCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </a>
+          
+        </div>
 
             <div class="text-center mt-3">
               <p class="text-3xl font-bold text-blue-500">
@@ -564,13 +604,38 @@
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <!-- Scripts JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Zoom -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
   <script>
+    $(document).ready(function() {
+      $(".image-link").fancybox({
+        buttons: [
+          "zoom",
+          "slideShow",
+          "fullScreen",
+          "thumbs",
+          "close"
+        ],
+        loop: true,
+        infobar: false,
+        protect: true,
+        modal: true,
+        afterClose: function(instance, current, e) {}
+      });
+  
+      $(document).on("click", function(e) {
+        if ($(e.target).hasClass("fancybox-slide")) {
+          $.fancybox.close();
+        }
+      });
+    });
+  </script>
+  
+
+<script>
     $(document).ready(function() {
         var rua = '<%= imovel.enderecoRua %>';
         var bairro = '<%= imovel.enderecoBairro %>';
@@ -634,7 +699,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       const likeButton = document.getElementById('likeButton');
       const heartIcon = document.querySelector('.fa-heart');
-      const favoritesCountSpan = document.getElementById('favoritesCount'); // Elemento do contador de favoritos
+      const favoritesCountSpan = document.getElementById('favoritesCount'); 
       const imovelId = '<%= imovel.id %>';
       const likedKey = 'liked_' + imovelId;
     
@@ -707,15 +772,10 @@
             const link = document.createElement('a');
             link.href = `/imoveis/informacoes-imovel/${imovelId}`;
     
-            let propertyImage = '';
-            if (imovel.fotos && imovel.fotos.length > 0) {
-              propertyImage = `<img src="${imovel.fotos[0]}" alt="Property Image" class="property-image">`;
-            } else {
-              propertyImage = '<i class="fas fa-image property-placeholder"></i>';
-            }
+            
     
             link.innerHTML = `
-              ${propertyImage}
+              
               <p><strong>Endereço:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoBairro}, ${imovel.enderecoCidade}</p>
               <p><strong>Valor:</strong> R$ ${imovel.valor}</p>
               <hr>
@@ -757,7 +817,6 @@
       const averageRatingElement = document.getElementById('averageRating');
       const numAvaliacoesElement = document.getElementById('numAvaliacoes');
       const stars = document.querySelectorAll('.star');
-      //const imovelId = reviewForm.getAttribute('data-imovel-id');
       const imovelId = "<%= imovel.id %>"
   
       function clearStars() {
@@ -810,7 +869,6 @@
   
         const userId = reviewForm.getAttribute('data-user-id');
 
-        // Fetch user's rating if user is logged in
         if (userId) {
           const userRatingResponse = await fetch(`/avaliacoes/user-rating?imovelId=<%= imovel.id %>&userId=${userId}`, {
             method: 'GET',
@@ -890,7 +948,7 @@
                 console.log('Saved Avaliação:', savedAvaliacao);
                 addReview(savedAvaliacao.nota);
                 console.log("savedAvaliação2 = ", savedAvaliacao.nota);
-                updateAverageAndUserRating(); // Update average and user's rating
+                updateAverageAndUserRating();
               } catch (error) {
                 console.error('Erro ao analisar JSON da resposta do servidor:', error);
               }
@@ -902,21 +960,9 @@
           }
         });
       }
-  
-      // Initialize the page when it loads
       updateAverageAndUserRating();
     });
   </script>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
 
 </body>

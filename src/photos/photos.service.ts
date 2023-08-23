@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Photo } from './photo.entity';
+import path, { extname } from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class PhotosService {
@@ -22,5 +24,18 @@ export class PhotosService {
       throw error;
     }
   }
-  
+
+  async findAll(): Promise<Photo[]> {
+    return this.photoRepository.find();
+  }
+
+  async saveFile(file: Express.Multer.File, destination: string): Promise<string> {
+    console.log('\n\n\n\nSAVEFILE')
+    console.log(file)
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const filePath = `${destination}/${uniqueSuffix}${extname(file.originalname)}`;
+    
+    await fs.promises.writeFile(filePath, file.buffer);
+    return filePath;
+  }
 }

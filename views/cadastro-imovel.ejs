@@ -217,42 +217,42 @@
             <div class="input-container">
               <label for="mobiliado"><span class="text-red-500">*</span> Mobiliado:</label>
               <select id="mobiliado" name="mobiliado" class="rounded-md focus:border-blue-500" required>
-                <option value="" >Escolha a opção</option>
-                <option value="true" selected>Sim</option>
-                <option value="false">Não</option>
+                <option value="" selected>Escolha a opção</option>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
               </select>
             </div>
             <!-- Status de Negociação -->
             <div class="input-container">
               <label for="statusNegociacao"><span class="text-red-500">*</span> Status de Negociação:</label>
               <select id="statusNegociacao" name="statusNegociacao" class="rounded-md focus:border-blue-500" required>
-                <option value="" >Escolha a opção</option>
-                <option value="true" selected>Disponível</option>
-                <option value="false">Indisponível</option>
+                <option value="" selected >Escolha a opção</option>
+                <option value="1" >Disponível</option>
+                <option value="0">Indisponível</option>
               </select>
             </div>
             <!-- Valor -->
             <div class="input-container">
               <label for="valor"><span class="text-red-500">*</span> Valor Mensal:</label>
-              <input value="400" type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" required>
+              <input type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" required>
             </div>
             <!-- RG do Proprietário -->
             <div class="input-container">
               <label for="rgProprietario"><span class="text-red-500">*</span> RG do Proprietário:</label>
-              <input value="12345678" type="text" id="rgProprietario" name="rgProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <input type="text" id="rgProprietario" name="rgProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
             </div>
             <!-- CPF do Proprietário -->
             <div class="input-container">
               <label for="cpfProprietario"><span class="text-red-500">*</span> CPF do Proprietário:</label>
-              <input value="12345678909" type="text" id="cpfProprietario" name="cpfProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
+              <input type="text" id="cpfProprietario" name="cpfProprietario" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" required>
             </div>
             
           </div>
           <div>
             <!-- Descrição -->
             <div class="input-container">
-              <label for="descricao"><span class="text-red-500">*</span> Descrição:</label>
-              <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4" required>Oloco</textarea>
+              <label for="descricao"><span class="text-red-500">*</span>Descrição</label>
+              <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4" required></textarea>
             </div>
             <!-- Fotos do Imóvel -->
             <div class="upload-container">
@@ -281,8 +281,8 @@
             <div class="input-container">
               <label for="tipoImovel"><span class="text-red-500">*</span> Tipo de Imóvel:</label>
               <select id="tipoImovel" name="tipoImovel" class="rounded-md focus:border-blue-500" required>
-                <option value="" >Escolha o tipo</option>
-                <option value="Salão" selected>Salão Comercial</option>
+                <option value="" selected>Escolha o tipo</option>
+                <option value="Salão">Salão Comercial</option>
                 <option value="Casa">Casa</option>
                 <option value="Apartamento">Apartamento</option>
                 <option value="Chácara">Chácara</option>
@@ -300,63 +300,63 @@
             <div class="input-container">
               <label for="grande"><span class="text-red-500">*</span> Grande:</label>
               <select id="grande" name="grande" class="rounded-md focus:border-blue-500">
-                <option value="" >Escolha a opção</option>
-                <option value="true" selected>Sim</option>
-                <option value="false">Não</option>
+                <option value="" selected>Escolha a opção</option>
+                <option value="1" >Sim</option>
+                <option value="0">Não</option>
               </select>
             </div>
             <!-- Bem Localizado -->
             <div class="input-container">
               <label for="bemLocalizado"><span class="text-red-500">*</span> Bem Localizado:</label>
               <select id="bemLocalizado" name="bemLocalizado" class="rounded-md focus:border-blue-500">
-                <option value="" >Escolha a opção</option>
-                <option value="true" selected>Sim</option>
-                <option value="false">Não</option>
+                <option value="" selected>Escolha a opção</option>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
               </select>
             </div>
             <!-- Condomínio Fechado -->
             <div class="input-container">
               <label for="condominioFechado"><span class="text-red-500">*</span> Condomínio Fechado:</label>
               <select id="condominioFechado" name="condominioFechado" class="rounded-md focus:border-blue-500">
-                <option value="" >Escolha a opção</option>
-                <option value="true" selected>Sim</option>
-                <option value="false">Não</option>
+                <option value="" selected>Escolha a opção</option>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
               </select>
             </div>
             <!-- Novo -->
             <div class="input-container">
               <label for="novo"><span class="text-red-500">*</span> Novo:</label>
               <select id="novo" name="novo" class="rounded-md focus:border-blue-500">
-                <option value="" >Escolha a opção</option>
-                <option value="true" selected>Sim</option>
-                <option value="false">Não</option>
+                <option value="" selected>Escolha a opção</option>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
               </select>
             </div>
             <!-- Estacionamento -->
             <div class="input-container">
               <label for="estacionamento"><span class="text-red-500">*</span> Estacionamento:</label>
               <select id="estacionamento" name="estacionamento" class="rounded-md focus:border-blue-500">
-                <option value="" >Escolha a opção</option>
-                <option value="true" selected>Sim</option>
-                <option value="false">Não</option>
+                <option value="" selected>Escolha a opção</option>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
               </select>
             </div>
             <!-- Água Gratuita -->
             <div class="input-container">
               <label for="aguaGratuita"><span class="text-red-500">*</span> Água Inclusa:</label>
               <select id="aguaGratuita" name="aguaGratuita" class="rounded-md focus:border-blue-500">
-                <option value="" >Escolha a opção</option>
-                <option value="true" selected>Sim</option>
-                <option value="false">Não</option>
+                <option value="" selected>Escolha a opção</option>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
               </select>
             </div>
             <!-- IPTU Incluso -->
             <div class="input-container">
               <label for="iptuIncluso"><span class="text-red-500">*</span> IPTU Incluso:</label>
               <select id="iptuIncluso" name="iptuIncluso" class="rounded-md focus:border-blue-500">
-                <option value="" >Escolha a opção</option>
-                <option value="true" selected>Sim</option>
-                <option value="false">Não</option>
+                <option value="" selected>Escolha a opção</option>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
               </select>
             </div>
           </div>
@@ -600,15 +600,10 @@
           const link = document.createElement('a');
           link.href = `/imoveis/informacoes-imovel/${imovelId}`;
   
-          let propertyImage = '';
-          if (imovel.fotos && imovel.fotos.length > 0) {
-            propertyImage = `<img src="${imovel.fotos[0]}" alt="Property Image" class="property-image">`;
-          } else {
-            propertyImage = '<i class="fas fa-image property-placeholder"></i>';
-          }
+
   
           link.innerHTML = `
-            ${propertyImage}
+
             <p><strong>Endereço:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoBairro}, ${imovel.enderecoCidade}</p>
             <p><strong>Valor:</strong> R$ ${imovel.valor}</p>
             <hr>

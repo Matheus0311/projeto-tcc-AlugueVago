@@ -11,6 +11,6 @@ export class Photo {
   @Column()
   url: string
 
-  @ManyToOne(() => Imovel, (imovel) => imovel.photos)
+  @ManyToOne(() => Imovel, (imovel) => imovel.photos, { onDelete: 'CASCADE' })
   imovel: Imovel
 }

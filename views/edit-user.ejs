@@ -624,15 +624,10 @@
           const link = document.createElement('a');
           link.href = `/imoveis/informacoes-imovel/${imovelId}`;
   
-          let propertyImage = '';
-          if (imovel.fotos && imovel.fotos.length > 0) {
-            propertyImage = `<img src="${imovel.fotos[0]}" alt="Property Image" class="property-image">`;
-          } else {
-            propertyImage = '<i class="fas fa-image property-placeholder"></i>';
-          }
+
   
           link.innerHTML = `
-            ${propertyImage}
+
             <p><strong>Endereço:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoBairro}, ${imovel.enderecoCidade}</p>
             <p><strong>Valor:</strong> R$ ${imovel.valor}</p>
             <hr>

@@ -134,8 +134,8 @@ export class ImovelController {
 
       newImovel.tamanho = tamanho;
       newImovel.quantidadeComodos = quantidadeComodos;
-      newImovel.mobiliado = mobiliado;
-      newImovel.statusNegociacao = statusNegociacao;
+      newImovel.mobiliado = mobiliado === "1";
+      newImovel.statusNegociacao = statusNegociacao === "1";
       newImovel.valor = valor;
       newImovel.descricao = descricao;
       newImovel.numeroInscricao = numeroInscricao;
@@ -150,112 +150,68 @@ export class ImovelController {
       newImovel.enderecoCidade = enderecoCidade;
       newImovel.estadoNome = estadoNome;
       newImovel.tipoImovel = tipoImovel;
-      newImovel.novo = novo;
-      newImovel.grande = grande;
-      newImovel.bemLocalizado = bemLocalizado;
-      newImovel.condominioFechado = condominioFechado;
-      newImovel.estacionamento = estacionamento;
-      newImovel.aguaGratuita = aguaGratuita;
-      newImovel.iptuIncluso = iptuIncluso;
+      newImovel.novo = novo === "1";
+      newImovel.grande = grande === "1";
+      newImovel.bemLocalizado = bemLocalizado === "1";
+      newImovel.condominioFechado = condominioFechado === "1";
+      newImovel.estacionamento = estacionamento === "1";
+      newImovel.aguaGratuita = aguaGratuita === "1";
+      newImovel.iptuIncluso = iptuIncluso === "1";
+      const photos = []
 
-      // if (pdfDocument) {
-      //   newImovel.pdfDocument = pdfDocument.filename;
-      //   console.log("Tem documento");
-      // }
-    
-      // if (files && files.length > 0) {
-      //   newImovel.fotos = files.map((file) => ({
-      //     filename: file.filename,
-      //     originalname: file.originalname,
-      //   }));
-      //   console.log("Tem foto(s)");
-      // } else {
-      //   console.log("Não tem foto(s)");
-      // }
-    
-      // const user: User = req.user;
-      // newImovel.usuario = user;
-    
-      // console.log("Criando novo imóvel:");
-      // console.log(newImovel);
-    
-     // return await this.imovelService.createImovel(newImovel);
-
-    //  newImovel.photos = req.files.map((file) => {
-    //   const photo = new Photo();
-    //   const uniqueToken = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-    //   photo.url = `./uploads/fotos-imovel/${uniqueToken}${extname(file.originalname)}`;
-    //   photo.imovel = newImovel;
-    //   return photo;
-    // });
-
-    // await newImovel.photos.forEach(async (photo) => {
-    //   await this.photoService.createPhoto(photo)
-    // })
-    // console.log("Tem foto");
-
-    // const user: User = req.user;
-    // newImovel.usuario = user;
-
-    // console.log("criando novo imovel =")
-    // console.log(newImovel)
-
-    // return await this.imovelService.createImovelWithFiles(newImovel, newImovel.photos, pdfDocument);
-
-    // } catch (error) {
-    //   console.log("Caiu no erro do cadastro");
+      let pdfDocument = null;
   
-    //   res.redirect("/imoveis/cadastro-imovel");
-    // }
-     // Criação das fotos
-     const photos = files.map(file => {
-      const photo = new Photo();
-      const uniqueToken = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-      photo.url = `./uploads/fotos-imovel/${uniqueToken}${extname(file.originalname)}`;
-      photo.imovel = newImovel;
-      console.log("Funcionou aqui nas fotos")
-      return photo;
-    });
+      for (let file of files) {
+        if (extname(file.originalname) === '.pdf') {
+          pdfDocument = file
+        }
+        else {        
+          const url = await this.photoService.saveFile(file, './uploads/fotos-imoveis');
+          const photo = new Photo();
+          photo.url = url
+          photos.push(photo);
+        }
+      }
+  
+      const fotosEntidades = []
+      try {
+        await Promise.all(photos.map(photo => this.photoService.createPhoto(photo).then(photo2 => fotosEntidades.push(photo2))))
+        console.log("Depois de salvar as fotos");
+      } catch (error) {
+        console.error("\n\n\nErro ao criar fotos por causa desse await Promise.all: ", error, "\n\n\n");
+      }
 
-    console.log("Antes de salvar as fotos");
-    // Salva as fotos no banco ou em cache, como preferir
-    try {
-      await Promise.all(photos.map(photo => this.photoService.createPhoto(photo)))
-      console.log("Depois de salvar as fotos");
+      console.log("newImovel.photos = ", newImovel.photos);
+  
+  
+      // Associa o usuário logado ao imóvel
+      const user: User = req.user;
+      newImovel.usuario = user;
+      console.log("Usuário dono do imóvel = ", newImovel.usuario);
+  
+      // Se houver um documento PDF, guarda o caminho
+      if (pdfDocument) {
+        const pdfPath = await this.imovelService.saveFile(pdfDocument, './uploads/documentos-imoveis');
+        newImovel.pdfDocument = pdfPath;
+        console.log("PDF = ", pdfDocument);
+      }
+      // Criação do imóvel com fotos e documentos
+      const savedImovel = await this.imovelService.createImovelWithFiles(newImovel, fotosEntidades, pdfDocument);
+  
+      res.redirect('/imoveis/meus-imoveis');
+      return savedImovel;
     } catch (error) {
-      console.error("\n\n\nErro ao criar fotos por causa desse await Promise.all: ", error, "\n\n\n");
-      // Lidar com o erro de alguma forma
+      // Tratamento de erro
+      console.error("Erro ao criar imóvel:", error);
+      throw error;
     }
-    
-
-    
-    // Associa as fotos ao imóvel
-    newImovel.photos = photos
-    console.log("newImovel.photos = ", newImovel.photos);
-
-
-    // Associa o usuário logado ao imóvel
-    const user: User = req.user;
-    newImovel.usuario = user;
-    console.log("Usuário dono do imóvel = ", newImovel.usuario);
-
-    // Se houver um documento PDF, guarda o caminho
-    if (pdfDocument) {
-      const pdfPath = await this.imovelService.saveFile(pdfDocument, './uploads/documentos-imoveis');
-      newImovel.pdfDocument = pdfPath;
-      console.log("PDF = ", pdfDocument);
-    }
-
-    console.log("\n\n\nAntes de chamar createImovelWithFiles\n\n\n")
-    // Criação do imóvel com fotos e documentos
-    const savedImovel = await this.imovelService.createImovelWithFiles(newImovel, photos, pdfDocument);
-
-    return savedImovel;
-  } catch (error) {
-    // Tratamento de erro
-    console.error("Erro ao criar imóvel:", error);
-    throw error;
   }
+
+  @Get('/uploads/documentos-imoveis/:pdfName')
+  async serveImovelImage(@Param('pdfName') pdfName, @Res() res) {
+    const imagePath = `./uploads/documentos-imoveis/${pdfName}`;
+    // Envia o arquivo como resposta
+    res.sendFile(imagePath, { root: '.' });
   }
 
   @Get()
@@ -279,6 +235,20 @@ export class ImovelController {
     console.log(user.id);
 
     return { userIsLoggedIn, user, userImoveis };
+  }
+
+  @Get('/uploads/fotos-imoveis/:imageName')
+  async serveRotaImovelImage(@Param('imageName') imageName, @Res() res) {
+    const imagePath = `./uploads/fotos-imoveis/${imageName}`;
+    // Envia o arquivo como resposta
+    res.sendFile(imagePath, { root: '.' });
+  }
+
+  @Get('/informacoes-imovel/uploads/fotos-imoveis/:imageName')
+  async serveRotaInformacaoImovelImage(@Param('imageName') imageName, @Res() res) {
+    const imagePath = `./uploads/fotos-imoveis/${imageName}`;
+    // Envia o arquivo como resposta
+    res.sendFile(imagePath, { root: '.' });
   }
 
   

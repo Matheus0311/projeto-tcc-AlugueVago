@@ -29,7 +29,7 @@ export class Imovel {
   // @Column('json', { nullable: true })
   // fotos: { filename: string; originalname: string }[];
 
-  @OneToMany(() => Photo, (photo) => photo.imovel)
+  @OneToMany(() => Photo, (photo) => photo.imovel, { onDelete: 'CASCADE' })
   photos: Photo[]
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
