@@ -25,6 +25,17 @@ export class PhotosService {
     }
   }
 
+  async deletePhotosByImovelId(imovelId: number): Promise<void> {
+    await this.photoRepository.delete({ imovel: { id: imovelId } });
+  }
+
+  async createPhotos(photos: Photo[]): Promise<Photo[]> {
+    const savedPhotos = await this.photoRepository.save(photos);
+    console.log("Saved photos:", savedPhotos);
+    return savedPhotos;
+  }
+  
+
   async findAll(): Promise<Photo[]> {
     return this.photoRepository.find();
   }

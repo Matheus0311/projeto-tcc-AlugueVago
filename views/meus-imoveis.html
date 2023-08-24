@@ -39,7 +39,6 @@
       font-size: large;
     }
 
-    /*Abrir o dorpmeun certo*/
 
   .dropdown-menu.right-0 {
     right: 0;
@@ -164,6 +163,21 @@
       color: #333;
     }
 
+    .bg-orange-500 {
+      background-color: rgba(255, 165, 0, 0.9); 
+      transition: background-color 0.3s ease; 
+    }
+
+  
+
+    .brighten {
+      filter: brightness(1); 
+      transition: filter 0.3s ease; 
+    }
+    
+    .brighten:hover {
+      filter: brightness(1.1); 
+    }
     
 
   </style>
@@ -171,7 +185,6 @@
 <body class="bg-gray-100">
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500 navbar-light bg-light">
-  <!-- <nav class="navbar navbar-expand-lg bg-gradient-to-r from-blue-300 to-blue-500"> -->
     <div class="container-fluid">
       <a class="text-2xl font-semibold text-white hover:text-blue-300" href="/">AlugueVago</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -258,12 +271,22 @@
             <ul class="space-y-4">
               <% userImoveis.forEach(imovel => { %>
                 <li class="border border-gray-200 rounded-lg p-4 flex flex-col md:flex-row items-center md:space-x-4">
-                  <div class="w-full md:w-1/4 mb-4 md:mb-0">
-                    <% if (imovel.photos && imovel.photos.length > 0) { %>
-                      <img src="<%= imovel.photos[0].url %>" alt="Imagem do Imóvel" class="w-full rounded-lg shadow-md">
-                    <% } else { %>
-                      <div class="w-full h-40 bg-gray-200 rounded-lg shadow-md"></div>
-                    <% } %>
+                  <div class="w-full md:w-1/4 mb-4 md:mb-0 relative">
+                    <div class="relative">
+                      <% if (imovel.photos && imovel.photos.length > 0) { %>
+                        <div class="group relative">
+                          <span class="bg-yellow-300 px-2 py-1 rounded text-white font-bold"><%= 'Cód. ' + imovel.id %></span>
+                          <img src="<%= imovel.photos[0].url %>" alt="Imagem do Imóvel" class="w-full rounded-lg shadow-md brighten">
+                          <% if (!imovel.statusNegociacao) { %>
+                            <div class="absolute bottom-0 left-0 w-full h-8 bg-orange-500 bg-opacity-50 text-white transition-opacity duration-300 group-hover:opacity-0 flex items-center justify-center rounded-lg">
+                              Em negociação
+                            </div>
+                          <% } %>
+                        </div>
+                      <% } else { %>
+                        <div class="w-full h-40 bg-gray-200 rounded-lg shadow-md"></div>
+                      <% } %>
+                    </div>
                   </div>
                   <div class="w-full md:w-3/4 pl-4">
                     <h3 class="text-lg font-semibold mb-2"><%= imovel.descricao %></h3>
@@ -274,13 +297,14 @@
                     <p class="mb-2 text-sm"><strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>, <%= imovel.enderecoCidade %></p>
                     <div class="flex flex-wrap justify-start space-x-2 space-y-2 md:space-y-0 md:space-x-2">
                       <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal<%= imovel._id %>">Deletar</button>
-                      <a href="/imoveis/edit-imovel/<%= imovel._id %>" class="btn btn-primary">Editar</a>
+                      <a href="/imoveis/edit-imovel/<%= imovel.id %>" class="btn btn-primary">Editar</a>
                       <a href="/imoveis/informacoes-imovel/<%= imovel.id %>" class="btn btn-primary">Ver Detalhes</a>
                     </div>
                   </div>
                 </li>
               <% }); %>
             </ul>
+            
           <% } else { %>
             <h2 class="text-xl font-semibold mb-4 text-center">Comece a fazer seu imóvel parado render!</h2>
             <p class="text-center"><a href="/imoveis/cadastro-imovel" class="text-blue-500">Clique aqui para cadastrar um imóvel</a></p>
@@ -325,10 +349,9 @@
   <script>
     $(document).ready(function () {
       $('#confirmDeleteModal').on('show.bs.modal', function (event) {
-        const button = $(event.relatedTarget); // Botão que acionou o modal
-        const imovelId = button.data('imovel-id'); // Pega o ID do imóvel a partir do atributo data-imovel-id
+        const button = $(event.relatedTarget); 
+        const imovelId = button.data('imovel-id'); 
   
-        // Atualiza o botão de confirmação no modal com o ID do imóvel e o link de exclusão
         $('#confirmDeleteButton').data('imovel-id', imovelId);
       });
   
@@ -340,7 +363,6 @@
   </script>
 
   <script>
-    // Chamando a função quando a página carrega
     window.addEventListener('load', () => {
       populateFavoritesList();
     });

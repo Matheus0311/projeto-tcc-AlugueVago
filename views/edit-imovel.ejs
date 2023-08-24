@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Imóveis</title>
+  <title>Editar Imóvel</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
@@ -73,8 +73,6 @@
     }
   }
   
-
-
   .profile-image {
     margin-top: 20px;
     text-align: center;
@@ -189,7 +187,7 @@
   </nav>
   <div class="container mx-auto mt-4">
     <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl mx-auto">
-      <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Imóveis</h1>
+      <h1 class="text-2xl font-semibold text-center mb-6">Editar Imóvel</h1>
       <% if (errorMessages && errorMessages.length > 0) { %>
         <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
           <% for (const errorMessage of errorMessages) { %>
@@ -198,7 +196,7 @@
         </div>
       <% } %>
   
-      <form action="/imoveis/cadastro-imovel" method="POST" enctype="multipart/form-data" id="imovelForm">
+      <form action="/imoveis/edit-imovel/<%=imovel.id%>" method="POST" enctype="multipart/form-data" id="imovelForm">
      
         <!-- Parte 1 - Informações do Imóvel -->
         <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel</h2>
@@ -214,6 +212,7 @@
               </label>
               <input type="number" id="tamanho" name="tamanho" class="rounded-md focus:border-blue-500" 
               title="Informe o tamanho do imóvel"
+              value="<%= imovel.tamanho %>"
               required >
               <div class="error-message" id="tamanhoError"></div>
             </div>
@@ -227,6 +226,7 @@
 
               <input type="number" id="quantidadeComodos" name="quantidadeComodos" class="rounded-md focus:border-blue-500" 
               title="Informe a quantidade cômodos"
+              value="<%= imovel.quantidadeComodos %>"
               required>
               <div class="error-message" id="quantidadeComodosError"></div>
             </div>
@@ -238,11 +238,15 @@
                 </span>
               </label>
               <select id="mobiliado" name="mobiliado" class="rounded-md focus:border-blue-500" 
-              title="Informe se o imóvel é mobiliado" required>
+              title="Informe se o imóvel é mobiliado" 
+              value = "<%= imovel.mobiliado %>"
+              required>
               <div class="error-message" id="mobiliadoError"></div>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
-                <option value="0">Não</option>
+              <% const mobiliadoInt = imovel.mobiliado ? 1 : 0; %>
+              <option value="" <%= mobiliadoInt === 0 ? 'selected' : '' %>>Escolha a opção</option>
+              <option value="1" <%= mobiliadoInt === 1 ? 'selected' : '' %>>Sim</option>
+              <option value="0" <%= mobiliadoInt === 0 ? 'selected' : '' %>>Não</option>
+            
               </select>
             </div>
             <!-- Status de Negociação -->
@@ -256,9 +260,10 @@
               title="Informe se o imóvel já está sendo negociado"
               required>
               <div class="error-message" id="statusNegociacaoError"></div>
-                <option value="" selected >Escolha a opção</option>
-                <option value="1" >Disponível</option>
-                <option value="0">Indisponível</option>
+              <% const statusNegociacaoInt = imovel.statusNegociacao ? 1 : 0; %>
+              <option value="" <%= statusNegociacaoInt === 0 ? 'selected' : '' %>>Escolha a opção</option>
+              <option value="1" <%= statusNegociacaoInt === 1 ? 'selected' : '' %>>Disponível</option>
+              <option value="0" <%= statusNegociacaoInt === 0 ? 'selected' : '' %>>Indisponível</option>
               </select>
             </div>
             <!-- Valor -->
@@ -269,6 +274,7 @@
                 </span>
               </label>
               <input type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" 
+              value = "<%= imovel.valor %>"
               title="Informe o valor mensal do aluguel do imóvel"
               required>
               <div class="error-message" id="valorError"></div>
@@ -289,6 +295,7 @@
                 placeholder="Digite sem pontuação"
                 class="rounded-md focus:border-blue-500"
                 maxlength="9"
+                value = "<%= imovel.rgProprietario %>"
                 required
                 pattern="[0-9]{8,9}"
                 title="Digite um RG válido com 8 a 9 dígitos"
@@ -310,6 +317,7 @@
                 placeholder="Digite sem pontuação"
                 class="rounded-md focus:border-blue-500"
                 maxlength="11"
+                value = "<%= imovel.cpfProprietario %>"
                 required
                 pattern="[0-9]{11}"
                 title="Digite um CPF válido com 11 dígitos"
@@ -329,10 +337,10 @@
               <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4"  maxlength="200"
               required
               title="Informe uma pequena descrição com 3 a 200 caracteres"
-              pattern=".{3,200}"></textarea>
+              pattern=".{3,200}"><%= imovel.descricao %></textarea>
               <div class="error-message" id="descricaoError"></div>
             </div>
-            <!-- Fotos do Imóvel -->
+           <!-- Fotos do Imóvel -->
             <div class="upload-container">
               <label for="fotos" class="block text-gray-700 font-semibold mb-2">Fotos (até 6 fotos): <span class="text-red-500">*</span>
                 <span class="info-icon" title="Forneça até 6 imagens do imóvel, de preferência do mesmo tamanho">
@@ -340,23 +348,43 @@
                 </span>
               </label>
               <div class="relative">
-                <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="updateImageLabel(this)" required>
+                <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="updateImageLabel(this)">
                 <p id="fotosLabel">Clique para selecionar fotos</p>
               </div>
               <div class="error-message" id="fotosError"></div>
             </div>
+
+            <script>
+            function updateImageLabel(input) {
+              const label = document.getElementById("fotosLabel");
+              if (input.files && input.files.length > 0) {
+                label.textContent = input.files.length + (input.files.length > 1 ? " fotos selecionadas" : " foto selecionada");
+              } else {
+                label.textContent = "Clique para selecionar fotos";
+              }
+            }
+            </script>
+
             <!-- Documentos do Imóvel -->
             <div class="upload-container">
-              <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">PDF Document: <span class="text-red-500">*</span>
-                <span class="info-icon" title="Forneça 1 PDF com os documentos principais do imóvel (Escritura)">
-                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
+              <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">Documentos do Imóvel:</label>
               <div class="relative">
-                <input type="file" id="pdfDocument" name="pdfDocument" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" onchange="updatePDFLabel(this)" required>
-                <p id="pdfDocumentLabel">Clique para selecionar um PDF</p>
+                <input type="file" id="pdfDocument" name="pdfDocument" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" onchange="updatePDFLabel(this)">
+                <p id="pdfDocumentLabel">Clique para selecionar um novo PDF</p>
               </div>
             </div>
+
+            <script>
+            function updatePDFLabel(input) {
+              const label = document.getElementById("pdfDocumentLabel");
+              if (input.files && input.files.length > 0) {
+                label.textContent = "Novo PDF selecionado";
+              } else {
+                label.textContent = "Clique para selecionar um novo PDF";
+              }
+            }
+            </script>
+
 
 
             <br>
@@ -367,7 +395,7 @@
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
               </label>
-              <input type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
+              <input value = "<%= imovel.numeroInscricao %>" type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
               title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU"
               required>
               <div class="error-message" id="numeroInscricaoError"></div>
@@ -384,16 +412,16 @@
               title="Informe o tipo do imóvel"
               required>
               <div class="error-message" id="tipoImovelError"></div>
-                <option value="" selected>Escolha o tipo</option>
-                <option value="Salão">Salão Comercial</option>
-                <option value="Casa">Casa</option>
-                <option value="Apartamento">Apartamento</option>
-                <option value="Chácara">Chácara</option>
-                <option value="Loft">Loft</option>
-                <option value="Studio">Studio</option>
-                <option value="Condomínio">Casa em Condomínio</option>
-                <option value="Quitinete">Quitinete</option>
-                <option value="Flat">Flat</option>
+              <option value="" <%= imovel.tipoImovel === '' ? 'selected' : '' %>>Escolha o tipo</option>
+              <option value="Salão" <%= imovel.tipoImovel === 'Salão' ? 'selected' : '' %>>Salão Comercial</option>
+              <option value="Casa" <%= imovel.tipoImovel === 'Casa' ? 'selected' : '' %>>Casa</option>
+              <option value="Apartamento" <%= imovel.tipoImovel === 'Apartamento' ? 'selected' : '' %>>Apartamento</option>
+              <option value="Chácara" <%= imovel.tipoImovel === 'Chácara' ? 'selected' : '' %>>Chácara</option>
+              <option value="Loft" <%= imovel.tipoImovel === 'Loft' ? 'selected' : '' %>>Loft</option>
+              <option value="Studio" <%= imovel.tipoImovel === 'Studio' ? 'selected' : '' %>>Studio</option>
+              <option value="Condomínio" <%= imovel.tipoImovel === 'Condomínio' ? 'selected' : '' %>>Casa em Condomínio</option>
+              <option value="Quitinete" <%= imovel.tipoImovel === 'Quitinete' ? 'selected' : '' %>>Quitinete</option>
+              <option value="Flat" <%= imovel.tipoImovel === 'Flat' ? 'selected' : '' %>>Flat</option>
               </select>
             </div>
 
@@ -409,9 +437,10 @@
               <select id="grande" name="grande" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel é considerado grande (só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1" >Sim</option>
-                <option value="0">Não</option>
+              <option value="" <%= imovel.grande === '' ? 'selected' : '' %>>Escolha a opção</option>
+              <option value="1" <%= imovel.grande === true ? 'selected' : '' %>>Sim</option>
+              <option value="0" <%= imovel.grande === false ? 'selected' : '' %>>Não</option>
+            </select>
               </select>
             </div>
             <!-- Bem Localizado -->
@@ -424,9 +453,9 @@
               <select id="bemLocalizado" name="bemLocalizado" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel é bem localizado (só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
-                <option value="0">Não</option>
+              <option value="" <%= imovel.bemLocalizado === '' ? 'selected' : '' %>>Escolha a opção</option>
+              <option value="1" <%= imovel.bemLocalizado === true ? 'selected' : '' %>>Sim</option>
+              <option value="0" <%= imovel.bemLocalizado === false ? 'selected' : '' %>>Não</option>
               </select>
             </div>
             <!-- Condomínio Fechado -->
@@ -439,9 +468,9 @@
               <select id="condominioFechado" name="condominioFechado" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel é em condomínio fechado (só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
-                <option value="0">Não</option>
+              <option value="" <%= imovel.condominioFechado === '' ? 'selected' : '' %>>Escolha a opção</option>
+              <option value="1" <%= imovel.condominioFechado === true ? 'selected' : '' %>>Sim</option>
+              <option value="0" <%= imovel.condominioFechado === false ? 'selected' : '' %>>Não</option>
               </select>
             </div>
             <!-- Novo -->
@@ -454,9 +483,9 @@
               <select id="novo" name="novo" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel é novo(só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
-                <option value="0">Não</option>
+                <option value="" <%= imovel.novo === '' ? 'selected' : '' %>>Escolha a opção</option>
+                <option value="1" <%= imovel.novo === true ? 'selected' : '' %>>Sim</option>
+                <option value="0" <%= imovel.novo === false ? 'selected' : '' %>>Não</option>
               </select>
             </div>
             <!-- Estacionamento -->
@@ -469,9 +498,9 @@
               <select id="estacionamento" name="estacionamento" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel tem estacionamento(só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
-                <option value="0">Não</option>
+                <option value="" <%= imovel.estacionamento === '' ? 'selected' : '' %>>Escolha a opção</option>
+                <option value="1" <%= imovel.estacionamento === true ? 'selected' : '' %>>Sim</option>
+                <option value="0" <%= imovel.estacionamento === false ? 'selected' : '' %>>Não</option>
               </select>
             </div>
             <!-- Água Gratuita -->
@@ -484,9 +513,9 @@
               <select id="aguaGratuita" name="aguaGratuita" class="rounded-md focus:border-blue-500" 
               title="Informe se a água é inclusa(só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
-                <option value="0">Não</option>
+                <option value="" <%= imovel.aguaGratuita === '' ? 'selected' : '' %>>Escolha a opção</option>
+                <option value="1" <%= imovel.aguaGratuita === true ? 'selected' : '' %>>Sim</option>
+                <option value="0" <%= imovel.aguaGratuita === false ? 'selected' : '' %>>Não</option>
               </select>
             </div>
             <!-- IPTU Incluso -->
@@ -499,9 +528,9 @@
               <select id="iptuIncluso" name="iptuIncluso" class="rounded-md focus:border-blue-500" 
               title="Informe se o IPTU é incluso(só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
-                <option value="0">Não</option>
+                <option value="" <%= imovel.iptuIncluso === '' ? 'selected' : '' %>>Escolha a opção</option>
+                <option value="1" <%= imovel.iptuIncluso === true ? 'selected' : '' %>>Sim</option>
+                <option value="0" <%= imovel.iptuIncluso === false ? 'selected' : '' %>>Não</option>
               </select>
             </div>
           </div>
@@ -522,7 +551,7 @@
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
               </label>
-              <input type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
+              <input value="<%= imovel.enderecoCEP %>" type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
               title="Informe o CEP correto"
               required>
               <div class="error-message" id="enderecoCEPError"></div>
@@ -535,7 +564,7 @@
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
               </label>
-              <input type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" 
+              <input value="<%= imovel.enderecoCidade %>" type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" 
               title="Informe a cidade correta"
               required>
               <div class="error-message" id="enderecoCidadeError"></div>
@@ -551,34 +580,34 @@
               <select id="estadoNome" name="estadoNome" class="rounded-md focus:border-blue-500" 
               title="Informe o estado correto"
               required>
-                <option value="" selected >Selecione o estado</option>
-                <option value="AC">Acre</option>
-                <option value="AL">Alagoas</option>
-                <option value="AP">Amapá</option>
-                <option value="AM">Amazonas</option>
-                <option value="BA">Bahia</option>
-                <option value="CE">Ceará</option>
-                <option value="DF">Distrito Federal</option>
-                <option value="ES">Espírito Santo</option>
-                <option value="GO">Goiás</option>
-                <option value="MA">Maranhão</option>
-                <option value="MT">Mato Grosso</option>
-                <option value="MS">Mato Grosso do Sul</option>
-                <option value="MG">Minas Gerais</option>
-                <option value="PA">Pará</option>
-                <option value="PB">Paraíba</option>
-                <option value="PR">Paraná</option>
-                <option value="PE">Pernambuco</option>
-                <option value="PI">Piauí</option>
-                <option value="RJ">Rio de Janeiro</option>
-                <option value="RN">Rio Grande do Norte</option>
-                <option value="RS">Rio Grande do Sul</option>
-                <option value="RO">Rondônia</option>
-                <option value="RR">Roraima</option>
-                <option value="SC">Santa Catarina</option>
-                <option value="SP">São Paulo</option>
-                <option value="SE">Sergipe</option>
-                <option value="TO">Tocantins</option>
+              <option value="" <%= imovel.estadoNome === '' ? 'selected' : '' %>>Selecione o estado</option>
+              <option value="AC" <%= imovel.estadoNome === 'AC' ? 'selected' : '' %>>Acre</option>
+              <option value="AL" <%= imovel.estadoNome === 'AL' ? 'selected' : '' %>>Alagoas</option>
+              <option value="AP" <%= imovel.estadoNome === 'AP' ? 'selected' : '' %>>Amapá</option>
+              <option value="AM" <%= imovel.estadoNome === 'AM' ? 'selected' : '' %>>Amazonas</option>
+              <option value="BA" <%= imovel.estadoNome === 'BA' ? 'selected' : '' %>>Bahia</option>
+              <option value="CE" <%= imovel.estadoNome === 'CE' ? 'selected' : '' %>>Ceará</option>
+              <option value="DF" <%= imovel.estadoNome === 'DF' ? 'selected' : '' %>>Distrito Federal</option>
+              <option value="ES" <%= imovel.estadoNome === 'ES' ? 'selected' : '' %>>Espírito Santo</option>
+              <option value="GO" <%= imovel.estadoNome === 'GO' ? 'selected' : '' %>>Goiás</option>
+              <option value="MA" <%= imovel.estadoNome === 'MA' ? 'selected' : '' %>>Maranhão</option>
+              <option value="MT" <%= imovel.estadoNome === 'MT' ? 'selected' : '' %>>Mato Grosso</option>
+              <option value="MS" <%= imovel.estadoNome === 'MS' ? 'selected' : '' %>>Mato Grosso do Sul</option>
+              <option value="MG" <%= imovel.estadoNome === 'MG' ? 'selected' : '' %>>Minas Gerais</option>
+              <option value="PA" <%= imovel.estadoNome === 'PA' ? 'selected' : '' %>>Pará</option>
+              <option value="PB" <%= imovel.estadoNome === 'PB' ? 'selected' : '' %>>Paraíba</option>
+              <option value="PR" <%= imovel.estadoNome === 'PR' ? 'selected' : '' %>>Paraná</option>
+              <option value="PE" <%= imovel.estadoNome === 'PE' ? 'selected' : '' %>>Pernambuco</option>
+              <option value="PI" <%= imovel.estadoNome === 'PI' ? 'selected' : '' %>>Piauí</option>
+              <option value="RJ" <%= imovel.estadoNome === 'RJ' ? 'selected' : '' %>>Rio de Janeiro</option>
+              <option value="RN" <%= imovel.estadoNome === 'RN' ? 'selected' : '' %>>Rio Grande do Norte</option>
+              <option value="RS" <%= imovel.estadoNome === 'RS' ? 'selected' : '' %>>Rio Grande do Sul</option>
+              <option value="RO" <%= imovel.estadoNome === 'RO' ? 'selected' : '' %>>Rondônia</option>
+              <option value="RR" <%= imovel.estadoNome === 'RR' ? 'selected' : '' %>>Roraima</option>
+              <option value="SC" <%= imovel.estadoNome === 'SC' ? 'selected' : '' %>>Santa Catarina</option>
+              <option value="SP" <%= imovel.estadoNome === 'SP' ? 'selected' : '' %>>São Paulo</option>
+              <option value="SE" <%= imovel.estadoNome === 'SE' ? 'selected' : '' %>>Sergipe</option>
+              <option value="TO" <%= imovel.estadoNome === 'TO' ? 'selected' : '' %>>Tocantins</option>
               </select>
             </div>
           </div>
@@ -592,7 +621,7 @@
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
               </label>
-              <input type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" 
+              <input value="<%= imovel.enderecoRua %>" type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" 
               title="Informe a rua correta"
               required>
               <div class="error-message" id="enderecoRuaError"></div>
@@ -605,7 +634,7 @@
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
               </label>
-              <input type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" 
+              <input value="<%= imovel.enderecoNumero %>" type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" 
               title="Informe o número do imóvel correto"
               required>
               <div class="error-message" id="enderecoNumeroError"></div>
@@ -618,7 +647,7 @@
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
               </label>
-              <input type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" 
+              <input value="<%= imovel.enderecoBairro %>" type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" 
               title="Informe o bairro correto"
               required>
               <div class="error-message" id="enderecoBairroError"></div>
@@ -636,7 +665,7 @@
         <!-- Telefone de Contato -->
         <div class="input-container">
           <label for="telefoneContato">Telefone de Contato: <span class="text-red-500">*</span> </label>
-          <input type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação" required>
+          <input value="<%= imovel.telefoneContato %>" type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação" required>
         </div>
         <!-- Email de Contato -->
         <div class="input-container">
@@ -650,6 +679,7 @@
             type="email"
             id="emailContato"
             name="emailContato"
+            value="<%= imovel.emailContato %>"
             class="rounded-md focus:border-blue-500"
             placeholder="exemplo@exemplo.com"
             required

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile, Res, Request, ConsoleLogger, ParseIntPipe, Query, UploadedFiles  } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile, Res, Request, ConsoleLogger, ParseIntPipe, Query, UploadedFiles, UsePipes, ValidationPipe  } from '@nestjs/common';
 import { ImovelService } from './imoveis.service';
 import { Imovel } from './imovel.entity';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
@@ -56,7 +56,7 @@ export class ImovelController {
   )
  async create(
     @Body() body: any,
-    @UploadedFile() pdfDocument: Express.Multer.File,
+    // @UploadedFile() pdfDocument: Express.Multer.File,
     @UploadedFiles() files: Express.Multer.File[],
     @Req() req,
     @Res() res,
@@ -186,6 +186,127 @@ export class ImovelController {
     res.sendFile(imagePath, { root: '.' });
   }
 
+
+  @Get('/edit-imovel/:id')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @Render('edit-imovel.ejs')
+  async showEditUserPage(
+    @Request() req,
+    @Res() res,
+    @Param('id') imovelId: number, 
+    @Query('errorMessages') errorMessages: string
+  ): Promise<{ user: User; imovel: Imovel; userIsLoggedIn: boolean; errorMessages: string }> {
+    const userIsLoggedIn = req.isAuthenticated();
+    const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+    const errorMessagesArray = errorMessages ? JSON.parse(errorMessages) : [];
+  
+    const imovel = await this.imovelService.findById(imovelId); 
+    if (!user) {
+      res.redirect('/');
+    }
+
+    if (imovel) {
+      const fotos = imovel.photos; 
+    } else {
+      res.redirect('/imoveis/meus-imoveis');
+    }
+  
+    return { user: user, imovel: imovel, userIsLoggedIn, errorMessages: errorMessagesArray };
+  }
+  
+  @Post('/edit-imovel/:id')
+  @UseGuards(AuthenticatedGuard)
+  @UseInterceptors(AnyFilesInterceptor())
+  async update(
+    @Param('id') imovelId: number,
+    @Body() body: any,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Req() req,
+    @Res() res,
+  ): Promise<Imovel> {
+    const imovel = await this.imovelService.findById(imovelId);
+  
+    if (!imovel) {
+      throw new NotFoundException('Imóvel não encontrado');
+    }
+  
+    imovel.tamanho = body.tamanho;
+    imovel.quantidadeComodos = body.quantidadeComodos;
+    imovel.mobiliado = body.mobiliado === '1';
+    imovel.statusNegociacao = body.statusNegociacao === '1';
+    imovel.valor = body.valor;
+    imovel.descricao = body.descricao;
+    imovel.numeroInscricao = body.numeroInscricao;
+    imovel.rgProprietario = body.rgProprietario;
+    imovel.cpfProprietario = body.cpfProprietario;
+    imovel.telefoneContato = body.telefoneContato;
+    imovel.emailContato = body.emailContato;
+    imovel.enderecoRua = body.enderecoRua;
+    imovel.enderecoNumero = body.enderecoNumero;
+    imovel.enderecoBairro = body.enderecoBairro;
+    imovel.enderecoCEP = body.enderecoCEP;
+    imovel.enderecoCidade = body.enderecoCidade;
+    imovel.estadoNome = body.estadoNome;
+    imovel.tipoImovel = body.tipoImovel;
+    imovel.novo = body.novo === '1';
+    imovel.grande = body.grande === '1';
+    imovel.bemLocalizado = body.bemLocalizado === '1';
+    imovel.condominioFechado = body.condominioFechado === '1';
+    imovel.estacionamento = body.estacionamento === '1';
+    imovel.aguaGratuita = body.aguaGratuita === '1';
+    imovel.iptuIncluso = body.iptuIncluso === '1';
+
+    console.log("Antes da atualização das fotos: ", imovel.photos);
+
+    try {
+      const existingImovel = await this.imovelService.findById(imovelId);
+
+      // Cria novas entidades de fotos e as associa ao imóvel
+      const newPhotos = [];
+      for (let file of files) {
+        if (extname(file.originalname) !== '.pdf') {
+          const url = await this.photoService.saveFile(file, './uploads/fotos-imoveis');
+          const photo = new Photo();
+          photo.url = url;
+          photo.imovel = existingImovel;
+          console.log("photo.imovel.id: ", photo.imovel.id);
+          console.log("existingImovel.id: ", existingImovel.id);
+          newPhotos.push(photo);
+        }
+      }
+
+      console.log("Depois da atualização das fotos: ", imovel.photos);
+
+      // Atualiza o objeto imovel com as novas fotos
+      if (newPhotos.length > 0) {
+        imovel.photos = newPhotos;
+      }
+
+      // Atualiza o caminho do PDF se um novo PDF foi enviado
+      if (req.files && req.files.length > 0) {
+        const pdfDocument = req.files.find(file => extname(file.originalname) === '.pdf');
+        if (pdfDocument) {
+          const pdfPath = await this.imovelService.saveFile(pdfDocument, './uploads/documentos-imoveis');
+          imovel.pdfDocument = pdfPath;
+        }
+      }
+
+      // Salva as novas entidades de fotos no banco de dados
+      if (newPhotos.length > 0) {
+        await this.photoService.createPhotos(newPhotos);
+      }
+
+      const updatedImovel = await this.imovelService.update(imovelId, imovel);
+
+      res.redirect(`/imoveis/meus-imoveis`);
+      return updatedImovel;
+    } catch (error) {
+      console.error("Erro durante a atualização do imóvel:", error);
+      throw error;
+    }
+  }
+  
+
   // @UseGuards(AuthenticatedGuard, AdminGuard)
   @Get()
   async findAll(): Promise<Imovel[]> {
@@ -294,11 +415,11 @@ export class ImovelController {
     return { imovel, user, userIsLoggedIn };
   }
 
-  @UseGuards(AuthenticatedGuard, AdminGuard)
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() imovel: Imovel): Promise<Imovel> {
-    return this.imovelService.update(id, imovel);
-  }
+  // @UseGuards(AuthenticatedGuard, AdminGuard)
+  // @Put(':id')
+  // async update(@Param('id') id: number, @Body() imovel: Imovel): Promise<Imovel> {
+  //   return this.imovelService.update(id, imovel);
+  // }
 
   @Delete(':id')
   @UseGuards(AuthenticatedGuard, AdminGuard)

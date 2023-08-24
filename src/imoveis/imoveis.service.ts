@@ -36,6 +36,9 @@ export class ImovelService {
       return savedImovel;
     });
   }
+
+
+  
   
   async findAll(): Promise<Imovel[]> {
     return this.imovelRepository.find();
@@ -44,6 +47,11 @@ export class ImovelService {
   async findOne(id: number): Promise<Imovel> {
     return this.imovelRepository.findOne({ where: { id }, relations: ['usuario', 'photos'] });
   }
+
+  async findById(id: number): Promise<Imovel | undefined> {
+    return await this.imovelRepository.findOne({ where: { id }, relations: ['photos'] });
+  }
+  
 
   async findImoveisByUserId(userId: number): Promise<Imovel[]> {
     console.log("entrou aqui no findImoveisByUserId");
@@ -58,10 +66,23 @@ export class ImovelService {
     return userImoveis;
   }
   
+  async deletePhotosByImovelId(imovelId: number): Promise<void> {
+    const imovel = await this.findById(imovelId);
+    if (imovel) {
+      imovel.photos = [];
+      await this.imovelRepository.save(imovel);
+    }
+  }
+
 
   async update(id: number, imovel: Imovel): Promise<Imovel> {
-    await this.imovelRepository.update(id, imovel);
+    await this.imovelRepository.save(imovel); 
     return this.imovelRepository.findOne({ where: { id } });
+  }
+  
+
+  async updatePhotos(imovel: Imovel): Promise<void> {
+    await this.imovelRepository.save(imovel);
   }
   
 
