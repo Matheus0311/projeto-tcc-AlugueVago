@@ -359,9 +359,16 @@
   }
 
   function validateSenha(senha) {
-    const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+    const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\-]{6,}$/;
     return senhaRegex.test(senha);
-  }
+}
+
+
+const senha = "123456Teste!";
+const isSenhaValida = validateSenha(senha);
+
+console.log("Senha: ", isSenhaValida); // Deveria imprimir 'true' no console
+
 
   function displayError(input, message) {
     const errorDiv = input.nextElementSibling;
@@ -459,7 +466,7 @@
     }
   }
 
-
+  
   function updatePasswordStrength(password) {
     const strengthIndicator = document.getElementById('password-strength');
     const strengthLabel = document.getElementById('password-strength-label');
@@ -467,19 +474,38 @@
     const colors = ['#FF0000', '#FF4500', '#FFD700', '#32CD32', '#00FF00'];
     const labels = ['Fraca', 'Média', 'Forte', 'Muito Forte'];
 
-    strengthIndicator.style.width = `${strength * 25}%`;
+    if (strength === 3) {
+        strengthIndicator.style.width = '100%';
+    } else {
+        strengthIndicator.style.width = `${strength * 25}%`;
+    }
+
     strengthIndicator.style.backgroundColor = colors[strength];
     strengthLabel.textContent = labels[strength];
     strengthLabel.style.color = colors[strength];
-  }
+}
+
 
   function calculatePasswordStrength(password) {
-    if (password.length < 6) return 0;
-    if (password.length < 8) return 1;
-    if (/[a-zA-Z]/.test(password) && /\d/.test(password) && /[!@#$%^&*()_+{}\[\]:;<>,.?~\-]/.test(password)) return 3;
-    if (/[a-zA-Z]/.test(password) && /\d/.test(password)) return 2;
-    if (/[a-zA-Z]/.test(password)) return 1;
-    return 4;
+    const length = password.length;
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\-]/.test(password);
+
+    if (length < 6) {
+        return 0;
+    } else if (length < 8) {
+        return 1;
+    } else if (hasLowerCase && hasUpperCase && hasDigit && hasSpecialChar) {
+        return 3;
+    } else if ((hasLowerCase && hasUpperCase && hasDigit) || (hasLowerCase && hasDigit && hasSpecialChar) || (hasUpperCase && hasDigit && hasSpecialChar)) {
+        return 2;
+    } else if (hasLowerCase || hasUpperCase) {
+        return 1;
+    } else {
+        return 4;
+    }
   }
 </script>
 

@@ -316,9 +316,37 @@
               />
               <div class="error-message" id="cpfError"></div>
             </div>
+
+            <!-- Número de Inscrição -->
+            <div class="input-container">
+              <label for="numeroInscricao">Número de Inscrição do Imóvel: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <input type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
+              title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU"
+              required>
+              <div class="error-message" id="numeroInscricaoError"></div>
+
+            </div>
             
           </div>
           <div>
+            <!-- Título -->
+            <div class="input-container">
+              <label for="titulo">Título do Imóvel <span class="text-red-500">*</span>
+                <span class="info-icon" title="Informe uum título para o imóvel com 3 a 200 caracteres">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
+              <textarea id="titulo" name="titulo" class="rounded-md focus:border-blue-500" rows="3"  maxlength="200"
+              required
+              title="Informe um titulo para o imóvel com 3 a 200 caracteres"
+              pattern=".{3,200}"></textarea>
+              <div class="error-message" id="descricaoError"></div>
+            </div>
+
             <!-- Descrição -->
             <div class="input-container">
               <label for="descricao">Descrição <span class="text-red-500">*</span>
@@ -360,21 +388,13 @@
 
 
             <br>
-            <!-- Número de Inscrição -->
-            <div class="input-container">
-              <label for="numeroInscricao">Número de Inscrição do Imóvel: <span class="text-red-500">*</span> 
-                <span class="info-icon" title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU">
-                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
-              title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU"
-              required>
-              <div class="error-message" id="numeroInscricaoError"></div>
+            
+           
 
-            </div>
-            <!-- Tipo de Imóvel -->
-            <div class="input-container">
+          </div>
+          <div>
+             <!-- Tipo de Imóvel -->
+             <div class="input-container">
               <label for="tipoImovel">Tipo de Imóvel: <span class="text-red-500">*</span> 
                 <span class="info-icon" title="Informe o tipo do imóvel">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
@@ -396,9 +416,6 @@
                 <option value="Flat">Flat</option>
               </select>
             </div>
-
-          </div>
-          <div>
             <!-- Grande -->
             <div class="input-container">
               <label for="grande">Grande: <span class="text-red-500">*</span> 
@@ -685,6 +702,7 @@
 <script>
   const form = document.getElementById('imovelForm');
   const tamanhoInput = document.getElementById('tamanho');
+  const tituloInput = document.getElementById('titulo');
   
   const quantidadeComodosInput = document.getElementById('quantidadeComodos');
   const mobiliadoInput = document.getElementById('mobiliado');
@@ -756,6 +774,11 @@
       displayError(descricaoInput, 'A descrição deve ter pelo menos 3 caracteres');
     }
 
+    if (tituloInput.value.length < 3) {
+      isValid = false;
+      displayError(tituloInput, 'O título deve ter pelo menos 3 caracteres');
+    }
+
     if (!validateEmail(emailInput.value)) {
       isValid = false;
       displayError(emailInput, 'Digite um email válido');
@@ -793,6 +816,7 @@
 
 
   tamanhoInput.addEventListener('input', () => clearError(tamanhoInput));
+  tituloInput.addEventListener('input', () => clearError(tituloInput));
   quantidadeComodosInput.addEventListener('input', () => clearError(quantidadeComodosInput));
   mobiliadoInput.addEventListener('input', () => clearError(mobiliadoInput));
   statusNegociacaoInput.addEventListener('input', () => clearError(statusNegociacaoInput));

@@ -36,6 +36,9 @@ export class Imovel {
   valor: number;
 
   @Column({ type: 'text' })
+  titulo: string;
+
+  @Column({ type: 'text' })
   descricao: string;
 
   @Column({ nullable: true })

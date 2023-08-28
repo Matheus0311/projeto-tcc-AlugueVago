@@ -63,6 +63,7 @@ export class ImovelController {
   ): Promise<Imovel> {
     const {
       tamanho,
+      titulo,
       quantidadeComodos,
       mobiliado,
       statusNegociacao,
@@ -105,6 +106,7 @@ export class ImovelController {
       const newImovel = new Imovel();
 
       newImovel.tamanho = tamanho;
+      newImovel.titulo = titulo;
       newImovel.quantidadeComodos = quantidadeComodos;
       newImovel.mobiliado = mobiliado === "1";
       newImovel.statusNegociacao = statusNegociacao === "1";
@@ -231,6 +233,7 @@ export class ImovelController {
     }
   
     imovel.tamanho = body.tamanho;
+    imovel.titulo = body.titulo;
     imovel.quantidadeComodos = body.quantidadeComodos;
     imovel.mobiliado = body.mobiliado === '1';
     imovel.statusNegociacao = body.statusNegociacao === '1';
