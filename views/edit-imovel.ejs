@@ -205,7 +205,7 @@
           <div>
             <!-- Tamanho -->
             <div class="input-container">
-              <label for="tamanho">Tamanho (m²): <span class="text-red-500">*</span> 
+              <label for="tamanho">Tamanho (m²): 
                 <span class="info-icon" title="Informe o tamanho do imóvel">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -218,7 +218,7 @@
             </div>
             <!-- Quantidade de Cômodos -->
             <div class="input-container">
-              <label for="quantidadeComodos">Quantidade de Cômodos: <span class="text-red-500">*</span>
+              <label for="quantidadeComodos">Quantidade de Cômodos: 
                 <span class="info-icon" title="Informe a quantidade cômodos">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -232,7 +232,7 @@
             </div>
             <!-- Mobiliado -->
             <div class="input-container">
-              <label for="mobiliado">Mobiliado: <span class="text-red-500">*</span> 
+              <label for="mobiliado">Mobiliado: 
                 <span class="info-icon" title="Informe se o imóvel é mobiliado">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -251,7 +251,7 @@
             </div>
             <!-- Status de Negociação -->
             <div class="input-container">
-              <label for="statusNegociacao">Status de Negociação: <span class="text-red-500">*</span> 
+              <label for="statusNegociacao">Status de Negociação:  
                 <span class="info-icon" title="Informe se o imóvel já está sendo negociado">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -268,7 +268,7 @@
             </div>
             <!-- Valor -->
             <div class="input-container">
-              <label for="valor">Valor Mensal: <span class="text-red-500">*</span> 
+              <label for="valor">Valor Mensal: 
                 <span class="info-icon" title="Informe o valor mensal do aluguel do imóvel">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -283,7 +283,7 @@
             <!-- RG do Proprietário -->
             <div class="input-container">
               <label for="rgProprietario">
-                RG: <span class="text-red-500">*</span>
+                RG: 
                 <span class="info-icon" title="Digite um RG válido com 8 a 9 dígitos">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -305,7 +305,7 @@
             <!-- CPF do Proprietário -->
             <div class="input-container">
               <label for="cpfProprietario">
-                CPF: <span class="text-red-500">*</span>
+                CPF: 
                 <span class="info-icon" title="Digite um CPF válido com 11 dígitos">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -327,7 +327,7 @@
 
             <!-- Número de Inscrição -->
             <div class="input-container">
-              <label for="numeroInscricao">Número de Inscrição do Imóvel: <span class="text-red-500">*</span> 
+              <label for="numeroInscricao">Número de Inscrição do Imóvel: 
                 <span class="info-icon" title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -344,7 +344,7 @@
           <div>
              <!-- Título -->
              <div class="input-container">
-              <label for="titulo">Título do Imóvel <span class="text-red-500">*</span>
+              <label for="titulo">Título do Imóvel
                 <span class="info-icon" title="Informe uum título para o imóvel com 3 a 200 caracteres">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -358,7 +358,7 @@
 
             <!-- Descrição -->
             <div class="input-container">
-              <label for="descricao">Descrição <span class="text-red-500">*</span>
+              <label for="descricao">Descrição 
                 <span class="info-icon" title="Informe uma pequena descrição com 3 a 200 caracteres">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -371,14 +371,14 @@
             </div>
            <!-- Fotos do Imóvel -->
             <div class="upload-container">
-              <label for="fotos" class="block text-gray-700 font-semibold mb-2">Fotos (até 6 fotos): <span class="text-red-500">*</span>
+              <label for="fotos" class="block text-gray-700 font-semibold mb-2">Fotos (até 6 fotos): 
                 <span class="info-icon" title="Forneça até 6 imagens do imóvel, de preferência do mesmo tamanho">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
               </label>
               <div class="relative">
                 <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="updateImageLabel(this)">
-                <p id="fotosLabel">Clique para selecionar fotos</p>
+                <p id="fotosLabel">As fotos continuam as mesmas se não editá-las</p>
               </div>
               <div class="error-message" id="fotosError"></div>
             </div>
@@ -399,7 +399,7 @@
               <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">Documentos do Imóvel:</label>
               <div class="relative">
                 <input type="file" id="pdfDocument" name="pdfDocument" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" onchange="updatePDFLabel(this)">
-                <p id="pdfDocumentLabel">Clique para selecionar um novo PDF</p>
+                <p id="pdfDocumentLabel">O PDF continua o mesmo se não editá-lo</p>
               </div>
             </div>
 
@@ -424,7 +424,7 @@
           <div>
              <!-- Tipo de Imóvel -->
              <div class="input-container">
-              <label for="tipoImovel">Tipo de Imóvel: <span class="text-red-500">*</span> 
+              <label for="tipoImovel">Tipo de Imóvel:  
                 <span class="info-icon" title="Informe o tipo do imóvel">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -447,7 +447,7 @@
             </div>
             <!-- Grande -->
             <div class="input-container">
-              <label for="grande">Grande: <span class="text-red-500">*</span> 
+              <label for="grande">Grande:  
                 <span class="info-icon" title="Informe se o imóvel é considerado grande (só aparecerá esse atributo se for verdadeiro)">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -463,7 +463,7 @@
             </div>
             <!-- Bem Localizado -->
             <div class="input-container">
-              <label for="bemLocalizado">Bem Localizado: <span class="text-red-500">*</span> 
+              <label for="bemLocalizado">Bem Localizado:  
                 <span class="info-icon" title="Informe se o imóvel é bem localizado (só aparecerá esse atributo se for verdadeiro)">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -478,7 +478,7 @@
             </div>
             <!-- Condomínio Fechado -->
             <div class="input-container">
-              <label for="condominioFechado">Condomínio Fechado: <span class="text-red-500">*</span> 
+              <label for="condominioFechado">Condomínio Fechado:  
                 <span class="info-icon" title="Informe se o imóvel é em condomínio fechado (só aparecerá esse atributo se for verdadeiro)">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -493,7 +493,7 @@
             </div>
             <!-- Novo -->
             <div class="input-container">
-              <label for="novo">Novo: <span class="text-red-500">*</span> 
+              <label for="novo">Novo: 
                 <span class="info-icon" title="Informe se o imóvel é novo(só aparecerá esse atributo se for verdadeiro)">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -508,7 +508,7 @@
             </div>
             <!-- Estacionamento -->
             <div class="input-container">
-              <label for="estacionamento">Estacionamento: <span class="text-red-500">*</span> 
+              <label for="estacionamento">Estacionamento: 
                 <span class="info-icon" title="Informe se o imóvel tem estacionamento(só aparecerá esse atributo se for verdadeiro)">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -523,7 +523,7 @@
             </div>
             <!-- Água Gratuita -->
             <div class="input-container">
-              <label for="aguaGratuita">Água Inclusa: <span class="text-red-500">*</span> 
+              <label for="aguaGratuita">Água Inclusa: 
                 <span class="info-icon" title="Informe se a água é inclusa(só aparecerá esse atributo se for verdadeiro)">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -538,7 +538,7 @@
             </div>
             <!-- IPTU Incluso -->
             <div class="input-container">
-              <label for="iptuIncluso">IPTU Incluso: <span class="text-red-500">*</span> 
+              <label for="iptuIncluso">IPTU Incluso:  
                 <span class="info-icon" title="Informe se o IPTU é incluso(só aparecerá esse atributo se for verdadeiro)">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -564,7 +564,7 @@
           <div>
             <!-- CEP -->
             <div class="input-container">
-              <label for="enderecoCEP">CEP: <span class="text-red-500">*</span> 
+              <label for="enderecoCEP">CEP: 
                 <span class="info-icon" title="Informe o CEP correto">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -577,7 +577,7 @@
             </div>
             <!-- Cidade -->
             <div class="input-container">
-              <label for="enderecoCidade">Cidade: <span class="text-red-500">*</span> 
+              <label for="enderecoCidade">Cidade:  
                 <span class="info-icon" title="Informe a cidade correta">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -590,7 +590,7 @@
             </div>
             <!-- Estado -->
             <div class="input-container">
-              <label for="estadoNome">Estado: <span class="text-red-500">*</span> 
+              <label for="estadoNome">Estado:  
                 <span class="info-icon" title="Informe o estado correto">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -634,7 +634,7 @@
           <div>
             <!-- Rua -->
             <div class="input-container">
-              <label for="enderecoRua">Rua: <span class="text-red-500">*</span> 
+              <label for="enderecoRua">Rua: 
                 <span class="info-icon" title="Informe a rua correta">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -647,7 +647,7 @@
             </div>
             <!-- Número -->
             <div class="input-container">
-              <label for="enderecoNumero">Número: <span class="text-red-500">*</span> 
+              <label for="enderecoNumero">Número: 
                 <span class="info-icon" title="Informe o número do imóvel correto">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -660,7 +660,7 @@
             </div>
             <!-- Bairro -->
             <div class="input-container">
-              <label for="enderecoBairro">Bairro: <span class="text-red-500">*</span> 
+              <label for="enderecoBairro">Bairro: 
                 <span class="info-icon" title="Informe o bairro correto">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
@@ -682,13 +682,13 @@
         </h2>
         <!-- Telefone de Contato -->
         <div class="input-container">
-          <label for="telefoneContato">Telefone de Contato: <span class="text-red-500">*</span> </label>
+          <label for="telefoneContato">Telefone de Contato:  </label>
           <input value="<%= imovel.telefoneContato %>" type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação" required>
         </div>
         <!-- Email de Contato -->
         <div class="input-container">
           <label for="emailContato">
-            Email: <span class="text-red-500">*</span>
+            Email: 
             <span class="info-icon" title="Digite um nome email válido com @ e .">
               <i class="text-gray-500 cursor-pointer">&#9432;</i>
             </span>
