@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile, Res, Request, ConsoleLogger, ParseIntPipe, Query, UploadedFiles, UsePipes, ValidationPipe  } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile, Res, Request, ConsoleLogger, ParseIntPipe, Query, UploadedFiles, UsePipes, ValidationPipe, HttpCode, HttpStatus  } from '@nestjs/common';
 import { ImovelService } from './imoveis.service';
 import { Imovel } from './imovel.entity';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
@@ -333,6 +333,33 @@ export class ImovelController {
 
     return { userIsLoggedIn, user, userImoveis };
   }
+
+
+  @UseGuards(AuthenticatedGuard)
+  @Post('/meus-imoveis/atualizar-status/:id')
+  @HttpCode(HttpStatus.OK)
+  async atualizarStatusImovel(
+    @Param('id') imovelId: number,
+    @Body() body: { novoStatus: string },
+  ): Promise<{ message: string }> {
+  try {
+    // Use o ID do imóvel e o novoStatus para atualizar o status no banco de dados
+    const imovel = await this.imovelService.findById(imovelId);
+    if (!imovel) {
+      throw new NotFoundException('Imóvel não encontrado');
+    }
+
+    imovel.statusNegociacao = body.novoStatus === 'true'; // Converter a string em um valor booleano
+    await this.imovelService.update(imovelId, imovel);
+
+
+    return { message: 'Status atualizado com sucesso' };
+  } catch (error) {
+    console.error(error);
+    throw new InternalServerErrorException('Erro ao atualizar o status');
+  }
+}
+
 
   @Get('/uploads/fotos-imoveis/:imageName')
   async serveRotaImovelImage(@Param('imageName') imageName, @Res() res) {

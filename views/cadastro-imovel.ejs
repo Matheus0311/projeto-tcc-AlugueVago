@@ -129,6 +129,19 @@
     font-size: 14px; 
   }
 
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .cancel-button {
+    margin-left: auto;
+  }
+
+  .register-button{
+    margin-right: auto;
+  }
+
 </style>
 <body class="bg-gray-100">
 <!-- Navbar -->
@@ -200,10 +213,13 @@
   
       <form action="/imoveis/cadastro-imovel" method="POST" enctype="multipart/form-data" id="imovelForm">
      
-        <!-- Parte 1 - Informações do Imóvel -->
-        <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+          <section class="step" data-step="1">
+            <!-- Parte 1 - Informações do Imóvel -->
+            <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel (1/4)</h2>
           <div>
             <!-- Tamanho -->
             <div class="input-container">
@@ -244,6 +260,7 @@
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
               </select>
+              <div class="error-message" id="mobiliadoError"></div>
             </div>
             <!-- Status de Negociação -->
             <div class="input-container">
@@ -260,6 +277,7 @@
                 <option value="1" >Disponível</option>
                 <option value="0">Indisponível</option>
               </select>
+              <div class="error-message" id="statusNegociacaoError"></div>
             </div>
             <!-- Valor -->
             <div class="input-container">
@@ -332,7 +350,23 @@
             </div>
             
           </div>
+          <div class="button-container">
+            <button type="button" class="next-step bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
+              Continuar
+            </button>
+            <button
+              type="button"
+              onclick="window.location.href='/imoveis/meus-imoveis'"
+              class="cancel-button bg-yellow-400 text-white py-2 px-4 rounded-md hover:bg-yellow-500 duration-300"
+            >
+              Cancelar
+            </button>
+          </div>          
+
+          </section>
+          <section class="step hidden" data-step="2">
           <div>
+            <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel (2/4)</h2>
             <!-- Título -->
             <div class="input-container">
               <label for="titulo">Título do Imóvel <span class="text-red-500">*</span>
@@ -368,7 +402,7 @@
                 </span>
               </label>
               <div class="relative">
-                <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="updateImageLabel(this)" required>
+                <input type="file" id="fotos" name="fotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*" onchange="limitarFotos(this)" required>
                 <p id="fotosLabel">Clique para selecionar fotos</p>
               </div>
               <div class="error-message" id="fotosError"></div>
@@ -385,14 +419,31 @@
                 <p id="pdfDocumentLabel">Clique para selecionar um PDF</p>
               </div>
             </div>
-
-
-            <br>
-            
-           
-
+          <br>
           </div>
+         
+          <div class="button-container">
+            <button type="button" class="prev-step bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 hover:text-white transition duration-300" style="margin-right: 10px;">
+              Voltar
+            </button>
+            <button type="button" class="next-step bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
+              Continuar
+            </button>
+            <button
+              type="button"
+              onclick="window.location.href='/imoveis/meus-imoveis'"
+              class="cancel-button bg-yellow-400 text-white py-2 px-4 rounded-md hover:bg-yellow-500 duration-300"
+            >
+              Cancelar
+            </button>
+          </div>
+          
+          
+          </section>
+          <section class="step hidden" data-step="3">
+
           <div>
+            <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações do Imóvel (3/4)</h2>
              <!-- Tipo de Imóvel -->
              <div class="input-container">
               <label for="tipoImovel">Tipo de Imóvel: <span class="text-red-500">*</span> 
@@ -415,6 +466,7 @@
                 <option value="Quitinete">Quitinete</option>
                 <option value="Flat">Flat</option>
               </select>
+              <div class="error-message" id="tipoImovelError"></div>
             </div>
             <!-- Grande -->
             <div class="input-container">
@@ -430,6 +482,7 @@
                 <option value="1" >Sim</option>
                 <option value="0">Não</option>
               </select>
+              <div class="error-message" id="grandeError"></div>
             </div>
             <!-- Bem Localizado -->
             <div class="input-container">
@@ -445,6 +498,7 @@
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
               </select>
+              <div class="error-message" id="bemLocaalizadoError"></div>
             </div>
             <!-- Condomínio Fechado -->
             <div class="input-container">
@@ -460,6 +514,7 @@
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
               </select>
+              <div class="error-message" id="condominioFechadoError"></div>
             </div>
             <!-- Novo -->
             <div class="input-container">
@@ -475,6 +530,7 @@
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
               </select>
+              <div class="error-message" id="novoError"></div>
             </div>
             <!-- Estacionamento -->
             <div class="input-container">
@@ -490,6 +546,7 @@
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
               </select>
+              <div class="error-message" id="estacionamentoError"></div>
             </div>
             <!-- Água Gratuita -->
             <div class="input-container">
@@ -505,6 +562,7 @@
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
               </select>
+              <div class="error-message" id="aguaGratuitaError"></div>
             </div>
             <!-- IPTU Incluso -->
             <div class="input-container">
@@ -520,186 +578,556 @@
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
               </select>
+              <div class="error-message" id="iptuInclusoError"></div>
             </div>
           </div>
+          <div class="button-container">
+            <button type="button" class="prev-step bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 hover:text-white transition duration-300" style="margin-right: 10px;">
+              Voltar
+            </button>
+            <button type="button" class="next-step bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
+              Continuar
+            </button>
+            <button
+              type="button"
+              onclick="window.location.href='/imoveis/meus-imoveis'"
+              class="cancel-button bg-yellow-400 text-white py-2 px-4 rounded-md hover:bg-yellow-500 duration-300"
+            >
+              Cancelar
+            </button>
+          </div>          
+          </section>
         </div>
+        
 
+        <section class="step hidden" data-step="4">
     <!-- Parte 2 e 3 - Informações de Endereço e Contato -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-      <!-- Seção 2 - Informações de Endereço -->
-      <div class="md:col-span-2">
-        <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações de Endereço</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Coluna 1 - Endereço -->
-          <div>
-            <!-- CEP -->
-            <div class="input-container">
-              <label for="enderecoCEP">CEP: <span class="text-red-500">*</span> 
-                <span class="info-icon" title="Informe o CEP correto">
-                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
-              title="Informe o CEP correto"
-              required>
-              <div class="error-message" id="enderecoCEPError"></div>
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-6">
+          <!-- Seção 2 - Informações de Endereço -->
+          <div class="md:col-span-2">
 
-            </div>
-            <!-- Cidade -->
-            <div class="input-container">
-              <label for="enderecoCidade">Cidade: <span class="text-red-500">*</span> 
-                <span class="info-icon" title="Informe a cidade correta">
-                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" 
-              title="Informe a cidade correta"
-              required>
-              <div class="error-message" id="enderecoCidadeError"></div>
+            <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informações de Imovel (4/4) - Endereço e Contato</h2>
+              
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Coluna 1 - Endereço -->
+              <div>
+                <!-- CEP -->
+                <div class="input-container">
+                  <label for="enderecoCEP">CEP: <span class="text-red-500">*</span> 
+                    <span class="info-icon" title="Informe o CEP correto">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
+                  title="Informe o CEP correto"
+                  required>
+                  <div class="error-message" id="enderecoCEPError"></div>
 
-            </div>
-            <!-- Estado -->
-            <div class="input-container">
-              <label for="estadoNome">Estado: <span class="text-red-500">*</span> 
-                <span class="info-icon" title="Informe o estado correto">
-                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <select id="estadoNome" name="estadoNome" class="rounded-md focus:border-blue-500" 
-              title="Informe o estado correto"
-              required>
-                <option value="" selected >Selecione o estado</option>
-                <option value="AC">Acre</option>
-                <option value="AL">Alagoas</option>
-                <option value="AP">Amapá</option>
-                <option value="AM">Amazonas</option>
-                <option value="BA">Bahia</option>
-                <option value="CE">Ceará</option>
-                <option value="DF">Distrito Federal</option>
-                <option value="ES">Espírito Santo</option>
-                <option value="GO">Goiás</option>
-                <option value="MA">Maranhão</option>
-                <option value="MT">Mato Grosso</option>
-                <option value="MS">Mato Grosso do Sul</option>
-                <option value="MG">Minas Gerais</option>
-                <option value="PA">Pará</option>
-                <option value="PB">Paraíba</option>
-                <option value="PR">Paraná</option>
-                <option value="PE">Pernambuco</option>
-                <option value="PI">Piauí</option>
-                <option value="RJ">Rio de Janeiro</option>
-                <option value="RN">Rio Grande do Norte</option>
-                <option value="RS">Rio Grande do Sul</option>
-                <option value="RO">Rondônia</option>
-                <option value="RR">Roraima</option>
-                <option value="SC">Santa Catarina</option>
-                <option value="SP">São Paulo</option>
-                <option value="SE">Sergipe</option>
-                <option value="TO">Tocantins</option>
-              </select>
+                </div>
+                <!-- Cidade -->
+                <div class="input-container">
+                  <label for="enderecoCidade">Cidade: <span class="text-red-500">*</span> 
+                    <span class="info-icon" title="Informe a cidade correta">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" 
+                  title="Informe a cidade correta"
+                  required>
+                  <div class="error-message" id="enderecoCidadeError"></div>
+
+                </div>
+                <!-- Estado -->
+                <div class="input-container">
+                  <label for="estadoNome">Estado: <span class="text-red-500">*</span> 
+                    <span class="info-icon" title="Informe o estado correto">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <select id="estadoNome" name="estadoNome" class="rounded-md focus:border-blue-500" 
+                  title="Informe o estado correto"
+                  required>
+                    <option value="" selected >Selecione o estado</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                  </select>
+                </div>
+              </div>
+              <!-- Coluna 2 - Endereço -->
+
+              <div>
+                <!-- Rua -->
+                <div class="input-container">
+                  <label for="enderecoRua">Rua: <span class="text-red-500">*</span> 
+                    <span class="info-icon" title="Informe a rua correta">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" 
+                  title="Informe a rua correta"
+                  required>
+                  <div class="error-message" id="enderecoRuaError"></div>
+
+                </div>
+                <!-- Número -->
+                <div class="input-container">
+                  <label for="enderecoNumero">Número: <span class="text-red-500">*</span> 
+                    <span class="info-icon" title="Informe o número do imóvel correto">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" 
+                  title="Informe o número do imóvel correto"
+                  required>
+                  <div class="error-message" id="enderecoNumeroError"></div>
+
+                </div>
+                <!-- Bairro -->
+                <div class="input-container">
+                  <label for="enderecoBairro">Bairro: <span class="text-red-500">*</span> 
+                    <span class="info-icon" title="Informe o bairro correto">
+                      <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                    </span>
+                  </label>
+                  <input type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" 
+                  title="Informe o bairro correto"
+                  required>
+                  <div class="error-message" id="enderecoBairroError"></div>
+
+                </div>
+              </div>
+              
             </div>
           </div>
-          <!-- Coluna 2 - Endereço -->
-
-          <div>
-            <!-- Rua -->
+          <!-- Seção 3 - Informações de Contato -->
+          <div class="md:col-span-2">
+            <h2 class="text-lg font-semibold mb-4 border-b pb-2">
+              Informações de Contato
+            </h2>
+            <!-- Telefone de Contato -->
             <div class="input-container">
-              <label for="enderecoRua">Rua: <span class="text-red-500">*</span> 
-                <span class="info-icon" title="Informe a rua correta">
+              <label for="telefoneContato">Telefone de Contato: <span class="text-red-500">*</span> 
+                <span class="info-icon" title="Digite um telefone para contato válido">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" 
-              title="Informe a rua correta"
-              required>
-              <div class="error-message" id="enderecoRuaError"></div>
-
+                </span></label>
+              <input type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação" required>
             </div>
-            <!-- Número -->
+            <!-- Email de Contato -->
             <div class="input-container">
-              <label for="enderecoNumero">Número: <span class="text-red-500">*</span> 
-                <span class="info-icon" title="Informe o número do imóvel correto">
+              <label for="emailContato">
+                Email: <span class="text-red-500">*</span>
+                <span class="info-icon" title="Digite um nome email válido com @ e .">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span>
               </label>
-              <input type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" 
-              title="Informe o número do imóvel correto"
-              required>
-              <div class="error-message" id="enderecoNumeroError"></div>
-
-            </div>
-            <!-- Bairro -->
-            <div class="input-container">
-              <label for="enderecoBairro">Bairro: <span class="text-red-500">*</span> 
-                <span class="info-icon" title="Informe o bairro correto">
-                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
-                </span>
-              </label>
-              <input type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" 
-              title="Informe o bairro correto"
-              required>
-              <div class="error-message" id="enderecoBairroError"></div>
-
+              <input
+                type="email"
+                id="emailContato"
+                name="emailContato"
+                class="rounded-md focus:border-blue-500"
+                placeholder="exemplo@exemplo.com"
+                required
+                title="Digite um email válido com @ e ."
+              />
+              <div class="error-message" id="emailError"></div>
             </div>
           </div>
-          
         </div>
-      </div>
-      <!-- Seção 3 - Informações de Contato -->
-      <div>
-        <h2 class="text-lg font-semibold mb-4 border-b pb-2">
-          Informações de Contato
-        </h2>
-        <!-- Telefone de Contato -->
-        <div class="input-container">
-          <label for="telefoneContato">Telefone de Contato: <span class="text-red-500">*</span> </label>
-          <input type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação" required>
-        </div>
-        <!-- Email de Contato -->
-        <div class="input-container">
-          <label for="emailContato">
-            Email: <span class="text-red-500">*</span>
-            <span class="info-icon" title="Digite um nome email válido com @ e .">
-              <i class="text-gray-500 cursor-pointer">&#9432;</i>
-            </span>
-          </label>
-          <input
-            type="email"
-            id="emailContato"
-            name="emailContato"
-            class="rounded-md focus:border-blue-500"
-            placeholder="exemplo@exemplo.com"
-            required
-            title="Digite um email válido com @ e ."
-          />
-          <div class="error-message" id="emailError"></div>
-        </div>
-      </div>
-    </div>
 
-    <div class="mt-4 flex justify-between">
-      <button
-        type="submit"
-        class="w-1/2 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
-      >
-        Cadastrar
-      </button>
-  
-      <button
-        type="button"
-        onclick="window.location.href='/imoveis/meus-imoveis'"
-        class="w-1/2 bg-red-500 hover:bg-red-600 text-black py-2 rounded-md transition duration-300 ml-2"
-      >
-        Cancelar
-      </button>
-    </div>
+        <div class="button-container">
+          <button type="button" class="prev-step bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 hover:text-white transition duration-300" style="margin-right: 10px;">
+            Voltar
+          </button>
+          <button type="submit" class="register-button bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">
+            Cadastrar
+          </button>
+          <button
+            type="button"
+            onclick="window.location.href='/imoveis/meus-imoveis'"
+            class="cancel-button bg-yellow-400 text-white py-2 px-4 rounded-md hover:bg-yellow-500 duration-300 ml-2"
+          >
+            Cancelar
+          </button>
+        </div>
+    </section>
+   
     </form>
   </div>
 </div>
 
+<script>
+  function limitarFotos(input) {
+    const maxFotos = 6;
+    const fotosSelecionadas = input.files.length;
+
+    if (fotosSelecionadas > maxFotos) {
+      alert(`Você pode selecionar no máximo ${maxFotos} fotos.`);
+      input.value = ''; 
+    }
+
+    document.getElementById('fotosLabel').textContent = `Você selecionou ${fotosSelecionadas} de ${maxFotos} fotos.`;
+  }
+</script>
+
+<script>
+  const steps = document.querySelectorAll('.step');
+  const nextButtons = document.querySelectorAll('.next-step');
+  const prevButtons = document.querySelectorAll('.prev-step');
+  const lastStep = document.querySelector('.step[data-step="4"]');
+  const penultimo = document.querySelector('.step[data-step="3"]');
+
+  nextButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const currentStep = button.closest('.step');
+      const nextStep = currentStep.nextElementSibling;
+
+      if (validateFields()) { 
+        currentStep.classList.add('hidden');
+        if (nextStep) {
+          nextStep.classList.remove('hidden');
+        } else if (currentStep === penultimo) {
+          lastStep.classList.remove('hidden');
+        }
+      }
+    });
+  });
+
+  prevButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const currentStep = button.closest('.step');
+      const currentIndex = Array.from(steps).indexOf(currentStep);
+
+      if (currentIndex > 0) {
+        const prevStep = steps[currentIndex - 1];
+        currentStep.classList.add('hidden');
+        prevStep.classList.remove('hidden');
+        console.log("PREV: ", prevStep);
+      } else if (currentStep === lastStep) {
+        console.log("Ultimo");
+        currentStep.classList.add('hidden');
+        penultimo.classList.remove('hidden');
+      }
+    });
+  });
+
+function validateFields() {
+  let isValid = true;
+  const currentStep = document.querySelector('.step:not(.hidden)');
+
+  if (currentStep.dataset.step === '1') {
+    // Validação para a primeira etapa (Informações do Imóvel - Parte 1)
+    const tamanhoInput = document.getElementById('tamanho');
+    const quantidadeComodosInput = document.getElementById('quantidadeComodos');
+    const mobiliadoSelect = document.getElementById('mobiliado');
+    const statusNegociacaoSelect = document.getElementById('statusNegociacao');
+    const valorInput = document.getElementById('valor');
+    const rgProprietarioInput = document.getElementById('rgProprietario');
+    const cpfProprietarioInput = document.getElementById('cpfProprietario');
+    const numeroInscricaoInput = document.getElementById('numeroInscricao');
+
+    if (tamanhoInput.value <= 0) {
+      isValid = false;
+      displayError(tamanhoInput, 'O tamanho deve ser maior que 0');
+    }
+
+    if (quantidadeComodosInput.value <= 0) {
+      isValid = false;
+      displayError(quantidadeComodosInput, 'A quantidade de cômodos deve ser maior que 0');
+    }
+
+    if (mobiliadoSelect.value === '') {
+      isValid = false;
+      displayError(mobiliadoSelect, 'Selecione se o imóvel é mobiliado ou não');
+    }
+
+    if (statusNegociacaoSelect.value === '') {
+      isValid = false;
+      displayError(statusNegociacaoSelect, 'Selecione o status de negociação do imóvel');
+    }
+
+    if (valorInput.value <= 0) {
+      isValid = false;
+      displayError(valorInput, 'O valor mensal deve ser maior que 0');
+    }
+
+    if (!validateRG(rgProprietarioInput.value)) {
+      isValid = false;
+      displayError(rgProprietarioInput, 'Digite um RG válido com 8 ou 9 dígitos');
+    }
+
+    if (!validateCPF(cpfProprietarioInput.value)) {
+      isValid = false;
+      displayError(cpfProprietarioInput, 'Digite um CPF válido com 11 dígitos');
+    }
+
+    if (numeroInscricaoInput.value <= 6) {
+      isValid = false;
+      displayError(numeroInscricaoInput, 'Informe o número de inscrição do imóvel');
+    }
+  } else if (currentStep.dataset.step === '2') {
+    // Validação para a segunda etapa (Informações do Imóvel - Parte 2)
+    const tituloTextarea = document.getElementById('titulo');
+    const descricaoTextarea = document.getElementById('descricao');
+    const fotosInput = document.getElementById('fotos');
+    const pdfDocumentInput = document.getElementById('pdfDocument');
+
+    if (tituloTextarea.value.length < 3 || tituloTextarea.value.length > 200) {
+      isValid = false;
+      displayError(tituloTextarea, 'O título deve ter entre 3 e 200 caracteres');
+    }
+
+    if (descricaoTextarea.value.length < 3 || descricaoTextarea.value.length > 200) {
+      isValid = false;
+      displayError(descricaoTextarea, 'A descrição deve ter entre 3 e 200 caracteres');
+    }
+
+    if (!validateFileExtensions(fotosInput, ['jpg', 'jpeg', 'png'])) {
+      isValid = false;
+      displayError(fotosInput, 'Selecione até 6 imagens no formato JPG, JPEG ou PNG');
+    }
+
+    if (!validateFileExtensions(pdfDocumentInput, ['pdf'])) {
+      isValid = false;
+      displayError(pdfDocumentInput, 'Selecione um arquivo PDF com os documentos principais do imóvel');
+    }
+  } else if (currentStep.dataset.step === '3') {
+    // Validação para a terceira etapa (Informações do Imóvel - Parte 3)
+    const tipoImovelSelect = document.getElementById('tipoImovel');
+    const grandeSelect = document.getElementById('grande');
+    const bemLocalizadoSelect = document.getElementById('bemLocalizado');
+    const condominioFechadoSelect = document.getElementById('condominioFechado');
+    const novoSelect = document.getElementById('novo');
+    const estacionamentoSelect = document.getElementById('estacionamento');
+    const aguaGratuitaSelect = document.getElementById('aguaGratuita');
+    const iptuInclusoSelect = document.getElementById('iptuIncluso');
+
+    if (tipoImovelSelect.value === '') {
+      isValid = false;
+      displayError(tipoImovelSelect, 'Selecione o tipo do imóvel');
+    }
+
+    if (grandeSelect.value === '') {
+      isValid = false;
+      displayError(grandeSelect, 'Informe se o imóvel é considerado grande ou não');
+    }
+
+    if (bemLocalizadoSelect.value === '') {
+      isValid = false;
+      displayError(bemLocalizadoSelect, 'Informe se o imóvel é bem localizado ou não');
+    }
+
+    if (condominioFechadoSelect.value === '') {
+      isValid = false;
+      displayError(condominioFechadoSelect, 'Informe se o imóvel está em um condomínio fechado ou não');
+    }
+
+    if (novoSelect.value === '') {
+      isValid = false;
+      displayError(novoSelect, 'Informe se o imóvel é novo ou usado');
+    }
+
+    if (estacionamentoSelect.value === '') {
+      isValid = false;
+      displayError(estacionamentoSelect, 'Informe se o imóvel possui estacionamento ou não');
+    }
+
+    if (aguaGratuitaSelect.value === '') {
+      isValid = false;
+      displayError(aguaGratuitaSelect, 'Informe se a água é gratuita no imóvel ou não');
+    }
+
+    if (iptuInclusoSelect.value === '') {
+      isValid = false;
+      displayError(iptuInclusoSelect, 'Informe se o IPTU está incluso no valor do aluguel ou não');
+    }
+  }else if (currentStep.dataset.step === '4') {
+    // Validação para a quarta etapa (Informações de Endereço e Contato)
+    const enderecoCEPInput = document.getElementById('enderecoCEP');
+    const enderecoCidadeInput = document.getElementById('enderecoCidade');
+    const estadoNomeSelect = document.getElementById('estadoNome');
+    const enderecoRuaInput = document.getElementById('enderecoRua');
+    const enderecoNumeroInput = document.getElementById('enderecoNumero');
+    const enderecoBairroInput = document.getElementById('enderecoBairro');
+    const telefoneContatoInput = document.getElementById('telefoneContato');
+    const emailContatoInput = document.getElementById('emailContato');
+
+    // Validação para o CEP (deve conter 8 dígitos)
+    if (!validateCEP(enderecoCEPInput.value)) {
+      isValid = false;
+      displayError(enderecoCEPInput, 'Digite um CEP válido com 8 dígitos');
+    }
+
+    if (enderecoCidadeInput.value.trim() === '') {
+      isValid = false;
+      displayError(enderecoCidadeInput, 'Informe a cidade correta');
+    }
+
+    if (estadoNomeSelect.value === '') {
+      isValid = false;
+      displayError(estadoNomeSelect, 'Selecione o estado');
+    }
+
+    if (enderecoRuaInput.value.trim() === '') {
+      isValid = false;
+      displayError(enderecoRuaInput, 'Informe a rua correta');
+    }
+
+    if (enderecoNumeroInput.value.trim() === '') {
+      isValid = false;
+      displayError(enderecoNumeroInput, 'Informe o número do imóvel correto');
+    }
+
+    if (enderecoBairroInput.value.trim() === '') {
+      isValid = false;
+      displayError(enderecoBairroInput, 'Informe o bairro correto');
+    }
+
+    // Validação para o telefone de contato (deve conter apenas números e DDD)
+    if (!validateTelefone(telefoneContatoInput.value)) {
+      isValid = false;
+      displayError(telefoneContatoInput, 'Digite um telefone de contato válido (DDD e número)');
+    }
+
+    // Validação para o email de contato
+    if (!validateEmail(emailContatoInput.value)) {
+      isValid = false;
+      displayError(emailContatoInput, 'Digite um email válido');
+    }
+  }
+
+
+  return isValid;
+}
+function clearError(input) {
+  const errorDiv = input.nextElementSibling;
+  if (errorDiv) {
+    errorDiv.textContent = '';
+  }
+  input.classList.remove('border', 'border-red-500');
+}
+
+// Função para exibir mensagens de erro
+function displayError(element, errorMessage) {
+  const errorContainer = element.parentElement.querySelector('.error-message');
+
+  if (errorContainer) {
+    errorContainer.textContent = errorMessage;
+    errorContainer.style.display = 'block';
+  }
+}
+
+// Função para validar RG (8 ou 9 dígitos)
+function validateRG(rg) {
+  const rgPattern = /^\d{8}|\d{9}$/;
+  return rgPattern.test(rg);
+}
+
+// Função para validar CPF (11 dígitos)
+function validateCPF(cpf) {
+  cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+  if (cpf.length !== 11) {
+    return false;
+  }
+
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // Função para validar CEP (8 dígitos)
+function validateCEP(cep) {
+  const cepPattern = /^\d{8}$/;
+  return cepPattern.test(cep);
+}
+
+  // Verifica se todos os dígitos são iguais (situação inválida)
+  if (/^(\d)\1+$/.test(cpf)) {
+    return false;
+  }
+
+  const cpfArray = cpf.split('').map(Number);
+
+  // Calcula o primeiro dígito verificador
+  let sum = 0;
+  for (let i = 0; i < 9; i++) {
+    sum += cpfArray[i] * (10 - i);
+  }
+  let remainder = (sum * 10) % 11;
+  if (remainder === 10 || remainder === 11) {
+    remainder = 0;
+  }
+  if (remainder !== cpfArray[9]) {
+    return false;
+  }
+
+  // Calcula o segundo dígito verificador
+  sum = 0;
+  for (let i = 0; i < 10; i++) {
+    sum += cpfArray[i] * (11 - i);
+  }
+  remainder = (sum * 10) % 11;
+  if (remainder === 10 || remainder === 11) {
+    remainder = 0;
+  }
+  if (remainder !== cpfArray[10]) {
+    return false;
+  }
+
+  return true;
+}
+
+
+
+// Função para validar extensões de arquivo
+function validateFileExtensions(input, allowedExtensions) {
+  const fileName = input.value;
+  const fileExtension = fileName.split('.').pop().toLowerCase();
+  return allowedExtensions.includes(fileExtension);
+}
+
+</script>
+
+
+
 
 
 <script>
+
+  nextButtons.forEach(button => {
+    button.addEventListener('click', (event) => {
+      if (!validateForm()) {
+        event.preventDefault(); 
+      }
+    });
+  });
+  
+
+  function validateForm() {
   const form = document.getElementById('imovelForm');
   const tamanhoInput = document.getElementById('tamanho');
   const tituloInput = document.getElementById('titulo');
@@ -710,6 +1138,7 @@
   const valorInput = document.getElementById('valor');
   const rgInput = document.getElementById('rgProprietario');
   const cpfInput = document.getElementById('cpfProprietario');
+  const numeroInscricaoInput = document.getElementById('numeroInscricao');
   const descricaoInput = document.getElementById('descricao');
   const emailInput = document.getElementById('emailContato');
 
@@ -727,6 +1156,7 @@
   const enderecoBairroInput = document.getElementById("enderecoBairro");
   const enderecoCidadeInput = document.getElementById("enderecoCidade");
   const estadoNomeInput = document.getElementById("estadoNome");
+    
   
 
   form.addEventListener('submit', (event) => {
@@ -823,6 +1253,7 @@
   valorInput.addEventListener('input', () => clearError(valorInput));
   rgInput.addEventListener('input', () => clearError(rgInput));
   cpfInput.addEventListener('input', () => clearError(cpfInput));
+  numeroInscricaoInput.addEventListener('input', () => clearError(numeroInscricaoInput));
   descricaoInput.addEventListener('input', () => clearError(descricaoInput));
   emailInput.addEventListener('input', () => clearError(emailInput));
 
@@ -909,7 +1340,7 @@
   const cpf2 = '111.222.333-44';
   console.log(isValidCPF(cpf2)); // Deve retornar false
   
-
+  }
 
 </script>
 
@@ -988,6 +1419,8 @@
   "Casa charmosa em bairro arborizado.",
   "Loft espaçoso com pé-direito alto."
 ];
+
+  const descricaoInput = document.getElementById('descricao');
 
   const randomIndex = Math.floor(Math.random() * examplePhrases.length);
   const randomPhrase = examplePhrases[randomIndex];

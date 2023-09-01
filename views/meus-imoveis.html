@@ -292,15 +292,23 @@
                     <h3 class="text-lg font-semibold mb-2"><%= imovel.titulo %></h3>
                     <p class="mb-2 text-sm"><strong>Tamanho:</strong> <%= imovel.tamanho %> m²</p>
                     <p class="mb-2 text-sm"><strong>Valor:</strong> R$ <%= imovel.valor %></p>
-                    <p class="mb-2 text-sm"><strong>Status de Negociação:</strong>
-                      <%= imovel.statusNegociacao ? 'Negociável' : 'Não negociável' %></p>
+                    <div class="mb-2">
+                      <strong>Status de Negociação:</strong>
+                      <select id="statusNegociacao<%= imovel.id %>" class="form-select">
+                        <% const statusNegociacaoInt = imovel.statusNegociacao ? 1 : 0; %>
+                        <option value="true" <%= statusNegociacaoInt === 1 ? 'selected' : '' %>>Disponível</option>
+                        <option value="false" <%= statusNegociacaoInt === 0 ? 'selected' : '' %>>Indisponível</option>
+                      </select>
+                    </div>
                     <p class="mb-2 text-sm"><strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>, <%= imovel.enderecoCidade %></p>
                     <div class="flex flex-wrap justify-start space-x-2 space-y-2 md:space-y-0 md:space-x-2">
                       <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal<%= imovel._id %>">Deletar</button>
                       <a href="/imoveis/edit-imovel/<%= imovel.id %>" class="btn btn-primary">Editar</a>
                       <a href="/imoveis/informacoes-imovel/<%= imovel.id %>" class="btn btn-primary">Ver Detalhes</a>
+                      <button type="button" onclick="atualizarStatus('<%= imovel.id %>')" class="btn btn-primary">Atualizar Status</button>
                     </div>
                   </div>
+                  
                 </li>
               <% }); %>
             </ul>
@@ -344,6 +352,48 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+  <script>
+    function atualizarStatus(imovelId) {
+      event.preventDefault();
+    
+      const selectElement = document.getElementById(`statusNegociacao${imovelId}`);
+      const novoStatus = selectElement.value; // Converte a string em um valor booleano
+    
+      // Enviar a solicitação para atualizar o status para o servidor
+      fetch(`/imoveis/meus-imoveis/atualizar-status/${imovelId}`, {
+        method: 'POST', // Certifique-se de que o método seja POST
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ novoStatus }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.message === 'Status atualizado com sucesso') {
+            // Atualizar a exibição na página, por exemplo, alterando a cor do texto
+            if (novoStatus === 'true') {
+              selectElement.classList.remove('text-red-500');
+              selectElement.classList.add('text-green-500');
+            } else {
+              selectElement.classList.remove('text-green-500');
+              selectElement.classList.add('text-red-500');
+            }
+          } else {
+            alert('Erro ao atualizar o status');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          alert('Erro ao atualizar o status');
+        });
+    }
+    
+  </script>
+  
+  
 
 
   <script>
