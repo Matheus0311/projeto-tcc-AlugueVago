@@ -229,7 +229,7 @@
                 </span>
               </label>
               <input type="number" id="tamanho" name="tamanho" class="rounded-md focus:border-blue-500" 
-              title="Informe o tamanho do imóvel"
+              title="Informe o tamanho do imóvel" value="400"
               required >
               <div class="error-message" id="tamanhoError"></div>
             </div>
@@ -242,7 +242,7 @@
               </label>
 
               <input type="number" id="quantidadeComodos" name="quantidadeComodos" class="rounded-md focus:border-blue-500" 
-              title="Informe a quantidade cômodos"
+              title="Informe a quantidade cômodos" value="4"
               required>
               <div class="error-message" id="quantidadeComodosError"></div>
             </div>
@@ -256,8 +256,8 @@
               <select id="mobiliado" name="mobiliado" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel é mobiliado" required>
               <div class="error-message" id="mobiliadoError"></div>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="1" selected>Sim</option>
                 <option value="0">Não</option>
               </select>
               <div class="error-message" id="mobiliadoError"></div>
@@ -273,8 +273,8 @@
               title="Informe se o imóvel já está sendo negociado"
               required>
               <div class="error-message" id="statusNegociacaoError"></div>
-                <option value="" selected >Escolha a opção</option>
-                <option value="1" >Disponível</option>
+                <option value=""  >Escolha a opção</option>
+                <option value="1" selected>Disponível</option>
                 <option value="0">Indisponível</option>
               </select>
               <div class="error-message" id="statusNegociacaoError"></div>
@@ -287,7 +287,7 @@
                 </span>
               </label>
               <input type="number" id="valor" name="valor" class="rounded-md focus:border-blue-500" 
-              title="Informe o valor mensal do aluguel do imóvel"
+              title="Informe o valor mensal do aluguel do imóvel" value="1200"
               required>
               <div class="error-message" id="valorError"></div>
 
@@ -309,7 +309,7 @@
                 maxlength="9"
                 required
                 pattern="[0-9]{8,9}"
-                title="Digite um RG válido com 8 a 9 dígitos"
+                title="Digite um RG válido com 8 a 9 dígitos" value="12345678"
               />
               <div class="error-message" id="rgError"></div>
             </div>
@@ -330,7 +330,7 @@
                 maxlength="11"
                 required
                 pattern="[0-9]{11}"
-                title="Digite um CPF válido com 11 dígitos"
+                title="Digite um CPF válido com 11 dígitos" value="12345678909"
               />
               <div class="error-message" id="cpfError"></div>
             </div>
@@ -343,7 +343,7 @@
                 </span>
               </label>
               <input type="text" id="numeroInscricao" name="numeroInscricao" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
-              title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU"
+              title="Informe o número de inscrição do imóvel. Vem estampado na capa do carnê do IPTU" value="1234567"
               required>
               <div class="error-message" id="numeroInscricaoError"></div>
 
@@ -377,7 +377,7 @@
               <textarea id="titulo" name="titulo" class="rounded-md focus:border-blue-500" rows="3"  maxlength="200"
               required
               title="Informe um titulo para o imóvel com 3 a 200 caracteres"
-              pattern=".{3,200}"></textarea>
+              pattern=".{3,200}">Uma casa perto da Unigran</textarea>
               <div class="error-message" id="descricaoError"></div>
             </div>
 
@@ -391,7 +391,7 @@
               <textarea id="descricao" name="descricao" class="rounded-md focus:border-blue-500" rows="4"  maxlength="200"
               required
               title="Informe uma pequena descrição com 3 a 200 caracteres"
-              pattern=".{3,200}"></textarea>
+              pattern=".{3,200}">Casa bem cuidada e próxima dos melhores pontos da cidade</textarea>
               <div class="error-message" id="descricaoError"></div>
             </div>
             <!-- Fotos do Imóvel -->
@@ -455,9 +455,9 @@
               title="Informe o tipo do imóvel"
               required>
               <div class="error-message" id="tipoImovelError"></div>
-                <option value="" selected>Escolha o tipo</option>
+                <option value="" >Escolha o tipo</option>
                 <option value="Salão">Salão Comercial</option>
-                <option value="Casa">Casa</option>
+                <option value="Casa" selected>Casa</option>
                 <option value="Apartamento">Apartamento</option>
                 <option value="Chácara">Chácara</option>
                 <option value="Loft">Loft</option>
@@ -478,8 +478,8 @@
               <select id="grande" name="grande" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel é considerado grande (só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1" >Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="1" selected>Sim</option>
                 <option value="0">Não</option>
               </select>
               <div class="error-message" id="grandeError"></div>
@@ -494,8 +494,8 @@
               <select id="bemLocalizado" name="bemLocalizado" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel é bem localizado (só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="1" selected>Sim</option>
                 <option value="0">Não</option>
               </select>
               <div class="error-message" id="bemLocaalizadoError"></div>
@@ -510,8 +510,8 @@
               <select id="condominioFechado" name="condominioFechado" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel é em condomínio fechado (só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="1" selected>Sim</option>
                 <option value="0">Não</option>
               </select>
               <div class="error-message" id="condominioFechadoError"></div>
@@ -526,8 +526,8 @@
               <select id="novo" name="novo" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel é novo(só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="1" selected>Sim</option>
                 <option value="0">Não</option>
               </select>
               <div class="error-message" id="novoError"></div>
@@ -542,8 +542,8 @@
               <select id="estacionamento" name="estacionamento" class="rounded-md focus:border-blue-500" 
               title="Informe se o imóvel tem estacionamento(só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="1" selected>Sim</option>
                 <option value="0">Não</option>
               </select>
               <div class="error-message" id="estacionamentoError"></div>
@@ -558,8 +558,8 @@
               <select id="aguaGratuita" name="aguaGratuita" class="rounded-md focus:border-blue-500" 
               title="Informe se a água é inclusa(só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="1" selected>Sim</option>
                 <option value="0">Não</option>
               </select>
               <div class="error-message" id="aguaGratuitaError"></div>
@@ -574,8 +574,8 @@
               <select id="iptuIncluso" name="iptuIncluso" class="rounded-md focus:border-blue-500" 
               title="Informe se o IPTU é incluso(só aparecerá esse atributo se for verdadeiro)"
               required>
-                <option value="" selected>Escolha a opção</option>
-                <option value="1">Sim</option>
+                <option value="" >Escolha a opção</option>
+                <option value="1" selected>Sim</option>
                 <option value="0">Não</option>
               </select>
               <div class="error-message" id="iptuInclusoError"></div>
@@ -619,7 +619,7 @@
                     </span>
                   </label>
                   <input type="text" id="enderecoCEP" name="enderecoCEP" class="rounded-md focus:border-blue-500" placeholder="Digite sem pontuação" 
-                  title="Informe o CEP correto"
+                  title="Informe o CEP correto" value="79824170"
                   required>
                   <div class="error-message" id="enderecoCEPError"></div>
 
@@ -632,7 +632,7 @@
                     </span>
                   </label>
                   <input type="text" id="enderecoCidade" name="enderecoCidade" class="rounded-md focus:border-blue-500" 
-                  title="Informe a cidade correta"
+                  title="Informe a cidade correta" value="Dourados"
                   required>
                   <div class="error-message" id="enderecoCidadeError"></div>
 
@@ -647,7 +647,7 @@
                   <select id="estadoNome" name="estadoNome" class="rounded-md focus:border-blue-500" 
                   title="Informe o estado correto"
                   required>
-                    <option value="" selected >Selecione o estado</option>
+                    <option value=""  >Selecione o estado</option>
                     <option value="AC">Acre</option>
                     <option value="AL">Alagoas</option>
                     <option value="AP">Amapá</option>
@@ -659,7 +659,7 @@
                     <option value="GO">Goiás</option>
                     <option value="MA">Maranhão</option>
                     <option value="MT">Mato Grosso</option>
-                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MS" selected>Mato Grosso do Sul</option>
                     <option value="MG">Minas Gerais</option>
                     <option value="PA">Pará</option>
                     <option value="PB">Paraíba</option>
@@ -689,7 +689,7 @@
                     </span>
                   </label>
                   <input type="text" id="enderecoRua" name="enderecoRua" class="rounded-md focus:border-blue-500" 
-                  title="Informe a rua correta"
+                  title="Informe a rua correta" value="Rua Gustavo Adolfo Pável"
                   required>
                   <div class="error-message" id="enderecoRuaError"></div>
 
@@ -702,7 +702,7 @@
                     </span>
                   </label>
                   <input type="text" id="enderecoNumero" name="enderecoNumero" class="rounded-md focus:border-blue-500" 
-                  title="Informe o número do imóvel correto"
+                  title="Informe o número do imóvel correto" value="340"
                   required>
                   <div class="error-message" id="enderecoNumeroError"></div>
 
@@ -715,7 +715,7 @@
                     </span>
                   </label>
                   <input type="text" id="enderecoBairro" name="enderecoBairro" class="rounded-md focus:border-blue-500" 
-                  title="Informe o bairro correto"
+                  title="Informe o bairro correto" value="Jardim Itaipú"
                   required>
                   <div class="error-message" id="enderecoBairroError"></div>
 
@@ -735,7 +735,7 @@
                 <span class="info-icon" title="Digite um telefone para contato válido">
                   <i class="text-gray-500 cursor-pointer">&#9432;</i>
                 </span></label>
-              <input type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação" required>
+              <input value="121221212" type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação" required>
             </div>
             <!-- Email de Contato -->
             <div class="input-container">
@@ -752,7 +752,7 @@
                 class="rounded-md focus:border-blue-500"
                 placeholder="exemplo@exemplo.com"
                 required
-                title="Digite um email válido com @ e ."
+                title="Digite um email válido com @ e ." value="bracin@exemplo.com"
               />
               <div class="error-message" id="emailError"></div>
             </div>

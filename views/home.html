@@ -37,22 +37,7 @@
       margin-bottom: 20px;
     }
 
-    .container {
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 5px;
-      padding: 20px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 420px;
-      margin: 0 auto;
-      margin-top: 20px;
-    }
-
-    .container h1 {
-      font-size: 24px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
+    
 
     .home-content {
       text-align: center;
@@ -109,6 +94,18 @@
     }
     .navbar {
       background-color: #4a90e2;
+    }
+
+    .bg-orange-500 {
+      background-color: rgba(255, 165, 0, 0.9); 
+      transition: background-color 0.3s ease; 
+    }
+    .brighten {
+      filter: brightness(1); 
+      transition: filter 0.3s ease; 
+    }
+    .brighten:hover {
+      filter: brightness(1.1); 
     }
 
     
@@ -175,22 +172,273 @@
     </div>
   </nav>
 
-  <div class="container mx-auto p-8 bg-white rounded-lg shadow-md max-w-md mt-20">
+  <!-- <div class="container mx-auto p-8 bg-white rounded-lg shadow-md max-w-md mt-20">
     <h1 class="text-2xl font-semibold text-center mb-6">Bem-vindo à AlugueVago</h1>
     <p class="text-center mb-8">Encontre o espaço perfeito para você alugar.</p>
     <button class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Ver Anúncios</button>
+  </div> -->
+
+
+  <div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="mb-4">
+                <label for="cidadeFiltro">Cidade:</label>
+                <input type="text" id="cidadeFiltro" class="form-control" placeholder="Cidade">
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="mb-4">
+                <label for="estadoFiltro">Estado:</label>
+                <select id="estadoFiltro" class="form-control">
+                  <option value=""  >Selecione o estado</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS" selected>Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                  </select>
+              </select>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="mb-4">
+                <label for="valorFiltro">Faixa de Preço:</label>
+                <input type="range" id="valorFiltro" class="form-control" min="0" max="20000">
+                <span id="priceRangeValue"></span>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="mb-4">
+                <label for="mobiliadoFiltro">Mobiliado:</label>
+                <select id="mobiliadoFiltro" class="form-control">
+                    <option value="">Qualquer</option>
+                    <option value="true">Sim</option>
+                    <option value="false">Não</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="mb-4">
+                <label for="tipoImovelFiltro">Tipo de Imóvel:</label>
+                <select id="tipoImovelFiltro" class="form-control">
+                    <option value="">Qualquer</option>
+                    <option value="Salão">Salão Comercial</option>
+                    <option value="Casa">Casa</option>
+                    <option value="Apartamento">Apartamento</option>
+                    <option value="Chácara">Chácara</option>
+                    <option value="Loft">Loft</option>
+                    <option value="Studio">Studio</option>
+                    <option value="Condomínio">Casa em Condomínio</option>
+                    <option value="Quitinete">Quitinete</option>
+                    <option value="Flat">Flat</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="mb-4">
+                <label for="tamanhoFiltro">Tamanho (m²):</label>
+                <input type="number" id="tamanhoFiltro" class="form-control" placeholder="Tamanho (m²)">
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="mb-4">
+                <label for="quantidadeComodosFiltro">Quantidade de Cômodos:</label>
+                <input type="number" id="quantidadeComodosFiltro" class="form-control" placeholder="Quantidade de Cômodos">
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <button id="filterButton" class="btn btn-primary w-100">Filtrar</button>
+        </div>
+    </div>
+</div>
+
+  
+  
+
+
+<!-- O resultado da filtragem deve aparecer aqui: -->
+
+
+<div class="container imoveis-container" id="imoveisContainer">
+    <div class="row">
+      <% imoveis.forEach(imovel => { %>
+        <div class="col-lg-3 col-md-6 col-sm-12 imovel">
+          <div class="border border-gray-200 rounded-lg p-3 mb-4 shadow-lg">
+            <div class="relative">
+              <% if (imovel.photos && imovel.photos.length > 0) { %>
+                <div class="group relative">
+                  <span class="bg-yellow-300 px-2 py-1 rounded text-white font-bold"><%= 'Cód. ' + imovel.id %></span>
+                  <a href="/imoveis/informacoes-imovel/<%= imovel.id %>">
+                    <img src="/<%= imovel.photos[0].url %>" alt="Imagem do Imóvel" class="w-full h-40 rounded-lg object-cover shadow-md brighten transform scale-100 transition-transform duration-300">
+                  </a>
+                  <% if (!imovel.statusNegociacao) { %>
+                    <div class="absolute bottom-0 left-0 w-full h-8 bg-orange-500 bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center rounded-lg">
+                      Em negociação
+                    </div>
+                  <% } %>
+                </div>
+              <% } else { %>
+                <div class="w-full h-32 bg-gray-200 rounded-lg shadow-md"></div>
+              <% } %>
+            </div>
+            <a href="/imoveis/informacoes-imovel/<%= imovel.id %>" class="text-lg font-semibold mt-4 mb-4 text-decoration-none text-dark" style="max-height: 3.6rem; overflow: hidden;">
+              <%= imovel.titulo %>
+            </a>
+            <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Valor:</strong> R$ <%= imovel.valor %></p>
+            <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>, <%= imovel.enderecoCidade %></p>
+            <p class="mb-2 text-sm"><strong>Mobiliado:</strong> <%= imovel.mobiliado ? 'Sim' : 'Não' %></p>
+          </div>
+        </div>
+      <% }); %>
+    </div>
   </div>
+  
+  
+  
+  
+  
+  
 
   <!-- Scripts JavaScript -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+
+
+
+
+<script>
+    function aplicarFiltros() {
+        var cidade = document.getElementById("cidadeFiltro").value;
+        var estado = document.getElementById("estadoFiltro").value;
+        var faixaPreco = parseFloat(document.getElementById("valorFiltro").value);
+        var mobiliado = document.getElementById("mobiliadoFiltro").value;
+        var tipoImovel = document.getElementById("tipoImovelFiltro").value;
+        var tamanho = parseFloat(document.getElementById("tamanhoFiltro").value);
+        var quantidadeComodos = parseInt(document.getElementById("quantidadeComodosFiltro").value);
+
+ 
+        console.log("Cidade:", cidade);
+        console.log("Estado:", estado);
+        console.log("Faixa de Preço:", faixaPreco);
+        console.log("Mobiliado:", mobiliado);
+        console.log("Tipo de Imóvel:", tipoImovel);
+        console.log("Tamanho (m²):", tamanho);
+        console.log("Quantidade de Cômodos:", quantidadeComodos);
+
+
+        //assim ele aparece todos os imoveis, adicionei essa classe lá no html
+        // var imoveis = document.querySelectorAll(".imovel");
+        var imoveis = document.querySelectorAll(".imovel .col-lg-3");
+        imoveis.forEach(function (imovel) {
+            var elementoCidade = imovel.querySelector(".enderecoCidade");
+            var imovelCidade = elementoCidade ? elementoCidade.textContent : "";
+            var elementoEstado = imovel.querySelector(".enderecoEstado");
+            var imovelEstado = elementoEstado ? elementoEstado.textContent : "";
+            var elementoValor = imovel.querySelector(".valor");
+            var imovelPreco = 0;
+
+            if (elementoValor) {
+                var valorTexto = elementoValor.textContent;
+                valorTexto = valorTexto.replace("R$ ", "").replace(",", "");
+                imovelPreco = parseFloat(valorTexto);
+            }
+            var elementoMobiliado = imovel.querySelector(".mobiliado");
+            var imovelMobiliado = "";
+
+            if (elementoMobiliado) {
+                imovelMobiliado = elementoMobiliado.textContent;
+            }
+            var elementoTipoImovel = imovel.querySelector(".tipoImovel");
+            var imovelTipo = "";
+
+            if (elementoTipoImovel) {
+                imovelTipo = elementoTipoImovel.textContent;
+            }
+
+            var elementoTamanho = imovel.querySelector(".tamanho");
+            var imovelTamanho = 0;
+
+            if (elementoTamanho) {
+                var tamanhoTexto = elementoTamanho.textContent;
+                tamanhoTexto = tamanhoTexto.replace(" m²", "");
+                imovelTamanho = parseFloat(tamanhoTexto);
+            }
+
+            var elementoQuantidadeComodos = imovel.querySelector(".quantidadeComodos");
+            var imovelQuantidadeComodos = 0;
+
+            if (elementoQuantidadeComodos) {
+                imovelQuantidadeComodos = parseInt(elementoQuantidadeComodos.textContent);
+            }
+            console.log("Imóvel Cidade:", imovelCidade);
+            console.log("Imóvel Estado:", imovelEstado);
+            console.log("Imóvel Preço:", imovelPreco);
+            console.log("Imóvel Mobiliado:", imovelMobiliado);
+            console.log("Imóvel Tipo:", imovelTipo);
+            console.log("Imóvel Tamanho:", imovelTamanho);
+            console.log("Imóvel Quantidade de Cômodos:", imovelQuantidadeComodos);
+
+            var mostrarImovel =
+            (cidade === "" || imovelCidade === cidade) &&
+            (estado === "" || imovelEstado === estado) &&
+            (isNaN(faixaPreco) || imovelPreco <= faixaPreco) &&
+            (mobiliado === "" || imovelMobiliado === mobiliado) &&
+            (tipoImovel === "" || imovelTipo === tipoImovel) &&
+            (isNaN(tamanho) || imovelTamanho >= tamanho) &&
+            (isNaN(quantidadeComodos) || imovelQuantidadeComodos >= quantidadeComodos);
+
+            console.log("Mostrar Imóvel:", mostrarImovel);
+            imovel.style.display = mostrarImovel ? "block" : "none";
+        });
+    }
+    document.getElementById("filterButton").addEventListener("click", aplicarFiltros);
+    aplicarFiltros();
+</script>
+
+
+
+
+
+
+ 
+
+
+
   <script>
     window.addEventListener('load', () => {
       populateFavoritesList();
     });
   </script>
+
+
   <script>
       
     const favoritesList = document.getElementById('favoritesList');
@@ -270,9 +518,6 @@
 
   </script>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 
 </body>
 </html>

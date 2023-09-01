@@ -41,8 +41,9 @@ export class ImovelService {
   
   
   async findAll(): Promise<Imovel[]> {
-    return this.imovelRepository.find();
+    return this.imovelRepository.find({ relations: ['photos'] });
   }
+  
 
   async findOne(id: number): Promise<Imovel> {
     return this.imovelRepository.findOne({ where: { id }, relations: ['usuario', 'photos'] });
