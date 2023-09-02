@@ -108,6 +108,14 @@
       filter: brightness(1.1); 
     }
 
+    .pagination {
+      display: flex; 
+      justify-content: center; 
+      margin-top: 20px; 
+      margin-bottom: 20px;
+    }
+    
+
     
     
   </style>
@@ -178,20 +186,17 @@
     <button class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Ver Anúncios</button>
   </div> -->
 
-
-  <div class="container">
-    <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="mb-4">
-                <label for="cidadeFiltro">Cidade:</label>
-                <input type="text" id="cidadeFiltro" class="form-control" placeholder="Cidade">
+  <div >
+    <div class="container mx-auto bg-blue-50 w-full border rounded-lg border-gray-300">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 p-2">
+            <div class="mb-1 px-1 flex items-center">
+                <label for="cidadeFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Cidade:</label>
+                <input type="text" id="cidadeFiltro" class="form-input w-2/3 border rounded-lg border-gray-300">
             </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="mb-4">
-                <label for="estadoFiltro">Estado:</label>
-                <select id="estadoFiltro" class="form-control">
-                  <option value=""  >Selecione o estado</option>
+            <div class="mb-1 px-1 flex items-center">
+                <label for="estadoFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Estado:</label>
+                <select id="estadoFiltro" class="form-select w-2/3 border rounded-lg border-gray-300">
+                    <option value="" selected>Selecione o estado</option>
                     <option value="AC">Acre</option>
                     <option value="AL">Alagoas</option>
                     <option value="AP">Amapá</option>
@@ -203,7 +208,102 @@
                     <option value="GO">Goiás</option>
                     <option value="MA">Maranhão</option>
                     <option value="MT">Mato Grosso</option>
-                    <option value="MS" selected>Mato Grosso do Sul</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                </select>
+            </div>
+            <div class="mb-1 px-1 flex items-center">
+                <label for="valorFiltroInput" class="text-gray-700 font-semibold w-1/3 text-center">Faixa de Preço:</label>
+                <input type="text" id="valorFiltroInput" class="form-input w-2/3 border rounded-lg border-gray-300 text-center">
+            </div>
+            <div class="mb-1 px-1 flex items-center">
+                <label for="quantidadeComodosFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Quantidade de Cômodos:</label>
+                <input type="number" id="quantidadeComodosFiltro" class="form-input w-2/3 border rounded-lg border-gray-300">
+            </div>
+            <div class="mb-1 px-1 flex items-center">
+                <label for="tipoImovelFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Tipo de Imóvel:</label>
+                <select id="tipoImovelFiltro" class="form-select w-2/3 border rounded-lg border-gray-300">
+                    <option value="">Qualquer</option>
+                    <option value="Salão">Salão Comercial</option>
+                    <option value="Casa">Casa</option>
+                    <option value="Apartamento">Apartamento</option>
+                    <option value="Chácara">Chácara</option>
+                    <option value="Loft">Loft</option>
+                    <option value="Studio">Studio</option>
+                    <option value="Condomínio">Casa em Condomínio</option>
+                    <option value="Quitinete">Quitinete</option>
+                    <option value="Flat">Flat</option>
+                </select>
+            </div>
+            <div class="mb-1 px-1 flex items-center">
+                <label for="tamanhoFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Tamanho (m²):</label>
+                <input type="number" id="tamanhoFiltro" class="form-input w-2/3 border rounded-lg border-gray-300 text-center">
+            </div>
+            <div class="mb-1 px-1 flex items-center">
+                <label for="mobiliadoFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Mobiliado:</label>
+                <select id="mobiliadoFiltro" class="form-select w-2/3 border rounded-lg border-gray-300">
+                    <option value="">Qualquer</option>
+                    <option value="true">Sim</option>
+                    <option value="false">Não</option>
+                </select>
+            </div>
+            <div class="mb-1 px-1 justify-end flex">
+              <div class="flex w-1/2">
+                  <button id="filterButton" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded w-full ml-auto">Filtrar</button>
+              </div>
+          </div>
+          
+        </div>
+    </div>
+</div>
+
+
+
+
+
+  
+  
+
+
+  <!-- <div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="mb-4">
+                <label for="cidadeFiltro">Cidade:</label>
+                <input type="text" id="cidadeFiltro" class="form-control" placeholder="Cidade">
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="mb-4">
+                <label for="estadoFiltro">Estado:</label>
+                <select id="estadoFiltro" class="form-control">
+                  <option value="" selected >Selecione o estado</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
                     <option value="MG">Minas Gerais</option>
                     <option value="PA">Pará</option>
                     <option value="PB">Paraíba</option>
@@ -224,11 +324,11 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="mb-4">
-                <label for="valorFiltro">Faixa de Preço:</label>
-                <input type="range" id="valorFiltro" class="form-control" min="0" max="20000">
-                <span id="priceRangeValue"></span>
-            </div>
+          <div class="mb-4">
+            <label for="valorFiltro">Faixa de Preço:</label>
+            <input type="range" id="valorFiltroRange" class="form-control" min="0" max="20000">
+            <input type="text" id="valorFiltroInput" class="form-control" placeholder="Digite o valor">
+          </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="mb-4">
@@ -277,10 +377,11 @@
 
   
   
-
+ -->
 
 <!-- O resultado da filtragem deve aparecer aqui: -->
 
+<br>
 
 <div class="container imoveis-container" id="imoveisContainer">
     <div class="row">
@@ -295,7 +396,7 @@
                     <img src="/<%= imovel.photos[0].url %>" alt="Imagem do Imóvel" class="w-full h-40 rounded-lg object-cover shadow-md brighten transform scale-100 transition-transform duration-300">
                   </a>
                   <% if (!imovel.statusNegociacao) { %>
-                    <div class="absolute bottom-0 left-0 w-full h-8 bg-orange-500 bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center rounded-lg">
+                    <div class="absolute bottom-0 left-0 w-full h-8 bg-orange-500 bg-opacity-50 text-white opacity-100 transition-opacity duration-300 group-hover:opacity-0 flex items-center justify-center rounded-lg">
                       Em negociação
                     </div>
                   <% } %>
@@ -314,7 +415,41 @@
         </div>
       <% }); %>
     </div>
+    <div class="pagination text-center">
+      <% const maxLinksToShow = 5; /* Número máximo de links de página a serem mostrados */ %>
+      
+      <% const halfMaxLinksToShow = Math.floor(maxLinksToShow / 2); %>
+      
+      <% let startPage = Math.max(1, currentPage - halfMaxLinksToShow); %>
+      <% let endPage = Math.min(totalPages, startPage + maxLinksToShow - 1); %>
+      
+      <% if (endPage - startPage < maxLinksToShow - 1) {
+        startPage = Math.max(1, endPage - maxLinksToShow + 1);
+      } %>
+    
+      <% if (startPage > 1) { %>
+        <a class="page-link" href="/1">1</a>
+        <% if (startPage > 2) { %>
+          <span>...</span>
+        <% } %>
+      <% } %>
+      
+      <% for (let i = startPage; i <= endPage; i++) { %>
+        <a class="page-link" href="/<%= i %>"><%= i %></a>
+      <% } %>
+      
+      <% if (endPage < totalPages) { %>
+        <% if (endPage < totalPages - 1) { %>
+          <span>...</span>
+        <% } %>
+        <a class="page-link" href="/<%= totalPages %>"><%= totalPages %></a>
+      <% } %>
+    </div>
   </div>
+
+  
+
+
   
   
   
@@ -335,101 +470,92 @@
 
 
 <script>
-    function aplicarFiltros() {
-        var cidade = document.getElementById("cidadeFiltro").value;
-        var estado = document.getElementById("estadoFiltro").value;
-        var faixaPreco = parseFloat(document.getElementById("valorFiltro").value);
-        var mobiliado = document.getElementById("mobiliadoFiltro").value;
-        var tipoImovel = document.getElementById("tipoImovelFiltro").value;
-        var tamanho = parseFloat(document.getElementById("tamanhoFiltro").value);
-        var quantidadeComodos = parseInt(document.getElementById("quantidadeComodosFiltro").value);
 
- 
-        console.log("Cidade:", cidade);
-        console.log("Estado:", estado);
-        console.log("Faixa de Preço:", faixaPreco);
-        console.log("Mobiliado:", mobiliado);
-        console.log("Tipo de Imóvel:", tipoImovel);
-        console.log("Tamanho (m²):", tamanho);
-        console.log("Quantidade de Cômodos:", quantidadeComodos);
+  filterButton.addEventListener('click', () => {
+    const cidade = document.getElementById('cidadeFiltro').value;
+    const estado = document.getElementById('estadoFiltro').value;
+    const valor = document.getElementById('valorFiltroInput').value;
+    const mobiliado = document.getElementById('mobiliadoFiltro').value;
+    const tipoImovel = document.getElementById('tipoImovelFiltro').value;
+    const tamanho = document.getElementById('tamanhoFiltro').value;
+    const quantidadeComodos = document.getElementById('quantidadeComodosFiltro').value;
+  
+    // Crie um objeto com os valores dos filtros, excluindo campos vazios
+    const filters = {};
+    if (cidade) filters.enderecoCidade = cidade;
+    if (estado) filters.estadoNome = estado;
+    if (valor) filters.valor = valor;
+    if (mobiliado) filters.mobiliado = mobiliado;
+    if (tipoImovel) filters.tipoImovel = tipoImovel;
+    if (tamanho) filters.tamanho = tamanho;
+    if (quantidadeComodos) filters.quantidadeComodos = quantidadeComodos;
+  
+    fetch('/filter-imoveis', {
+      method: 'POST',
+      body: JSON.stringify(filters),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.imoveis && data.imoveis.length > 0) {
+        const imoveisContainer = document.getElementById('imoveisContainer');
 
+        const imoveisWrapper = document.createElement('div');
+        imoveisWrapper.className = 'row';
 
-        //assim ele aparece todos os imoveis, adicionei essa classe lá no html
-        // var imoveis = document.querySelectorAll(".imovel");
-        var imoveis = document.querySelectorAll(".imovel .col-lg-3");
-        imoveis.forEach(function (imovel) {
-            var elementoCidade = imovel.querySelector(".enderecoCidade");
-            var imovelCidade = elementoCidade ? elementoCidade.textContent : "";
-            var elementoEstado = imovel.querySelector(".enderecoEstado");
-            var imovelEstado = elementoEstado ? elementoEstado.textContent : "";
-            var elementoValor = imovel.querySelector(".valor");
-            var imovelPreco = 0;
+        data.imoveis.forEach((imovel) => {
+          const imovelElement = document.createElement('div');
+          imovelElement.className = 'col-lg-3 col-md-6 col-sm-12 imovel';
 
-            if (elementoValor) {
-                var valorTexto = elementoValor.textContent;
-                valorTexto = valorTexto.replace("R$ ", "").replace(",", "");
-                imovelPreco = parseFloat(valorTexto);
-            }
-            var elementoMobiliado = imovel.querySelector(".mobiliado");
-            var imovelMobiliado = "";
+          imovelElement.innerHTML = `
+            <div class="border border-gray-200 rounded-lg p-3 mb-4 shadow-lg">
+              <div class="relative">
+                ${imovel.photos && imovel.photos.length > 0 ? `
+                  <div class="group relative">
+                    <span class="bg-yellow-300 px-2 py-1 rounded text-white font-bold">Cód. ${imovel.id}</span>
+                    <a href="/imoveis/informacoes-imovel/${imovel.id}">
+                      <img src="${imovel.photos[0].url}" alt="Imagem do Imóvel" class="w-full h-40 rounded-lg object-cover shadow-md brighten transform scale-100 transition-transform duration-300">
+                    </a>
+                    ${!imovel.statusNegociacao ? `
+                      <div class="absolute bottom-0 left-0 w-full h-8 bg-orange-500 bg-opacity-50 text-white opacity-100 transition-opacity duration-300 group-hover:opacity-0 flex items-center justify-center rounded-lg">
+                        Em negociação
+                      </div>
+                    ` : ''}
+                  </div>
+                ` : `
+                  <div class="w-full h-32 bg-gray-200 rounded-lg shadow-md"></div>
+                `}
+              </div>
+              <a href="/imoveis/informacoes-imovel/${imovel.id}" class="text-lg font-semibold mt-4 mb-4 text-decoration-none text-dark" style="max-height: 3.6rem; overflow: hidden;">
+                ${imovel.titulo}
+              </a>
+              <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Valor:</strong> R$ ${imovel.valor}</p>
+              <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Localização:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoCidade}</p>
+              <p class="mb-2 text-sm"><strong>Mobiliado:</strong> ${imovel.mobiliado ? 'Sim' : 'Não'}</p>
+            </div>
+          `;
 
-            if (elementoMobiliado) {
-                imovelMobiliado = elementoMobiliado.textContent;
-            }
-            var elementoTipoImovel = imovel.querySelector(".tipoImovel");
-            var imovelTipo = "";
-
-            if (elementoTipoImovel) {
-                imovelTipo = elementoTipoImovel.textContent;
-            }
-
-            var elementoTamanho = imovel.querySelector(".tamanho");
-            var imovelTamanho = 0;
-
-            if (elementoTamanho) {
-                var tamanhoTexto = elementoTamanho.textContent;
-                tamanhoTexto = tamanhoTexto.replace(" m²", "");
-                imovelTamanho = parseFloat(tamanhoTexto);
-            }
-
-            var elementoQuantidadeComodos = imovel.querySelector(".quantidadeComodos");
-            var imovelQuantidadeComodos = 0;
-
-            if (elementoQuantidadeComodos) {
-                imovelQuantidadeComodos = parseInt(elementoQuantidadeComodos.textContent);
-            }
-            console.log("Imóvel Cidade:", imovelCidade);
-            console.log("Imóvel Estado:", imovelEstado);
-            console.log("Imóvel Preço:", imovelPreco);
-            console.log("Imóvel Mobiliado:", imovelMobiliado);
-            console.log("Imóvel Tipo:", imovelTipo);
-            console.log("Imóvel Tamanho:", imovelTamanho);
-            console.log("Imóvel Quantidade de Cômodos:", imovelQuantidadeComodos);
-
-            var mostrarImovel =
-            (cidade === "" || imovelCidade === cidade) &&
-            (estado === "" || imovelEstado === estado) &&
-            (isNaN(faixaPreco) || imovelPreco <= faixaPreco) &&
-            (mobiliado === "" || imovelMobiliado === mobiliado) &&
-            (tipoImovel === "" || imovelTipo === tipoImovel) &&
-            (isNaN(tamanho) || imovelTamanho >= tamanho) &&
-            (isNaN(quantidadeComodos) || imovelQuantidadeComodos >= quantidadeComodos);
-
-            console.log("Mostrar Imóvel:", mostrarImovel);
-            imovel.style.display = mostrarImovel ? "block" : "none";
+          imoveisWrapper.appendChild(imovelElement);
         });
-    }
-    document.getElementById("filterButton").addEventListener("click", aplicarFiltros);
-    aplicarFiltros();
+
+        imoveisContainer.innerHTML = '';
+
+        imoveisContainer.appendChild(imoveisWrapper);
+
+      } else {
+        alert("Nenhum Imóvel com essa descrição");
+      }
+    })
+    
+    .catch((error) => {
+      console.error('Erro ao enviar a solicitação:', error);
+    });
+});
+
+
 </script>
-
-
-
-
-
-
- 
-
 
 
   <script>
