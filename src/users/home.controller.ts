@@ -17,38 +17,7 @@ export class HomeController {
     private readonly imovelService: ImovelService,
   ) {}
 
-  // @Get()
-  // @Render('home.html')
-  // async showHomePage(@Request() req): Promise<{ userIsLoggedIn: boolean, user: User, imoveis: Imovel[] }> {
-  //   const userIsLoggedIn = req.isAuthenticated();
-  //   const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
 
-  
-  //   // Fetch all properties from the ImovelService
-  //   const imoveis = await this.imovelService.findAll();
-
-  //   return { userIsLoggedIn, user, imoveis };
-  // }
-
-  // @Get(':page')
-  // @Render('home.html')
-  // async showHomePage(
-  //   @Request() req,
-  //   @Param('page') page: number = 1,
-  //   @Query() filters: ImovelFiltersDTO,
-  // ): Promise<{ userIsLoggedIn: boolean, user: User, imoveis: Imovel[], totalPages: number, currentPage: number }> {
-  //   // Lógica para aplicar os filtros em sua consulta
-  //   const imoveisFiltrados = await this.imovelService.filterImoveis(filters);
-
-  //   // Restante do código para paginação e renderização
-  //   const userIsLoggedIn = req.isAuthenticated();
-  //   const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
-  //   const itemsPerPage = 4;
-  //   const { imoveis, total } = await this.imovelService.findAllWithPagination(page, itemsPerPage);
-  //   const totalPages = Math.ceil(total / itemsPerPage);
-
-  //   return { userIsLoggedIn, user, imoveis, totalPages, currentPage: page };
-  // }
 
 
   @Get(':page')
@@ -62,7 +31,7 @@ async showHomePage(
 
   const userIsLoggedIn = req.isAuthenticated();
   const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
-  const totalPages = Math.ceil(total / 8); // 4 é o número de itens por página
+  const totalPages = Math.ceil(total / 8);
 
   return { userIsLoggedIn, user, imoveis, totalPages, currentPage: page };
 }
@@ -75,11 +44,10 @@ async filterImoveis(
   const imoveis = await this.imovelService.filterImoveis(filters);
   const userIsLoggedIn = req.isAuthenticated();
   const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
-  const totalPages = Math.ceil(imoveis.length / 4);
+  const totalPages = Math.ceil(imoveis.length / 8);
 
   return { userIsLoggedIn, user, imoveis, totalPages, currentPage: 1, totalImoveis: imoveis.length };
 }
-
 
 
 @Get()

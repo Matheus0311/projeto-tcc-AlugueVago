@@ -131,15 +131,42 @@
 
   .button-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
+    flex-wrap: wrap; 
   }
-
+  
+  .button-container button {
+    margin: 0 5px; 
+    margin-bottom: 10px; 
+  }
+  
   .cancel-button {
-    margin-left: auto;
+    margin-left: auto; 
   }
-
+  
+  
   .register-button{
     margin-right: auto;
+  }
+
+  
+  .fade-in {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+  }
+  
+  .fade-out {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+  
+  
+
+
+  #divform{
+    margin-bottom: 20px;
   }
 
 </style>
@@ -200,7 +227,7 @@
       </div>
     </div>
   </nav>
-  <div class="container mx-auto mt-4">
+  <div class="container mx-auto mt-4" id="divform">
     <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl mx-auto">
       <h1 class="text-2xl font-semibold text-center mb-6">Cadastro de Imóveis</h1>
       <% if (errorMessages && errorMessages.length > 0) { %>
@@ -805,34 +832,50 @@
     button.addEventListener('click', () => {
       const currentStep = button.closest('.step');
       const nextStep = currentStep.nextElementSibling;
-
+  
       if (validateFields()) { 
-        currentStep.classList.add('hidden');
-        if (nextStep) {
-          nextStep.classList.remove('hidden');
-        } else if (currentStep === penultimo) {
-          lastStep.classList.remove('hidden');
-        }
+        currentStep.classList.add('fade-out');
+        setTimeout(() => {
+          currentStep.classList.add('hidden');
+          currentStep.classList.remove('fade-out');
+          if (nextStep) {
+            nextStep.classList.remove('hidden');
+            nextStep.classList.add('fade-in');
+          } else if (currentStep === penultimo) {
+            lastStep.classList.remove('hidden');
+            lastStep.classList.add('fade-in');
+          }
+        }, 300); // Tempo em milissegundos para a transição
       }
     });
   });
-
+  
   prevButtons.forEach(button => {
     button.addEventListener('click', () => {
       const currentStep = button.closest('.step');
       const currentIndex = Array.from(steps).indexOf(currentStep);
-
+  
       if (currentIndex > 0) {
         const prevStep = steps[currentIndex - 1];
-        currentStep.classList.add('hidden');
-        prevStep.classList.remove('hidden');
-        console.log("PREV: ", prevStep);
+        currentStep.classList.add('fade-out');
+        setTimeout(() => {
+          currentStep.classList.add('hidden');
+          currentStep.classList.remove('fade-out');
+          prevStep.classList.remove('hidden');
+          prevStep.classList.add('fade-in');
+        }, 300); // Tempo em milissegundos para a transição
       } else if (currentStep === lastStep) {
-        console.log("Ultimo");
-        currentStep.classList.add('hidden');
-        penultimo.classList.remove('hidden');
+        currentStep.classList.add('fade-out');
+        setTimeout(() => {
+          currentStep.classList.add('hidden');
+          currentStep.classList.remove('fade-out');
+          penultimo.classList.remove('hidden');
+          penultimo.classList.add('fade-in');
+        }, 300); // Tempo em milissegundos para a transição
       }
     });
+
+  
   });
 
 function validateFields() {
@@ -1111,7 +1154,6 @@ function validateFileExtensions(input, allowedExtensions) {
 }
 
 </script>
-
 
 
 

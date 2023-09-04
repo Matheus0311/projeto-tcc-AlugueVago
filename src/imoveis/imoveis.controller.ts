@@ -310,7 +310,7 @@ export class ImovelController {
   }
   
 
-  // @UseGuards(AuthenticatedGuard, AdminGuard)
+  @UseGuards(AuthenticatedGuard, AdminGuard)
   @Get()
   async findAll(): Promise<Imovel[]> {
     return this.imovelService.findAll();
@@ -343,13 +343,13 @@ export class ImovelController {
     @Body() body: { novoStatus: string },
   ): Promise<{ message: string }> {
   try {
-    // Use o ID do imóvel e o novoStatus para atualizar o status no banco de dados
+   
     const imovel = await this.imovelService.findById(imovelId);
     if (!imovel) {
       throw new NotFoundException('Imóvel não encontrado');
     }
 
-    imovel.statusNegociacao = body.novoStatus === 'true'; // Converter a string em um valor booleano
+    imovel.statusNegociacao = body.novoStatus === 'true'; 
     await this.imovelService.update(imovelId, imovel);
 
 

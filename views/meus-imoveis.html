@@ -251,6 +251,7 @@
           <% } %>
           <h1 class="text-xl font-semibold mt-2"><%= user.nomeUsuario %></h1>
         </div>
+        
       
         <div class="mt-8">
           <% if (userImoveis.length > 0) { %>
@@ -259,6 +260,14 @@
                 Adicionar <i class="fas fa-plus ml-1"></i>
               </a>
             </div>
+            
+            <div class="search-container mt-2">
+              <input type="text" id="codigoImovel" placeholder="Digite o código do imóvel" class="bg-blue-50 rounded-md" style="width: 200px;">
+              <button id="irParaImovel" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Ir</button>
+            </div>
+            
+            
+            
       
             <h2 class="text-xl font-semibold mb-4">
               Meus Imóveis (<%= userImoveis.length %>):
@@ -266,7 +275,7 @@
       
             <ul class="space-y-4">
               <% userImoveis.forEach(imovel => { %>
-                <li class="border border-gray-200 rounded-lg p-4 flex flex-col md:flex-row items-center md:space-x-4">
+                <li class="border border-gray-200 rounded-lg p-4 flex flex-col md:flex-row items-center md:space-x-4 imovel" data-codigo="<%= imovel.id %>">
                   <div class="w-full md:w-1/4 mb-4 md:mb-0 relative">
                     <div class="relative">
                       <% if (imovel.photos && imovel.photos.length > 0) { %>
@@ -496,6 +505,26 @@
     favoritesDropdown.addEventListener('click', populateFavoritesList);
     
 
+  </script>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const irParaImovelButton = document.getElementById('irParaImovel');
+      const codigoImovelInput = document.getElementById('codigoImovel');
+    
+      irParaImovelButton.addEventListener('click', function () {
+        const codigoImovel = codigoImovelInput.value;     
+        const imovel = document.querySelector(`.imovel[data-codigo="${codigoImovel}"]`);
+    
+        if (imovel) {
+          imovel.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          alert('Imóvel não encontrado');
+        }
+      });
+    });
+    
   </script>
   
   
