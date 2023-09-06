@@ -174,6 +174,51 @@
     .brighten:hover {
       filter: brightness(1.1); 
     }
+
+    .nav-link.dropdown-toggle.flex.items-center {
+      color: white;
+    }
+
+    .search-container {
+      display: flex;
+      align-items: center; /* Alinhar verticalmente */
+    }
+    
+    #mensagem {
+      display: none;
+      background-color: #ff8080;
+      color: #ffffff;
+      padding: 10px;
+      text-align: center;
+      font-size: 16px;
+      margin-left: 10px;
+      margin-bottom: 5px;
+      z-index: 9999;
+    }
+    
+    #mensagem.fade-out {
+      animation: fadeOut 5s ease-in-out forwards;
+    }
+    
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        display: none; 
+      }
+    }
+    
+    
+
+
+    
+    
+    
+    
+    
+    
     
 
   </style>
@@ -194,7 +239,7 @@
           </li>
           <li class="nav-item dropdown relative">
             <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-star text-white mr-2"></i> Favoritos  <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
+              ⭐ Favoritos  <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
             </a>
             
             <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
@@ -256,15 +301,19 @@
         <div class="mt-8">
           <% if (userImoveis.length > 0) { %>
             <div class="text-center mb-4">
-              <a href="/imoveis/cadastro-imovel" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-lg font-semibold hover:bg-blue-600">
-                Adicionar <i class="fas fa-plus ml-1"></i>
+              <a href="/imoveis/cadastro-imovel" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-lg font-semibold hover:bg-blue-600 text-decoration-none">
+                Adicionar &#10133;
               </a>
             </div>
             
-            <div class="search-container mt-2">
-              <input type="text" id="codigoImovel" placeholder="Digite o código do imóvel" class="bg-blue-50 rounded-md" style="width: 200px;">
-              <button id="irParaImovel" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Ir</button>
+            <div class="search-container mt-2 flex flex-col md:flex-row md:items-center">
+              <input type="text" id="codigoImovel" placeholder="Digite o código do imóvel" class="bg-blue-50 rounded-md py-2 px-3 mb-2 md:mb-0 md:mr-2">
+              <button id="irParaImovel" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mb-2 md:mb-0">&#128270;</button>
+              <div id="mensagem" class="text-center md:text-left hidden md:inline-block" style="margin-left: 10px;"></div>
+            
             </div>
+            
+            
             
             
             
@@ -307,10 +356,10 @@
                     </div>
                     <p class="mb-2 text-sm"><strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>, <%= imovel.enderecoCidade %></p>
                     <div class="flex flex-wrap justify-start space-x-2 space-y-2 md:space-y-0 md:space-x-2">
-                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal<%= imovel._id %>">Deletar</button>
-                      <a href="/imoveis/edit-imovel/<%= imovel.id %>" class="btn btn-primary">Editar</a>
-                      <a href="/imoveis/informacoes-imovel/<%= imovel.id %>" class="btn btn-primary">Ver Detalhes</a>
-                      <button type="button" onclick="atualizarStatus('<%= imovel.id %>')" class="btn btn-primary">Atualizar Status</button>
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal<%= imovel._id %>">Deletar &#128465;</button>
+                      <a href="/imoveis/edit-imovel/<%= imovel.id %>" class="btn btn-primary">Editar ✏️</a>
+                      <a href="/imoveis/informacoes-imovel/<%= imovel.id %>" class="btn btn-primary">Ver Detalhes &#128712;</a>
+                      <button type="button" onclick="atualizarStatus('<%= imovel.id %>')" class="btn btn-primary">Atualizar Status &#128472;</button>
                     </div>
                   </div>
                   
@@ -360,6 +409,9 @@
 
 
 
+
+
+  
   <script>
     function atualizarStatus(imovelId) {
       event.preventDefault();
@@ -510,22 +562,40 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const irParaImovelButton = document.getElementById('irParaImovel');
-      const codigoImovelInput = document.getElementById('codigoImovel');
-    
-      irParaImovelButton.addEventListener('click', function () {
-        const codigoImovel = codigoImovelInput.value;     
-        const imovel = document.querySelector(`.imovel[data-codigo="${codigoImovel}"]`);
-    
-        if (imovel) {
-          imovel.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          alert('Imóvel não encontrado');
-        }
-      });
+        const irParaImovelButton = document.getElementById('irParaImovel');
+        const codigoImovelInput = document.getElementById('codigoImovel');
+
+        irParaImovelButton.addEventListener('click', function () {
+            const codigoImovel = codigoImovelInput.value;
+            const imovel = document.querySelector(`.imovel[data-codigo="${codigoImovel}"]`);
+
+            if (imovel) {
+                document.getElementById('mensagem').textContent = '';
+                document.getElementById('mensagem').style.display = 'none';
+                imovel.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                const mensagemElement = document.getElementById('mensagem');
+                mensagemElement.textContent = "Nenhum Imóvel com essa descrição";
+                mensagemElement.style.display = 'block';
+                mensagemElement.classList.add('fade-out');
+
+                const criarMensagem = () => {
+                    const mensagemElement = document.createElement('div');
+                    mensagemElement.id = 'mensagem';
+                    mensagemElement.textContent = 'Nenhum Imóvel com essa descrição';
+
+                    
+
+                    return mensagemElement;
+                };
+
+                const containerElement = document.querySelector('.search-container'); 
+                criarMensagem(); 
+                containerElement.appendChild(mensagemElement); 
+            }
+        });
     });
-    
-  </script>
+</script>
   
   
 </body>

@@ -114,6 +114,42 @@
       margin-top: 20px; 
       margin-bottom: 20px;
     }
+
+    #mensagem {
+      display: none;
+      background-color: #ff8080;
+      color: #ffffff;
+      padding: 10px;
+      text-align: center;
+      font-size: 16px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 400px; 
+      width: 100%; 
+      z-index: 9999;
+    }
+
+    #mensagem.fade-out {
+      animation: fadeOut 5s ease-in-out forwards;
+    }
+    
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        display: none; 
+      }
+    }
+    
+
+    .nav-link.dropdown-toggle.flex.items-center {
+      color: white;
+    }
+    
+    
+    
     
 
     
@@ -136,7 +172,7 @@
           </li>
           <li class="nav-item dropdown relative">
             <a class="nav-link dropdown-toggle flex items-center" href="#" id="favoritesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-star text-white mr-2"></i> Favoritos <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
+              ⭐ Favoritos <span id="favoritesCount" class="badge badge-pill badge-primary">0</span>
             </a>
             
             <div class="dropdown-menu hidden absolute right-0 mt-2 w-70 bg-white border rounded-md shadow-lg group-hover:block" aria-labelledby="favoritesDropdown">
@@ -263,14 +299,20 @@
             </div>
             <div class="mb-1 px-1 justify-end flex">
               <div class="flex w-1/2">
-                  <button id="filterButton" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded w-full ml-auto">Filtrar</button>
+                <button id="filterButton" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded w-full ml-auto">Filtrar &#128270;</button>
               </div>
-          </div>
-          
+              <div class="flex w-1/2 mt-auto text-right" id="removeFiltersButtonContainer" style="display: none; margin-left: 10px;">
+                <a href="/" class="btn btn-danger btn-sm">
+                  Remover Filtros ☒
+                </a>
+              </div>
+            </div>     
         </div>
     </div>
 </div>
 
+<br>
+<div id="mensagem" style="display: none;"></div>
 <br>
 
 <div class="container imoveis-container" id="imoveisContainer">
@@ -305,6 +347,7 @@
         </div>
       <% }); %>
     </div>
+
     <div class="pagination text-center">
       <% const maxLinksToShow = 5; /* Número máximo de links de página a serem mostrados */ %>
       
@@ -335,17 +378,9 @@
         <a class="page-link" href="/<%= totalPages %>"><%= totalPages %></a>
       <% } %>
     </div>
+    
   </div>
 
-  
-
-
-  
-  
-  
-  
-  
-  
 
   <!-- Scripts JavaScript -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -358,95 +393,242 @@
 
 
 
-
-<script>
-
-  filterButton.addEventListener('click', () => {
-    const cidade = document.getElementById('cidadeFiltro').value;
-    const estado = document.getElementById('estadoFiltro').value;
-    const valor = document.getElementById('valorFiltroInput').value;
-    const mobiliado = document.getElementById('mobiliadoFiltro').value;
-    const tipoImovel = document.getElementById('tipoImovelFiltro').value;
-    const tamanho = document.getElementById('tamanhoFiltro').value;
-    const quantidadeComodos = document.getElementById('quantidadeComodosFiltro').value;
-  
-    // Crie um objeto com os valores dos filtros, excluindo campos vazios
-    const filters = {};
-    if (cidade) filters.enderecoCidade = cidade;
-    if (estado) filters.estadoNome = estado;
-    if (valor) filters.valor = valor;
-    if (mobiliado) filters.mobiliado = mobiliado;
-    if (tipoImovel) filters.tipoImovel = tipoImovel;
-    if (tamanho) filters.tamanho = tamanho;
-    if (quantidadeComodos) filters.quantidadeComodos = quantidadeComodos;
-  
-    fetch('/filter-imoveis', {
-      method: 'POST',
-      body: JSON.stringify(filters),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.imoveis && data.imoveis.length > 0) {
-        const imoveisContainer = document.getElementById('imoveisContainer');
-
-        const imoveisWrapper = document.createElement('div');
-        imoveisWrapper.className = 'row';
-
-        data.imoveis.forEach((imovel) => {
-          const imovelElement = document.createElement('div');
-          imovelElement.className = 'col-lg-3 col-md-6 col-sm-12 imovel';
-
-          imovelElement.innerHTML = `
-            <div class="border border-gray-200 rounded-lg p-3 mb-4 shadow-lg">
-              <div class="relative">
-                ${imovel.photos && imovel.photos.length > 0 ? `
-                  <div class="group relative">
-                    <span class="bg-yellow-300 px-2 py-1 rounded text-white font-bold">Cód. ${imovel.id}</span>
-                    <a href="/imoveis/informacoes-imovel/${imovel.id}">
-                      <img src="${imovel.photos[0].url}" alt="Imagem do Imóvel" class="w-full h-40 rounded-lg object-cover shadow-md brighten transform scale-100 transition-transform duration-300">
-                    </a>
-                    ${!imovel.statusNegociacao ? `
-                      <div class="absolute bottom-0 left-0 w-full h-8 bg-orange-500 bg-opacity-50 text-white opacity-100 transition-opacity duration-300 group-hover:opacity-0 flex items-center justify-center rounded-lg">
-                        Em negociação
-                      </div>
-                    ` : ''}
-                  </div>
-                ` : `
-                  <div class="w-full h-32 bg-gray-200 rounded-lg shadow-md"></div>
-                `}
-              </div>
-              <a href="/imoveis/informacoes-imovel/${imovel.id}" class="text-lg font-semibold mt-4 mb-4 text-decoration-none text-dark" style="max-height: 3.6rem; overflow: hidden;">
-                ${imovel.titulo}
-              </a>
-              <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Valor:</strong> R$ ${imovel.valor}</p>
-              <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Localização:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoCidade}</p>
-              <p class="mb-2 text-sm"><strong>Mobiliado:</strong> ${imovel.mobiliado ? 'Sim' : 'Não'}</p>
-            </div>
-          `;
-
-          imoveisWrapper.appendChild(imovelElement);
-        });
-
-        imoveisContainer.innerHTML = '';
-
-        imoveisContainer.appendChild(imoveisWrapper);
-
-      } else {
-        alert("Nenhum Imóvel com essa descrição");
-      }
-    })
+  <script>
+    function updateURLWithFiltersAndPage(filters, page) {
+      const searchParams = new URLSearchParams();
     
-    .catch((error) => {
-      console.error('Erro ao enviar a solicitação:', error);
+      if (filters.enderecoCidade) searchParams.set('cidade', filters.enderecoCidade);
+      if (filters.estadoNome) searchParams.set('estado', filters.estadoNome);
+      if (filters.valor) searchParams.set('valor', filters.valor);
+      if (filters.mobiliado) searchParams.set('mobiliado', filters.mobiliado);
+      if (filters.tipoImovel) searchParams.set('tipoImovel', filters.tipoImovel);
+      if (filters.tamanho) searchParams.set('tamanho', filters.tamanho);
+      if (filters.quantidadeComodos) searchParams.set('quantidadeComodos', filters.quantidadeComodos);
+    
+      searchParams.set('page', page);    
+      const newURL = `${window.location.pathname}?${searchParams.toString()}`;
+      window.history.replaceState({ path: newURL }, '', newURL);
+    }
+  
+    function fetchImoveis(page) {
+      const cidade = document.getElementById('cidadeFiltro').value;
+      const estado = document.getElementById('estadoFiltro').value;
+      const valor = document.getElementById('valorFiltroInput').value;
+      const mobiliado = document.getElementById('mobiliadoFiltro').value;
+      const tipoImovel = document.getElementById('tipoImovelFiltro').value;
+      const tamanho = document.getElementById('tamanhoFiltro').value;
+      const quantidadeComodos = document.getElementById('quantidadeComodosFiltro').value;
+      const filters = {};
+    
+      if (cidade.trim() !== '') filters.enderecoCidade = cidade;
+      if (estado.trim() !== '') filters.estadoNome = estado;
+      if (valor.trim() !== '') filters.valor = valor;
+      if (mobiliado.trim() !== '') filters.mobiliado = mobiliado;
+      if (tipoImovel.trim() !== '') filters.tipoImovel = tipoImovel;
+      if (tamanho.trim() !== '') filters.tamanho = tamanho;
+      if (quantidadeComodos.trim() !== '') filters.quantidadeComodos = quantidadeComodos;
+    
+      fetch(`/filter-imoveis?page=${page}`, {
+        method: 'POST',
+        body: JSON.stringify({ ...filters, page }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.imoveis && data.imoveis.length > 0) {
+            document.getElementById('mensagem').textContent = '';
+            document.getElementById('mensagem').style.display = 'none';
+            const imoveisContainer = document.getElementById('imoveisContainer');
+  
+            const imoveisWrapper = document.createElement('div');
+            imoveisWrapper.className = 'row';
+  
+            data.imoveis.forEach((imovel) => {
+              const imovelElement = document.createElement('div');
+              imovelElement.className = 'col-lg-3 col-md-6 col-sm-12 imovel';
+  
+              imovelElement.innerHTML = `
+                <div class="border border-gray-200 rounded-lg p-3 mb-4 shadow-lg">
+                  <div class="relative">
+                    ${imovel.photos && imovel.photos.length > 0 ? `
+                      <div class="group relative">
+                        <span class="bg-yellow-300 px-2 py-1 rounded text-white font-bold">Cód. ${imovel.id}</span>
+                        <a href="/imoveis/informacoes-imovel/${imovel.id}">
+                          <img src="${imovel.photos[0].url}" alt="Imagem do Imóvel" class="w-full h-40 rounded-lg object-cover shadow-md brighten transform scale-100 transition-transform duration-300">
+                        </a>
+                        ${!imovel.statusNegociacao ? `
+                          <div class="absolute bottom-0 left-0 w-full h-8 bg-orange-500 bg-opacity-50 text-white opacity-100 transition-opacity duration-300 group-hover:opacity-0 flex items-center justify-center rounded-lg">
+                            Em negociação
+                          </div>
+                        ` : ''}
+                      </div>
+                    ` : `
+                      <div class="w-full h-32 bg-gray-200 rounded-lg shadow-md"></div>
+                    `}
+                  </div>
+                  <a href="/imoveis/informacoes-imovel/${imovel.id}" class="text-lg font-semibold mt-4 mb-4 text-decoration-none text-dark" style="max-height: 3.6rem; overflow: hidden;">
+                    ${imovel.titulo}
+                  </a>
+                  <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Valor:</strong> R$ ${imovel.valor}</p>
+                  <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Localização:</strong> ${imovel.enderecoRua}, ${imovel.enderecoNumero}, ${imovel.enderecoCidade}</p>
+                  <p class="mb-2 text-sm"><strong>Mobiliado:</strong> ${imovel.mobiliado ? 'Sim' : 'Não'}</p>
+                </div>
+              `;
+  
+              imoveisWrapper.appendChild(imovelElement);
+            });
+  
+            function createPageLink(pageNumber, isActive, filters) {
+              const searchParams = new URLSearchParams();
+              
+              if (filters.enderecoCidade) searchParams.set('cidade', filters.enderecoCidade);
+              if (filters.estadoNome) searchParams.set('estado', filters.estadoNome);
+              if (filters.valor) searchParams.set('valor', filters.valor);
+              if (filters.mobiliado) searchParams.set('mobiliado', filters.mobiliado);
+              if (filters.tipoImovel) searchParams.set('tipoImovel', filters.tipoImovel);
+              if (filters.tamanho) searchParams.set('tamanho', filters.tamanho);
+              if (filters.quantidadeComodos) searchParams.set('quantidadeComodos', filters.quantidadeComodos);
+              
+              searchParams.set('page', pageNumber);
+              const pageLink = document.createElement('a');
+              pageLink.className = isActive ? 'page-link active' : 'page-link';
+              const currentPath = window.location.pathname;
+              pageLink.href = currentPath + '?' + searchParams.toString();
+              
+              pageLink.textContent = pageNumber;
+              return pageLink;
+            }
+            
+            const maxLinksToShow = 5;
+            const currentPage = data.currentPage;
+            const totalPages = data.totalPages;
+            let startPage = Math.max(1, currentPage - Math.floor(maxLinksToShow / 2));
+            let endPage = Math.min(totalPages, startPage + maxLinksToShow - 1);
+
+            if (endPage - startPage < maxLinksToShow - 1) {
+              startPage = Math.max(1, endPage - maxLinksToShow + 1);
+            }
+
+            const pageLinks = [];
+
+            if (startPage > 1) {
+              pageLinks.push(createPageLink(1, false, filters));
+              if (startPage > 2) {
+                const ellipsis = document.createElement('span');
+                ellipsis.textContent = '...';
+                pageLinks.push(ellipsis);
+              }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+              const isActive = i === currentPage;
+              pageLinks.push(createPageLink(i, isActive, filters));
+            }
+
+            if (endPage < totalPages) {
+              if (endPage < totalPages - 1) {
+                const ellipsis = document.createElement('span');
+                ellipsis.textContent = '...';
+                pageLinks.push(ellipsis);
+              }
+              pageLinks.push(createPageLink(totalPages, false, filters));
+            }
+
+            const paginationContainer = document.createElement('div');
+            paginationContainer.className = 'pagination text-center';
+            pageLinks.forEach((pageLink) => {
+              paginationContainer.appendChild(pageLink);
+            });
+  
+            imoveisContainer.innerHTML = '';
+            imoveisContainer.appendChild(imoveisWrapper);
+            imoveisContainer.appendChild(paginationContainer);
+          }
+          else {
+            const mensagemElement = document.getElementById('mensagem');
+            mensagemElement.textContent = "Nenhum Imóvel com essa descrição";
+            mensagemElement.style.display = 'block';
+          }
+  
+          updateURLWithFiltersAndPage(filters, page);
+        })
+        .catch((error) => {
+          console.error('Erro ao enviar a solicitação:', error);
+        });
+    }
+      
+    filterButton.addEventListener('click', () => {
+      const cidade = document.getElementById('cidadeFiltro').value;
+      const estado = document.getElementById('estadoFiltro').value;
+      const valor = document.getElementById('valorFiltroInput').value;
+      const mobiliado = document.getElementById('mobiliadoFiltro').value;
+      const tipoImovel = document.getElementById('tipoImovelFiltro').value;
+      const tamanho = document.getElementById('tamanhoFiltro').value;
+      const quantidadeComodos = document.getElementById('quantidadeComodosFiltro').value;
+  
+      const filters = {};
+      if (cidade) filters.enderecoCidade = cidade;
+      if (estado) filters.estadoNome = estado;
+      if (valor) filters.valor = valor;
+      if (mobiliado) filters.mobiliado = mobiliado;
+      if (tipoImovel) filters.tipoImovel = tipoImovel;
+      if (tamanho) filters.tamanho = tamanho;
+      if (quantidadeComodos) filters.quantidadeComodos = quantidadeComodos;  
+      fetchImoveis(1); 
     });
-});
+  
+    window.addEventListener('load', () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const page = searchParams.get('page') || 1;
+      document.getElementById('cidadeFiltro').value = searchParams.get('cidade') || '';
+      document.getElementById('estadoFiltro').value = searchParams.get('estado') || '';
+      document.getElementById('valorFiltroInput').value = searchParams.get('valor') || '';
+      document.getElementById('mobiliadoFiltro').value = searchParams.get('mobiliado') || '';
+      document.getElementById('tipoImovelFiltro').value = searchParams.get('tipoImovel') || '';
+      document.getElementById('tamanhoFiltro').value = searchParams.get('tamanho') || '';
+      document.getElementById('quantidadeComodosFiltro').value = searchParams.get('quantidadeComodos') || '';
+      fetchImoveis(page);
+    });
+    const paginationLinks = document.querySelectorAll('.page-link');
+    paginationLinks.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const page = new URLSearchParams(link.search).get('page'); 
+        fetchImoveis(page); 
+      });
+    });
 
+    function checkFilters() {
+      const cidade = document.getElementById('cidadeFiltro').value;
+      const estado = document.getElementById('estadoFiltro').value;
+      const valor = document.getElementById('valorFiltroInput').value;
+      const mobiliado = document.getElementById('mobiliadoFiltro').value;
+      const tipoImovel = document.getElementById('tipoImovelFiltro').value;
+      const tamanho = document.getElementById('tamanhoFiltro').value;
+      const quantidadeComodos = document.getElementById('quantidadeComodosFiltro').value;
+  
+      const removeFiltersButtonContainer = document.getElementById('removeFiltersButtonContainer');
+  
+      if (
+        cidade.trim() !== '' ||
+        estado.trim() !== '' ||
+        valor.trim() !== '' ||
+        mobiliado.trim() !== '' ||
+        tipoImovel.trim() !== '' ||
+        tamanho.trim() !== '' ||
+        quantidadeComodos.trim() !== ''
+      ) {
+        removeFiltersButtonContainer.style.display = 'block'; 
+      } else {
+        removeFiltersButtonContainer.style.display = 'none';
+      }
+    }
+    document.getElementById('filterButton').addEventListener('click', checkFilters);
+    window.addEventListener('load', checkFilters);
 
-</script>
-
+  </script>
 
   <script>
     window.addEventListener('load', () => {

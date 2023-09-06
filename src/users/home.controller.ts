@@ -36,18 +36,41 @@ async showHomePage(
   return { userIsLoggedIn, user, imoveis, totalPages, currentPage: page };
 }
 
+// @Post('filter-imoveis')
+// async filterImoveis(
+//   @Request() req,
+//   @Body() filters: ImovelFiltersDTO,
+// ): Promise<{ userIsLoggedIn: boolean; user: User; imoveis: Imovel[]; totalPages: number; currentPage: number; totalImoveis: number }> {
+//   const imoveis = await this.imovelService.filterImoveis(filters);
+//   const userIsLoggedIn = req.isAuthenticated();
+//   const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
+//   const totalPages = Math.ceil(imoveis.length / 8);
+
+//   return { userIsLoggedIn, user, imoveis, totalPages, currentPage: 1, totalImoveis: imoveis.length };
+// }
+
+
 @Post('filter-imoveis')
 async filterImoveis(
   @Request() req,
   @Body() filters: ImovelFiltersDTO,
 ): Promise<{ userIsLoggedIn: boolean; user: User; imoveis: Imovel[]; totalPages: number; currentPage: number; totalImoveis: number }> {
-  const imoveis = await this.imovelService.filterImoveis(filters);
+  const itemsPerPage = 8;
+  const currentPage = filters.page ? parseInt(filters.page.toString()) : 1;
+  const filteredImoveis = await this.imovelService.filterImoveis(filters);
+
   const userIsLoggedIn = req.isAuthenticated();
   const user = userIsLoggedIn ? await this.usersService.findById(req.user.id) : null;
-  const totalPages = Math.ceil(imoveis.length / 8);
+  const totalImoveis = await this.imovelService.countFilteredImoveis(filters);
+  const totalPages = Math.ceil(totalImoveis / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const imoveis = filteredImoveis.slice(startIndex, endIndex);
 
-  return { userIsLoggedIn, user, imoveis, totalPages, currentPage: 1, totalImoveis: imoveis.length };
+  return { userIsLoggedIn, user, imoveis, totalPages, currentPage, totalImoveis };
 }
+
+
 
 
 @Get()

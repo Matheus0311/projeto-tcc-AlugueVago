@@ -23,4 +23,7 @@ export class ImovelFiltersDTO {
 
   @IsString() 
   estadoNome?: string;
+
+  @IsNumber()  
+  page?: number;
 }

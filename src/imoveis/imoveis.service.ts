@@ -131,6 +131,59 @@ async filterImoveis(filters: ImovelFiltersDTO): Promise<Imovel[]> {
   return imoveis;
 }
 
+async countFilteredImoveis(filters: ImovelFiltersDTO): Promise<number> {
+  const queryBuilder = this.imovelRepository.createQueryBuilder('imovel');
+  
+  if (filters) {
+    const whereConditions = [];
+    const parameters: Record<string, any> = {};
+
+    if (filters.tamanho !== undefined) {
+      parameters.tamanho = filters.tamanho;
+      whereConditions.push(`imovel.tamanho <= :tamanho`);
+    }
+
+    if (filters.quantidadeComodos !== undefined) {
+      parameters.quantidadeComodos = filters.quantidadeComodos;
+      whereConditions.push(`imovel.quantidadeComodos = :quantidadeComodos`);
+    }
+
+    if (filters.mobiliado !== undefined) {
+      parameters.mobiliado = filters.mobiliado;
+      whereConditions.push(`imovel.mobiliado = :mobiliado`);
+    }
+
+    if (filters.valor !== undefined) {
+      parameters.valor = filters.valor;
+      whereConditions.push(`imovel.valor <= :valor`);
+    }
+
+    if (filters.tipoImovel !== undefined) {
+      parameters.tipoImovel = filters.tipoImovel;
+      whereConditions.push(`imovel.tipoImovel = :tipoImovel`);
+    }
+
+    if (filters.enderecoCidade !== undefined) {
+      parameters.enderecoCidade = `%${filters.enderecoCidade}%`;
+      whereConditions.push(`imovel.enderecoCidade LIKE :enderecoCidade`);
+    }
+
+    if (filters.estadoNome !== undefined) {
+      parameters.estadoNome = `%${filters.estadoNome}%`;
+      whereConditions.push(`imovel.estadoNome LIKE :estadoNome`);
+    }
+
+    if (whereConditions.length > 0) {
+      queryBuilder.andWhere(whereConditions.join(' AND '), parameters);
+    }
+  }
+
+  const totalImoveis = await queryBuilder.getCount();
+  console.log("Número de imóveis: ", totalImoveis)
+  return totalImoveis;
+}
+
+
 
   async findOne(id: number): Promise<Imovel> {
     return this.imovelRepository.findOne({ where: { id }, relations: ['usuario', 'photos'] });
