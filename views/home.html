@@ -221,164 +221,169 @@
     <p class="text-center mb-8">Encontre o espaço perfeito para você alugar.</p>
     <button class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Ver Anúncios</button>
   </div> -->
-
-  <div >
-    <div class="container mx-auto bg-blue-50 w-full border rounded-lg border-gray-300">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 p-2">
-            <div class="mb-1 px-1 flex items-center">
-                <label for="cidadeFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Cidade:</label>
-                <input type="text" id="cidadeFiltro" class="form-input w-2/3 border rounded-lg border-gray-300">
-            </div>
-            <div class="mb-1 px-1 flex items-center">
-                <label for="estadoFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Estado:</label>
-                <select id="estadoFiltro" class="form-select w-2/3 border rounded-lg border-gray-300">
-                    <option value="" selected>Selecione o estado</option>
-                    <option value="AC">Acre</option>
-                    <option value="AL">Alagoas</option>
-                    <option value="AP">Amapá</option>
-                    <option value="AM">Amazonas</option>
-                    <option value="BA">Bahia</option>
-                    <option value="CE">Ceará</option>
-                    <option value="DF">Distrito Federal</option>
-                    <option value="ES">Espírito Santo</option>
-                    <option value="GO">Goiás</option>
-                    <option value="MA">Maranhão</option>
-                    <option value="MT">Mato Grosso</option>
-                    <option value="MS">Mato Grosso do Sul</option>
-                    <option value="MG">Minas Gerais</option>
-                    <option value="PA">Pará</option>
-                    <option value="PB">Paraíba</option>
-                    <option value="PR">Paraná</option>
-                    <option value="PE">Pernambuco</option>
-                    <option value="PI">Piauí</option>
-                    <option value="RJ">Rio de Janeiro</option>
-                    <option value="RN">Rio Grande do Norte</option>
-                    <option value="RS">Rio Grande do Sul</option>
-                    <option value="RO">Rondônia</option>
-                    <option value="RR">Roraima</option>
-                    <option value="SC">Santa Catarina</option>
-                    <option value="SP">São Paulo</option>
-                    <option value="SE">Sergipe</option>
-                    <option value="TO">Tocantins</option>
-                </select>
-            </div>
-            <div class="mb-1 px-1 flex items-center">
-                <label for="valorFiltroInput" class="text-gray-700 font-semibold w-1/3 text-center">Faixa de Preço:</label>
-                <input type="text" id="valorFiltroInput" class="form-input w-2/3 border rounded-lg border-gray-300 text-center">
-            </div>
-            <div class="mb-1 px-1 flex items-center">
-                <label for="quantidadeComodosFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Quantidade de Cômodos:</label>
-                <input type="number" id="quantidadeComodosFiltro" class="form-input w-2/3 border rounded-lg border-gray-300">
-            </div>
-            <div class="mb-1 px-1 flex items-center">
-                <label for="tipoImovelFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Tipo de Imóvel:</label>
-                <select id="tipoImovelFiltro" class="form-select w-2/3 border rounded-lg border-gray-300">
-                    <option value="">Qualquer</option>
-                    <option value="Salão">Salão Comercial</option>
-                    <option value="Casa">Casa</option>
-                    <option value="Apartamento">Apartamento</option>
-                    <option value="Chácara">Chácara</option>
-                    <option value="Loft">Loft</option>
-                    <option value="Studio">Studio</option>
-                    <option value="Condomínio">Casa em Condomínio</option>
-                    <option value="Quitinete">Quitinete</option>
-                    <option value="Flat">Flat</option>
-                </select>
-            </div>
-            <div class="mb-1 px-1 flex items-center">
-                <label for="tamanhoFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Tamanho (m²):</label>
-                <input type="number" id="tamanhoFiltro" class="form-input w-2/3 border rounded-lg border-gray-300 text-center">
-            </div>
-            <div class="mb-1 px-1 flex items-center">
-                <label for="mobiliadoFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Mobiliado:</label>
-                <select id="mobiliadoFiltro" class="form-select w-2/3 border rounded-lg border-gray-300">
-                    <option value="">Qualquer</option>
-                    <option value="true">Sim</option>
-                    <option value="false">Não</option>
-                </select>
-            </div>
-            <div class="mb-1 px-1 justify-end flex">
-              <div class="flex w-1/2">
-                <button id="filterButton" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded w-full ml-auto">Filtrar &#128270;</button>
-              </div>
-              <div class="flex w-1/2 mt-auto text-right" id="removeFiltersButtonContainer" style="display: none; margin-left: 10px;">
-                <a href="/" class="btn btn-danger btn-sm">
-                  Remover Filtros ☒
-                </a>
-              </div>
-            </div>     
-        </div>
+  <div class="container mx-auto">
+    <div class="sm:hidden">
+      <button id="toggleMenu" class="block text-blue-500 hover:text-blue-600 focus:text-blue-600 focus:outline-none">&#9776; Filtros</button>
     </div>
-</div>
-
-<br>
-<div id="mensagem" style="display: none;"></div>
-<br>
-
-<div class="container imoveis-container" id="imoveisContainer">
-    <div class="row">
-      <% imoveis.forEach(imovel => { %>
-        <div class="col-lg-3 col-md-6 col-sm-12 imovel">
-          <div class="border border-gray-200 rounded-lg p-3 mb-4 shadow-lg">
-            <div class="relative">
-              <% if (imovel.photos && imovel.photos.length > 0) { %>
-                <div class="group relative">
-                  <span class="bg-yellow-300 px-2 py-1 rounded text-white font-bold"><%= 'Cód. ' + imovel.id %></span>
-                  <a href="/imoveis/informacoes-imovel/<%= imovel.id %>">
-                    <img src="/<%= imovel.photos[0].url %>" alt="Imagem do Imóvel" class="w-full h-40 rounded-lg object-cover shadow-md brighten transform scale-100 transition-transform duration-300">
-                  </a>
-                  <% if (!imovel.statusNegociacao) { %>
-                    <div class="absolute bottom-0 left-0 w-full h-8 bg-orange-500 bg-opacity-50 text-white opacity-100 transition-opacity duration-300 group-hover:opacity-0 flex items-center justify-center rounded-lg">
-                      Em negociação
-                    </div>
-                  <% } %>
+    
+    <div id="filtersContainer" class="hidden sm:block" >
+      <div class="container mx-auto bg-blue-50 w-full border rounded-lg border-gray-300">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 p-2">
+              <div class="mb-1 px-1 flex items-center">
+                  <label for="cidadeFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Cidade:</label>
+                  <input type="text" id="cidadeFiltro" class="form-input w-2/3 border rounded-lg border-gray-300">
+              </div>
+              <div class="mb-1 px-1 flex items-center">
+                  <label for="estadoFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Estado:</label>
+                  <select id="estadoFiltro" class="form-select w-2/3 border rounded-lg border-gray-300">
+                      <option value="" selected>Selecione o estado</option>
+                      <option value="AC">Acre</option>
+                      <option value="AL">Alagoas</option>
+                      <option value="AP">Amapá</option>
+                      <option value="AM">Amazonas</option>
+                      <option value="BA">Bahia</option>
+                      <option value="CE">Ceará</option>
+                      <option value="DF">Distrito Federal</option>
+                      <option value="ES">Espírito Santo</option>
+                      <option value="GO">Goiás</option>
+                      <option value="MA">Maranhão</option>
+                      <option value="MT">Mato Grosso</option>
+                      <option value="MS">Mato Grosso do Sul</option>
+                      <option value="MG">Minas Gerais</option>
+                      <option value="PA">Pará</option>
+                      <option value="PB">Paraíba</option>
+                      <option value="PR">Paraná</option>
+                      <option value="PE">Pernambuco</option>
+                      <option value="PI">Piauí</option>
+                      <option value="RJ">Rio de Janeiro</option>
+                      <option value="RN">Rio Grande do Norte</option>
+                      <option value="RS">Rio Grande do Sul</option>
+                      <option value="RO">Rondônia</option>
+                      <option value="RR">Roraima</option>
+                      <option value="SC">Santa Catarina</option>
+                      <option value="SP">São Paulo</option>
+                      <option value="SE">Sergipe</option>
+                      <option value="TO">Tocantins</option>
+                  </select>
+              </div>
+              <div class="mb-1 px-1 flex items-center">
+                  <label for="valorFiltroInput" class="text-gray-700 font-semibold w-1/3 text-center">Faixa de Preço:</label>
+                  <input type="text" id="valorFiltroInput" class="form-input w-2/3 border rounded-lg border-gray-300 text-center">
+              </div>
+              <div class="mb-1 px-1 flex items-center">
+                  <label for="quantidadeComodosFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Quantidade de Cômodos:</label>
+                  <input type="number" id="quantidadeComodosFiltro" class="form-input w-2/3 border rounded-lg border-gray-300">
+              </div>
+              <div class="mb-1 px-1 flex items-center">
+                  <label for="tipoImovelFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Tipo de Imóvel:</label>
+                  <select id="tipoImovelFiltro" class="form-select w-2/3 border rounded-lg border-gray-300">
+                      <option value="">Qualquer</option>
+                      <option value="Salão">Salão Comercial</option>
+                      <option value="Casa">Casa</option>
+                      <option value="Apartamento">Apartamento</option>
+                      <option value="Chácara">Chácara</option>
+                      <option value="Loft">Loft</option>
+                      <option value="Studio">Studio</option>
+                      <option value="Condomínio">Casa em Condomínio</option>
+                      <option value="Quitinete">Quitinete</option>
+                      <option value="Flat">Flat</option>
+                  </select>
+              </div>
+              <div class="mb-1 px-1 flex items-center">
+                  <label for="tamanhoFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Tamanho (m²):</label>
+                  <input type="number" id="tamanhoFiltro" class="form-input w-2/3 border rounded-lg border-gray-300 text-center">
+              </div>
+              <div class="mb-1 px-1 flex items-center">
+                  <label for="mobiliadoFiltro" class="text-gray-700 font-semibold w-1/3 text-center">Mobiliado:</label>
+                  <select id="mobiliadoFiltro" class="form-select w-2/3 border rounded-lg border-gray-300">
+                      <option value="">Qualquer</option>
+                      <option value="true">Sim</option>
+                      <option value="false">Não</option>
+                  </select>
+              </div>
+              <div class="mb-1 px-1 justify-end flex">
+                <div class="flex w-1/2">
+                  <button id="filterButton" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded w-full ml-auto">Filtrar &#128270;</button>
                 </div>
-              <% } else { %>
-                <div class="w-full h-32 bg-gray-200 rounded-lg shadow-md"></div>
-              <% } %>
-            </div>
-            <a href="/imoveis/informacoes-imovel/<%= imovel.id %>" class="text-lg font-semibold mt-4 mb-4 text-decoration-none text-dark" style="max-height: 3.6rem; overflow: hidden;">
-              <%= imovel.titulo %>
-            </a>
-            <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Valor:</strong> R$ <%= imovel.valor %></p>
-            <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>, <%= imovel.enderecoCidade %></p>
-            <p class="mb-2 text-sm"><strong>Mobiliado:</strong> <%= imovel.mobiliado ? 'Sim' : 'Não' %></p>
+                <div class="flex w-1/2 mt-auto text-right" id="removeFiltersButtonContainer" style="display: none; margin-left: 10px;">
+                  <a href="/" class="btn btn-danger btn-sm">
+                    Remover Filtros ☒
+                  </a>
+                </div>
+              </div>     
           </div>
-        </div>
-      <% }); %>
+      </div>
     </div>
 
-    <div class="pagination text-center">
-      <% const maxLinksToShow = 5; /* Número máximo de links de página a serem mostrados */ %>
+    <br>
+    <div id="mensagem" style="display: none;"></div>
+    <br>
+
+    <div class="container imoveis-container" id="imoveisContainer">
+      <div class="row">
+        <% imoveis.forEach(imovel => { %>
+          <div class="col-lg-3 col-md-6 col-sm-12 imovel">
+            <div class="border border-gray-200 rounded-lg p-3 mb-4 shadow-lg">
+              <div class="relative">
+                <% if (imovel.photos && imovel.photos.length > 0) { %>
+                  <div class="group relative">
+                    <span class="bg-yellow-300 px-2 py-1 rounded text-white font-bold"><%= 'Cód. ' + imovel.id %></span>
+                    <a href="/imoveis/informacoes-imovel/<%= imovel.id %>">
+                      <img src="/<%= imovel.photos[0].url %>" alt="Imagem do Imóvel" class="w-full h-40 rounded-lg object-cover shadow-md brighten transform scale-100 transition-transform duration-300">
+                    </a>
+                    <% if (!imovel.statusNegociacao) { %>
+                      <div class="absolute bottom-0 left-0 w-full h-8 bg-orange-500 bg-opacity-50 text-white opacity-100 transition-opacity duration-300 group-hover:opacity-0 flex items-center justify-center rounded-lg">
+                        Em negociação
+                      </div>
+                    <% } %>
+                  </div>
+                <% } else { %>
+                  <div class="w-full h-32 bg-gray-200 rounded-lg shadow-md"></div>
+                <% } %>
+              </div>
+              <a href="/imoveis/informacoes-imovel/<%= imovel.id %>" class="text-lg font-semibold mt-4 mb-4 text-decoration-none text-dark" style="max-height: 3.6rem; overflow: hidden;">
+                <%= imovel.titulo %>
+              </a>
+              <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Valor:</strong> R$ <%= imovel.valor %></p>
+              <p class="mb-2 text-sm" style="max-height: 2.5rem; overflow: hidden;"><strong>Localização:</strong> <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>, <%= imovel.enderecoCidade %></p>
+              <p class="mb-2 text-sm"><strong>Mobiliado:</strong> <%= imovel.mobiliado ? 'Sim' : 'Não' %></p>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+      <div class="pagination text-center">
+        <% const maxLinksToShow = 5; /* Número máximo de links de página a serem mostrados */ %>
+        
+        <% const halfMaxLinksToShow = Math.floor(maxLinksToShow / 2); %>
+        
+        <% let startPage = Math.max(1, currentPage - halfMaxLinksToShow); %>
+        <% let endPage = Math.min(totalPages, startPage + maxLinksToShow - 1); %>
+        
+        <% if (endPage - startPage < maxLinksToShow - 1) {
+          startPage = Math.max(1, endPage - maxLinksToShow + 1);
+        } %>
       
-      <% const halfMaxLinksToShow = Math.floor(maxLinksToShow / 2); %>
-      
-      <% let startPage = Math.max(1, currentPage - halfMaxLinksToShow); %>
-      <% let endPage = Math.min(totalPages, startPage + maxLinksToShow - 1); %>
-      
-      <% if (endPage - startPage < maxLinksToShow - 1) {
-        startPage = Math.max(1, endPage - maxLinksToShow + 1);
-      } %>
-    
-      <% if (startPage > 1) { %>
-        <a class="page-link" href="/1">1</a>
-        <% if (startPage > 2) { %>
-          <span>...</span>
+        <% if (startPage > 1) { %>
+          <a class="page-link" href="/1">1</a>
+          <% if (startPage > 2) { %>
+            <span>...</span>
+          <% } %>
         <% } %>
-      <% } %>
-      
-      <% for (let i = startPage; i <= endPage; i++) { %>
-        <a class="page-link" href="/<%= i %>"><%= i %></a>
-      <% } %>
-      
-      <% if (endPage < totalPages) { %>
-        <% if (endPage < totalPages - 1) { %>
-          <span>...</span>
+        
+        <% for (let i = startPage; i <= endPage; i++) { %>
+          <a class="page-link" href="/<%= i %>"><%= i %></a>
         <% } %>
-        <a class="page-link" href="/<%= totalPages %>"><%= totalPages %></a>
-      <% } %>
+        
+        <% if (endPage < totalPages) { %>
+          <% if (endPage < totalPages - 1) { %>
+            <span>...</span>
+          <% } %>
+          <a class="page-link" href="/<%= totalPages %>"><%= totalPages %></a>
+        <% } %>
+      </div>
+      
     </div>
-    
   </div>
 
 
@@ -392,6 +397,20 @@
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 
 
+
+  <script>
+    const toggleButton = document.getElementById('toggleMenu');
+    const filtersContainer = document.getElementById('filtersContainer');
+  
+    toggleButton.addEventListener('click', function() {
+      if (filtersContainer.style.display === 'block') {
+        filtersContainer.style.display = 'none';
+      } else {
+        filtersContainer.style.display = 'block';
+      }
+    });
+  </script>
+  
 
   <script>
     function updateURLWithFiltersAndPage(filters, page) {
@@ -425,7 +444,16 @@
       if (valor.trim() !== '') filters.valor = valor;
       if (mobiliado.trim() !== '') filters.mobiliado = mobiliado;
       if (tipoImovel.trim() !== '') filters.tipoImovel = tipoImovel;
-      if (tamanho.trim() !== '') filters.tamanho = tamanho;
+      if (tamanho.trim() !== ''){
+        console.log("\n\n\n\n\nTamanho: ", typeof(tamanho))
+        const tamanhoComoNumero = parseFloat(tamanho, 10);
+        if (!isNaN(tamanhoComoNumero)) {
+          filters.tamanho = tamanhoComoNumero;
+        } else {
+          console.log("A string de tamanho não é um número válido.");
+        }
+      }
+      console.log("\n\n\n\n\nTamanho: ", typeof(tamanho)) 
       if (quantidadeComodos.trim() !== '') filters.quantidadeComodos = quantidadeComodos;
     
       fetch(`/filter-imoveis?page=${page}`, {

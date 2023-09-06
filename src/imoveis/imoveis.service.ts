@@ -56,24 +56,18 @@ export class ImovelService {
     const queryBuilder: SelectQueryBuilder<Imovel> = this.imovelRepository.createQueryBuilder('imovel');
   
     if (filters) {
-      if (filters.enderecoCidade) {
-        queryBuilder.andWhere('imovel.cidade LIKE :cidade', { cidade: `%${filters.enderecoCidade}%` });
-      }
-      if (filters) {
-        if (filters.tamanho) {
-          queryBuilder.andWhere('imovel.tamanho LIKE :tamanho', { tamanho: `%${filters.tamanho}%` });
-        }
-    }
+    
+    const startIndex = (page - 1) * itemsPerPage;
 
-  const startIndex = (page - 1) * itemsPerPage;
+    const [imoveis, total] = await queryBuilder
+      .skip(startIndex)
+      .take(itemsPerPage)
+      .leftJoinAndSelect('imovel.photos', 'photos') 
+      .getManyAndCount();
 
-  const [imoveis, total] = await queryBuilder
-    .skip(startIndex)
-    .take(itemsPerPage)
-    .leftJoinAndSelect('imovel.photos', 'photos') 
-    .getManyAndCount();
-
-  return { imoveis, total };
+      console.log("\n\n\n\n\nqueryBuilder.skip: ",queryBuilder.skip)
+      console.log("\n\n\n\n\nstartIndex: ",startIndex)
+    return { imoveis, total };
   }
 }
 
@@ -89,6 +83,7 @@ async filterImoveis(filters: ImovelFiltersDTO): Promise<Imovel[]> {
     if (filters.tamanho !== undefined) {
       parameters.tamanho = filters.tamanho;
       whereConditions.push(`imovel.tamanho <= :tamanho`);
+      console.log("\n\n\n\n\n\nTamanho: ", filters.tamanho)
     }
 
     if (filters.quantidadeComodos !== undefined) {
@@ -179,7 +174,7 @@ async countFilteredImoveis(filters: ImovelFiltersDTO): Promise<number> {
   }
 
   const totalImoveis = await queryBuilder.getCount();
-  console.log("Número de imóveis: ", totalImoveis)
+  console.log("\n\n\n\n\n\nNúmero de imóveis: ", totalImoveis)
   return totalImoveis;
 }
 
