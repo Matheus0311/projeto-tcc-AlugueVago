@@ -439,8 +439,8 @@
             <div class="bg-white p-6 rounded-lg shadow-md w-96">
               <h2 class="text-xl font-semibold mb-4">Enviar E-mail</h2>
               <form id="messageForm" class="flex flex-col space-y-4">
-                <label for="to" class="text-sm font-medium">Seu E-mail</label>
-                <input type="email" id="to" name="to" class="border rounded-lg px-3 py-2" required>
+                <!-- <label for="to" class="text-sm font-medium">Seu E-mail</label>
+                <input type="email" id="to" name="to" class="border rounded-lg px-3 py-2" required> -->
           
                 <label for="name" class="text-sm font-medium">Seu Nome</label>
                 <input type="text" id="name" name="name" class="border rounded-lg px-3 py-2" required>
@@ -637,15 +637,7 @@
 
   <script>
     document.getElementById("copyLocationButton").addEventListener("click", function() {
-      const locationInfo = `
-        Localização: <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>\n
-        Bairro: <%= imovel.enderecoBairro %>\n
-        Cidade: <%= imovel.enderecoCidade %>\n
-        Estado: <%= imovel.estadoNome %>\n
-        CEP: <%= imovel.enderecoCEP %>\n
-        Telefone de Contato: <%= imovel.telefoneContato %>\n
-        E-mail de Contato: <%= imovel.emailContato %>\n
-      `;
+      const locationInfo = `Localização: <%= imovel.enderecoRua %>, <%= imovel.enderecoNumero %>\nBairro: <%= imovel.enderecoBairro %>\nCidade: <%= imovel.enderecoCidade %>\nEstado: <%= imovel.estadoNome %>\nCEP: <%= imovel.enderecoCEP %>\nTelefone de Contato: <%= imovel.telefoneContato %>\nE-mail de Contato: <%= imovel.emailContato %>\n`;
     
       const tempElement = document.createElement("textarea");
       tempElement.value = locationInfo;
@@ -747,7 +739,7 @@
         const name = formData.get('name');
         const message = formData.get('message');
 
-        const mailtoLink = `mailto:${emailTo}?subject=Contato%20via%20site&body=${encodeURIComponent(`Olá ${name},%0D%0A%0D%0A${message}`)}`;
+        const mailtoLink = `mailto:${emailTo}?subject=Contato%20via%20site&body=${encodeURIComponent(`${name}, \n\n${message}`)}`;
 
         window.location.href = mailtoLink;
     });
