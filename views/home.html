@@ -143,17 +143,18 @@
       }
     }
     
-
     .nav-link.dropdown-toggle.flex.items-center {
       color: white;
     }
-    
-    
-    
-    
+    @media screen and (max-width: 640px) {
+      #filtersContainer {
+        display: none;
+      }
+      #filtersContainer.show {
+        display: block;
+      }
+    }
 
-    
-    
   </style>
 </head>
 <body class="bg-gray-100">
@@ -397,17 +398,12 @@
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 
 
-
   <script>
     const toggleButton = document.getElementById('toggleMenu');
     const filtersContainer = document.getElementById('filtersContainer');
   
-    toggleButton.addEventListener('click', function() {
-      if (filtersContainer.style.display === 'block') {
-        filtersContainer.style.display = 'none';
-      } else {
-        filtersContainer.style.display = 'block';
-      }
+    toggleButton.addEventListener('click', function () {
+      filtersContainer.classList.toggle('show');
     });
   </script>
   
