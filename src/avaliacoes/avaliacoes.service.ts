@@ -105,7 +105,18 @@ export class AvaliacaoService {
   }
   
 
-  async deleteAvaliacao(id: number): Promise<void> {
-    await this.avaliacaoRepository.delete(id);
+  // async deleteAvaliacao(id: number): Promise<void> {
+  //   await this.avaliacaoRepository.delete(id);
+  // }
+
+  async deleteAvaliacaoByImovelAndUser(imovelId: number, userId: number): Promise<void> {
+    const existingAvaliacao = await this.avaliacaoRepository.findOne({
+      where: { usuario: { id: userId }, imovel: { id: imovelId } },
+    });
+    if (!existingAvaliacao) {
+      throw new NotFoundException('Avaliação não encontrada.');
+    }
+    await this.avaliacaoRepository.remove(existingAvaliacao);
   }
+  
 }

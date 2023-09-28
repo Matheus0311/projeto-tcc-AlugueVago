@@ -383,6 +383,7 @@
                     </div>
                   </div>
                   <button type="submit" class="btn btn-primary mt-2">Enviar Avaliação</button>
+                  <button type="button" id="removeReviewBtn" class="btn btn-danger mt-2">Remover Avaliação</button>
                 </form>
               <% } else { %>
                 <p>Faça login para avaliar.</p>
@@ -654,6 +655,49 @@
 
     });
   </script>
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const removeReviewBtn = document.getElementById("removeReviewBtn");
+
+    if (removeReviewBtn) {
+      removeReviewBtn.addEventListener("click", function () {
+        // Obtenha os IDs do imóvel e do usuário
+        const imovelId = "<%= imovel.id %>";
+        const userId = "<%= user ? user.id : null %>";
+
+        // Verifique se os IDs são válidos
+        if (!imovelId || !userId) {
+          alert("IDs de imóvel ou usuário inválidos.");
+          return;
+        }
+
+           // Restante do código para remover a avaliação
+           fetch(`/avaliacoes/remover-avaliacao/${imovelId}/${userId}`, {
+            method: "DELETE",
+          })
+            .then((response) => {
+              if (response.status === 200) {
+                // Avaliação removida com sucesso, dispare um evento personalizado
+                const event = new CustomEvent('AvaliacaoRemovida');
+                document.dispatchEvent(event);
+              }
+            })
+            .catch((error) => {
+              console.error("Erro ao remover a avaliação:", error);
+              alert("Erro ao remover a avaliação.");
+            });
+        });
+      }
+    });
+  
+
+
+</script>
+
+  
   <script>
     const cepValue = "<%= imovel.enderecoCEP %>"; 
     const formattedCEP = VMasker.toPattern(cepValue, "99999-999");
@@ -858,11 +902,10 @@
   <script>
     document.addEventListener('DOMContentLoaded', async function () {
       const reviewForm = document.getElementById('reviewForm');
-      const reviewsList = document.getElementById('reviewsList');
       const averageRatingElement = document.getElementById('averageRating');
       const numAvaliacoesElement = document.getElementById('numAvaliacoes');
       const stars = document.querySelectorAll('.star');
-      const imovelId = "<%= imovel.id %>"
+      const imovelId = "<%= imovel.id %>";
   
       function clearStars() {
         stars.forEach(star => {
@@ -887,16 +930,16 @@
       function addReview(rating) {
         if (typeof rating !== 'undefined') {
           const reviewItem = document.createElement('div');
-        //  reviewItem.className = 'mb-4';
-        //  reviewItem.innerHTML = `
-        //    <div class="flex items-center mb-2">
-        //      <strong class="text-gray-800">${rating} estrela(s)</strong>
-        //    </div>
-        //    <hr>
-        //  `;
-        //  reviewsList.appendChild(reviewItem);
-        //} else {
-        //  console.error('Avaliação inválida:', rating);
+          //  reviewItem.className = 'mb-4';
+          //  reviewItem.innerHTML = `
+          //    <div class="flex items-center mb-2">
+          //      <strong class="text-gray-800">${rating} estrela(s)</strong>
+          //    </div>
+          //    <hr>
+          //  `;
+          //  reviewsList.appendChild(reviewItem);
+          //} else {
+          //  console.error('Avaliação inválida:', rating);
         }
       }
   
@@ -912,7 +955,7 @@
         }
   
         const userId = reviewForm.getAttribute('data-user-id');
-
+  
         if (userId) {
           const userRatingResponse = await fetch(`/avaliacoes/user-rating?imovelId=<%= imovel.id %>&userId=${userId}`, {
             method: 'GET',
@@ -945,11 +988,11 @@
           numAvaliacoesElement.style.display = 'inline';
         } else {
           const formattedAverageRating = parseFloat(averageRating).toFixed(1);
-      
+  
           if (!isNaN(formattedAverageRating)) {
             averageRatingElement.textContent = formattedAverageRating;
             averageRatingElement.style.display = 'inline';
-      
+  
             if (numAvaliacoes === 0) {
               numAvaliacoesElement.textContent = 'Nenhuma avaliação ainda';
             } else {
@@ -963,7 +1006,6 @@
           }
         }
       }
-      
   
       if (reviewForm) {
         reviewForm.addEventListener('submit', async function (event) {
@@ -992,6 +1034,8 @@
                 console.log('Saved Avaliação:', savedAvaliacao);
                 addReview(savedAvaliacao.nota);
                 console.log("savedAvaliação2 = ", savedAvaliacao.nota);
+  
+                // Após adicionar uma avaliação, atualize as médias e a classificação do usuário
                 updateAverageAndUserRating();
               } catch (error) {
                 console.error('Erro ao analisar JSON da resposta do servidor:', error);
@@ -1004,8 +1048,18 @@
           }
         });
       }
+  
+      // Inicialmente, atualize a média de avaliações e a classificação do usuário
       updateAverageAndUserRating();
+  
+      // ...
+  
+      document.addEventListener('AvaliacaoRemovida', function (event) {
+        updateAverageAndUserRating();
+        clearStars();
+      });
     });
+  
   </script>
   
 

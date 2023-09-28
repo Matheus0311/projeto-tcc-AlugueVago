@@ -43,9 +43,20 @@ async getAverageRating(@Query('imovelId') imovelId: number): Promise<AverageRati
     return this.avaliacaoService.updateAvaliacao(id, avaliacao);
   } 
 
-  @Delete(':id')
+  // @Delete(':id')
+  // @UsePipes(new ValidationPipe())
+  // async delete(@Param('id') id: number): Promise<void> {
+  //   return this.avaliacaoService.deleteAvaliacao(id);
+  // }
+
+  @Delete('remover-avaliacao/:imovelId/:userId')
   @UsePipes(new ValidationPipe())
-  async delete(@Param('id') id: number): Promise<void> {
-    return this.avaliacaoService.deleteAvaliacao(id);
+  async removeReview(
+    @Param('imovelId') imovelId: number,
+    @Param('userId') userId: number,
+  ): Promise<void> {
+    await this.avaliacaoService.deleteAvaliacaoByImovelAndUser(imovelId, userId);
   }
+  
+
 }

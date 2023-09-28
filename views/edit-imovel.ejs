@@ -404,7 +404,11 @@
 
             <!-- Documentos do Imóvel -->
             <div class="upload-container">
-              <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">Documentos do Imóvel:</label>
+              <label for="pdfDocument" class="block text-gray-700 font-semibold mb-2">Documentos do Imóvel:
+                <span class="info-icon" title="Forneça 1 PDF com os documentos principais do imóvel (Escritura)">
+                  <i class="text-gray-500 cursor-pointer">&#9432;</i>
+                </span>
+              </label>
               <div class="relative">
                 <input type="file" id="pdfDocument" name="pdfDocument" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" onchange="updatePDFLabel(this)">
                 <p id="pdfDocumentLabel">O PDF continua o mesmo se não editá-lo</p>
@@ -690,7 +694,9 @@
         </h2>
         <!-- Telefone de Contato -->
         <div class="input-container">
-          <label for="telefoneContato">Telefone de Contato:  </label>
+          <label for="telefoneContato">Telefone de Contato:  <span class="info-icon" title="Digite um nome telefone válido">
+            <i class="text-gray-500 cursor-pointer">&#9432;</i>
+          </span></label>
           <input value="<%= imovel.telefoneContato %>" type="tel" id="telefoneContato" name="telefoneContato" class="rounded-md focus:border-blue-500" placeholder="DDD e Número sem pontuação" required>
         </div>
         <!-- Email de Contato -->

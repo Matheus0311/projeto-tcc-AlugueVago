@@ -45,8 +45,14 @@ export class ImovelService {
   
   
   async findAll(): Promise<Imovel[]> {
-    return this.imovelRepository.find({ relations: ['photos'] });
+    return this.imovelRepository.find({
+      relations: ['photos'],
+      order: {
+        id: 'ASC', // Ordenar pelo campo 'id' em ordem crescente
+      },
+    });
   }
+  
 
   async findAllWithPagination(
     page: number = 1,
@@ -80,11 +86,16 @@ async filterImoveis(filters: ImovelFiltersDTO): Promise<Imovel[]> {
     const whereConditions = [];
     const parameters: Record<string, any> = {};
 
+    // if (filters.tamanho !== undefined) {
+    //   parameters.tamanho = filters.tamanho;
+    //   whereConditions.push(`imovel.tamanho <= :tamanho`);
+    //   console.log("\n\n\n\n\n\nTamanho: ", filters.tamanho)
+    // }
     if (filters.tamanho !== undefined) {
       parameters.tamanho = filters.tamanho;
-      whereConditions.push(`imovel.tamanho <= :tamanho`);
-      console.log("\n\n\n\n\n\nTamanho: ", filters.tamanho)
+      whereConditions.push(`imovel.tamanho BETWEEN :tamanho - 50 AND :tamanho + 50`);
     }
+    
 
     if (filters.quantidadeComodos !== undefined) {
       parameters.quantidadeComodos = filters.quantidadeComodos;
@@ -96,10 +107,19 @@ async filterImoveis(filters: ImovelFiltersDTO): Promise<Imovel[]> {
       whereConditions.push(`imovel.mobiliado = :mobiliado`);
     }
 
+    // if (filters.valor !== undefined) {
+    //   parameters.valor = filters.valor;
+    //   whereConditions.push(`imovel.valor <= :valor`);
+    // }
     if (filters.valor !== undefined) {
       parameters.valor = filters.valor;
-      whereConditions.push(`imovel.valor <= :valor`);
+      whereConditions.push(`imovel.valor BETWEEN :valor - 100 AND :valor + 100`);
     }
+    
+    
+    
+    
+    
 
     if (filters.tipoImovel !== undefined) {
       parameters.tipoImovel = filters.tipoImovel;
@@ -133,9 +153,13 @@ async countFilteredImoveis(filters: ImovelFiltersDTO): Promise<number> {
     const whereConditions = [];
     const parameters: Record<string, any> = {};
 
+    // if (filters.tamanho !== undefined) {
+    //   parameters.tamanho = filters.tamanho;
+    //   whereConditions.push(`imovel.tamanho <= :tamanho`);
+    // }
     if (filters.tamanho !== undefined) {
       parameters.tamanho = filters.tamanho;
-      whereConditions.push(`imovel.tamanho <= :tamanho`);
+      whereConditions.push(`imovel.tamanho BETWEEN :tamanho - 50 AND :tamanho + 50`);
     }
 
     if (filters.quantidadeComodos !== undefined) {
@@ -148,10 +172,19 @@ async countFilteredImoveis(filters: ImovelFiltersDTO): Promise<number> {
       whereConditions.push(`imovel.mobiliado = :mobiliado`);
     }
 
+    // if (filters.valor !== undefined) {
+    //   parameters.valor = filters.valor;
+    //   whereConditions.push(`imovel.valor <= :valor`);
+    // }
     if (filters.valor !== undefined) {
       parameters.valor = filters.valor;
-      whereConditions.push(`imovel.valor <= :valor`);
+      whereConditions.push(`imovel.valor BETWEEN :valor - 100 AND :valor + 100`);
     }
+    
+    
+    
+    
+    
 
     if (filters.tipoImovel !== undefined) {
       parameters.tipoImovel = filters.tipoImovel;
@@ -194,13 +227,17 @@ async countFilteredImoveis(filters: ImovelFiltersDTO): Promise<number> {
   
     const userImoveis = await this.imovelRepository.find({
       where: { usuario: { id: userId } },
-      relations: ['photos'] 
+      relations: ['photos'],
+      order: {
+        id: 'ASC', // Ordenar pelo campo 'id' em ordem crescente
+      },
     });
   
-    console.log("userImoveis:", userImoveis); 
+    console.log("userImoveis:", userImoveis);
   
     return userImoveis;
   }
+  
   
   async deletePhotosByImovelId(imovelId: number): Promise<void> {
     const imovel = await this.findById(imovelId);
