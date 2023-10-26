@@ -23,9 +23,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { diskStorage } from 'multer';
-import { LocalAuthGuard } from 'src/auth/local.auth.guard';
-import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
-import { AdminGuard } from 'src/auth/admin.guard';
+import { LocalAuthGuard } from '../auth/local.auth.guard';
+import { AuthenticatedGuard } from '../auth/authenticated.guard';
+import { AdminGuard } from '../auth/admin.guard';
 import { UserValidationException } from './user-validation.exception';
 
 @Controller('users')

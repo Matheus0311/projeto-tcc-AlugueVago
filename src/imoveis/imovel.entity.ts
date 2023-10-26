@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { Avaliacao } from '../avaliacoes/avaliacao.entity';
 import { User } from '../users/user.entity';
-import { Photo } from 'src/photos/photo.entity';
+import { Photo } from '../photos/photo.entity';
 
 @Entity()
 export class Imovel {

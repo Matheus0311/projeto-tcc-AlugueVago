@@ -1,14 +1,15 @@
 import { Controller, Post, Body, Get, Param, Put, Delete, InternalServerErrorException, Render, UseGuards, BadRequestException, Req, UseInterceptors, UploadedFile, Res, Request, ConsoleLogger, ParseIntPipe, Query, UploadedFiles, UsePipes, ValidationPipe, HttpCode, HttpStatus  } from '@nestjs/common';
 import { ImovelService } from './imoveis.service';
 import { Imovel } from './imovel.entity';
-import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
-import { User } from 'src/users/user.entity';
+import { AuthenticatedGuard } from '../auth/authenticated.guard';
+import { User } from '../users/user.entity';
 import { AnyFilesInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import * as fs from 'fs';
 import { useBeforeUnload } from 'react-router-dom';
+
 export interface ExtendedUser extends User {
   userImoveis: Imovel[];
 }
@@ -18,10 +19,10 @@ export interface AverageRating {
   numAvaliacoes: number;
 }
 import { NotFoundException } from '@nestjs/common';
-import { AdminGuard } from 'src/auth/admin.guard';
-import { AvaliacaoService } from 'src/avaliacoes/avaliacoes.service';
-import { Photo } from 'src/photos/photo.entity';
-import { PhotosService } from 'src/photos/photos.service';
+import { AdminGuard } from '../auth/admin.guard';
+import { AvaliacaoService } from '../avaliacoes/avaliacoes.service';
+import { Photo } from '../photos/photo.entity';
+import { PhotosService } from '../photos/photos.service';
 
 
 

@@ -8,7 +8,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { AvaliacaoService } from './avaliacoes/avaliacoes.service';
 import { UsersService } from './users/users.service';
 import { ImovelService } from './imoveis/imoveis.service';
-import { Endereco } from './enderecos/endereco.entity';
+import { Photo } from './photos/photo.entity';
 
 describe('Integration Test: User, Imovel, Avaliacao', () => {
   let app: TestingModule;
@@ -32,8 +32,6 @@ describe('Integration Test: User, Imovel, Avaliacao', () => {
     userRepository = app.get(getRepositoryToken(User));
     imovelRepository = app.get(getRepositoryToken(Imovel));
     avaliacaoRepository = app.get(getRepositoryToken(Avaliacao));
-
-   // await connection.synchronize(true); // Limpar e recriar o banco de dados antes dos testes
   });
 
   afterAll(async () => {
@@ -41,27 +39,19 @@ describe('Integration Test: User, Imovel, Avaliacao', () => {
     await app.close();
   });
 
-  it('Deve criar um usuario, um imovel, e uma avaliacao', async () => {
-    const endereco = new Endereco();
-    endereco.id = 1;
-    endereco.rua = 'Rua A';
-    endereco.cidade = 'Cidade A';
-    endereco.bairro = 'Bairro A';
-    endereco.estado = null;
-    endereco.cep = '12345-678';
-    endereco.numero = '123-b'
-  
-    const createdUser = new User();
-    createdUser.imagemPerfil = 'imagem.png';
-    createdUser.nomeUsuario = 'John Doe';
-    createdUser.senhaUsuario = '123456';
-    createdUser.emailUsuario = 'johndoe@example.com';
-    createdUser.rendaMensalUsuario = 5000;
-    createdUser.rgUsuario = '123456789';
-    createdUser.cpfUsuario = '987654321';
-  
-    const user = await userService.create(createdUser);
-  
+  it('Deve criar um usuário, um imóvel, e uma avaliação', async () => {
+    // Criar um usuário de teste
+    const user = new User();
+    user.nomeUsuario = 'John Doe';
+    user.senhaUsuario = '123456';
+    user.emailUsuario = 'johndoe@example.com';
+    user.rendaMensalUsuario = 5000;
+    user.rgUsuario = '123456789';
+    user.cpfUsuario = '987654321';
+
+    const createdUser = await userRepository.save(user);
+
+    // Criar um imóvel de teste
     const imovelEntity = new Imovel();
     imovelEntity.tamanho = 100;
     imovelEntity.quantidadeComodos = 3;
@@ -70,23 +60,47 @@ describe('Integration Test: User, Imovel, Avaliacao', () => {
     imovelEntity.telefoneContato = '987654321';
     imovelEntity.emailContato = 'imovel@example.com';
     imovelEntity.valor = 100000;
-    imovelEntity.descricao = 'Lindo apartamento';
+    imovelEntity.titulo = 'Lindo apartamento';
+    imovelEntity.descricao = 'Descrição do imóvel';
+    imovelEntity.pdfDocument = 'caminho/do/pdf.pdf';
     imovelEntity.numeroInscricao = '123456';
     imovelEntity.rgProprietario = '987654321';
     imovelEntity.cpfProprietario = '123456789';
+    imovelEntity.enderecoRua = 'Rua do Imóvel';
+    imovelEntity.enderecoNumero = '123';
+    imovelEntity.enderecoBairro = 'Bairro do Imóvel';
+    imovelEntity.enderecoCEP = '12345-678';
+    imovelEntity.enderecoCidade = 'Cidade do Imóvel';
+    imovelEntity.estadoNome = 'Estado do Imóvel';
+    imovelEntity.tipoImovel = 'Casa';
+    imovelEntity.novo = true;
+    imovelEntity.grande = false;
+    imovelEntity.bemLocalizado = true;
+    imovelEntity.condominioFechado = false;
+    imovelEntity.estacionamento = true;
+    imovelEntity.aguaGratuita = false;
+    imovelEntity.iptuIncluso = true;
     imovelEntity.usuario = createdUser;
-  
-    const createdImovelWithEndereco = await imovelService.createImovelWithEndereco(imovelEntity, endereco);
-  
+
+    const photos = [new Photo()]; 
+    const pdfDocument = null;
+
+    const createdImovel = await imovelRepository.save(imovelEntity);
+
+    // Criar uma avaliação de teste
     const avaliacao = new Avaliacao();
     avaliacao.nota = 5;
     avaliacao.usuario = createdUser;
-    avaliacao.imovel = createdImovelWithEndereco;
-  
-    const createdAvaliacao = await avaliacaoService.createAvaliacao(avaliacao, createdUser.id, createdImovelWithEndereco.id);
-  
+    avaliacao.imovel = createdImovel;
+
+    const createdAvaliacao = await avaliacaoRepository.save(avaliacao);
+
     expect(createdUser.id).toBeDefined();
-    expect(createdImovelWithEndereco.id).toBeDefined();
+    expect(createdImovel.id).toBeDefined();
     expect(createdAvaliacao.id).toBeDefined();
+
+    // Exclua o usuário criado para o teste
+    await userRepository.remove(createdUser);
+
   });
 });

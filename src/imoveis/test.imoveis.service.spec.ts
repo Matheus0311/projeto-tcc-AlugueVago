@@ -1,44 +1,54 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ImovelService } from './imoveis.service';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { Imovel } from './imovel.entity';
+import { Repository } from 'typeorm';
+import { FindOneOptions } from 'typeorm';
 
-describe('Imovel', () => {
-  let imovel: Imovel;
 
-  beforeEach(() => {
-    imovel = new Imovel();
-    imovel.id = 1;
-    imovel.tamanho = 100;
-    imovel.quantidadeComodos = 4;
-    imovel.mobiliado = true;
-    imovel.statusNegociacao = true;
-    imovel.telefoneContato = '123456789';
-    imovel.emailContato = 'exemplo@ex.com';
-    imovel.valor = 12000.00;
-    imovel.descricao = 'Salão com 4 salas';
-    imovel.pdfDocument = 'caminho/caminho/exemplo.pdf';
-    imovel.numeroInscricao = '1234221';
-    imovel.rgProprietario = '123456789';
-    imovel.cpfProprietario = '1234321232';
+describe('ImovelService', () => {
+  let service: ImovelService;
+  let repository: Repository<Imovel>;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        ImovelService,
+        {
+          provide: getRepositoryToken(Imovel),
+          useClass: Repository,
+        },
+      ],
+    }).compile();
+
+    service = module.get<ImovelService>(ImovelService);
+    repository = module.get<Repository<Imovel>>(getRepositoryToken(Imovel));
   });
 
-  it('Deve criar uma instância de Imovel', () => {
-    expect(imovel).toBeDefined();
-    expect(imovel).toBeInstanceOf(Imovel);
+  it('should be defined', () => {
+    expect(service).toBeDefined();
   });
 
-  it('Deve ter todas as propriedades definidas corretamente', () => {
-    expect(imovel.id).toEqual(1);
-    expect(imovel.tamanho).toEqual(100);
-    expect(imovel.quantidadeComodos).toEqual(4);
-    expect(imovel.mobiliado).toEqual(true);
-    expect(imovel.statusNegociacao).toEqual(true);
-    expect(imovel.telefoneContato).toEqual('123456789');
-    expect(imovel.emailContato).toEqual('exemplo@ex.com');
-    expect(imovel.valor).toEqual(12000.00);
-    expect(imovel.descricao).toEqual('Salão com 4 salas');
-    expect(imovel.pdfDocument).toEqual('caminho/caminho/exemplo.pdf');
-    expect(imovel.numeroInscricao).toEqual('1234221');
-    expect(imovel.rgProprietario).toEqual('123456789');
-    expect(imovel.cpfProprietario).toEqual('1234321232');
+  it('should find an Imovel by id', async () => {
+    const mockImovel = new Imovel();
+    mockImovel.id = 1;
+    jest.spyOn(repository, 'findOne').mockImplementation(() => Promise.resolve(mockImovel));
+
+    const result = await service.findById(1);
+
+    expect(result).toEqual(mockImovel);
   });
+
+  it('should return null for an unknown Imovel id', async () => {
+    jest.spyOn(repository, 'findOne').mockImplementation(async (options: any) => {
+      if (options.where?.id === 999) return null; 
+    });
+    
+  
+    const result = await service.findById(999);
+  
+    expect(result).toBeNull();
+  });
+  
+
 });

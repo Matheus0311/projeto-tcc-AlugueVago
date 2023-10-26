@@ -1,6 +1,6 @@
 import { Injectable, NotAcceptableException  } from '@nestjs/common';
 import { truncate } from 'fs';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import { UserNotFoundException } from './user-not-found.exception';
 
 @Injectable()

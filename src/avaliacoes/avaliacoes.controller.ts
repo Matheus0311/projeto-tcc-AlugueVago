@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UsePipes, ValidationPipe, Query } from '@nestjs/common';
 import { AvaliacaoService } from './avaliacoes.service';
 import { Avaliacao } from './avaliacao.entity';
-import { AverageRating } from 'src/imoveis/imoveis.controller';
+import { AverageRating } from '../imoveis/imoveis.controller';
 
 @Controller('avaliacoes')
 export class AvaliacaoController {

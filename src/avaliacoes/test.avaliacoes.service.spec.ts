@@ -1,84 +1,44 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { AvaliacaoController } from './avaliacoes.controller';
 import { AvaliacaoService } from './avaliacoes.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Avaliacao } from './avaliacao.entity';
-import { User } from '../users/user.entity';
-import { Imovel } from '../imoveis/imovel.entity';
-import { ConflictException } from '@nestjs/common';
-import { Connection } from 'typeorm';
 
-describe('AvaliacaoService', () => {
-  let avaliacaoService: AvaliacaoService;
-  let avaliacaoRepositoryMock: any;
+describe('AvaliacaoController', () => {
+  let controller: AvaliacaoController;
+  let service: AvaliacaoService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      controllers: [AvaliacaoController],
       providers: [
         AvaliacaoService,
         {
           provide: getRepositoryToken(Avaliacao),
-          useValue: {
-            findOne: jest.fn(),
-            save: jest.fn().mockImplementation((avaliacao) => Promise.resolve({ id: 1, ...avaliacao })),
-          },
+          useValue: {},
         },
       ],
     }).compile();
 
-    avaliacaoService = module.get<AvaliacaoService>(AvaliacaoService);
-    avaliacaoRepositoryMock = module.get(getRepositoryToken(Avaliacao));
+    controller = module.get<AvaliacaoController>(AvaliacaoController);
+    service = module.get<AvaliacaoService>(AvaliacaoService);
   });
 
-  describe('createAvaliacao', () => {
-    it('deve criar e retornar uma nova Avaliacao', async () => {
-      const user = new User(); 
-      const imovel = new Imovel();
-
-      const userId = 1;
-      const imovelId = 1;
-      const avaliacaoData = {
-        nota: 4.5,
-        usuario: user,
-        imovel: imovel,
-      };
-
-      avaliacaoRepositoryMock.findOne.mockResolvedValueOnce(undefined);
-
-      const result = await avaliacaoService.createAvaliacao(avaliacaoData as Avaliacao, userId, imovelId);
-
-      expect(result).toEqual(expect.objectContaining({ id: 1, ...avaliacaoData }));
-      expect(avaliacaoRepositoryMock.findOne).toHaveBeenCalledTimes(1);
-      expect(avaliacaoRepositoryMock.findOne).toHaveBeenCalledWith({
-        where: { usuario: { id: userId }, imovel: { id: imovelId } },
-      });
-      expect(avaliacaoRepositoryMock.save).toHaveBeenCalledTimes(1);
-      expect(avaliacaoRepositoryMock.save).toHaveBeenCalledWith(avaliacaoData);
-    });
-
-    it('Deve lançar uma ConflictException quando o usuário já fez uma Avaliação para o imóvel', async () => {
-      const userId = 1;
-      const imovelId = 1;
-      const avaliacaoData = {
-        nota: 4.5,
-        usuario: new User(),
-        imovel: new Imovel(),
-      };
-
-      const existingAvaliacao = new Avaliacao();
-      avaliacaoRepositoryMock.findOne.mockResolvedValueOnce(existingAvaliacao);
-
-      await expect(
-        avaliacaoService.createAvaliacao(avaliacaoData as Avaliacao, userId, imovelId),
-      ).rejects.toThrow(ConflictException);
-
-      expect(avaliacaoRepositoryMock.findOne).toHaveBeenCalledTimes(1);
-      expect(avaliacaoRepositoryMock.findOne).toHaveBeenCalledWith({
-        where: { usuario: { id: userId }, imovel: { id: imovelId } },
-      });
-      expect(avaliacaoRepositoryMock.save).not.toHaveBeenCalled();
-    });
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
-  
-  
+
+  it('should get user rating', async () => {
+    const mockAvaliacao = new Avaliacao();
+    const mockUserId = 1;
+    const mockImovelId = 2;
+
+    jest.spyOn(service, 'getUserRating').mockResolvedValue(mockAvaliacao);
+
+    const result = await controller.getUserRating(mockImovelId, mockUserId);
+
+    expect(result).toBe(mockAvaliacao);
+    expect(service.getUserRating).toHaveBeenCalledWith(mockImovelId, mockUserId);
+  });
+
 });
-

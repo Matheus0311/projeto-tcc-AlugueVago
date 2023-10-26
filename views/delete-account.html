@@ -243,7 +243,7 @@
           </div>
       
           <div class="mt-4 flex justify-between">
-            <button type="button" class="w-1/2 bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition duration-300" onclick="openDeleteModal()">Apagar Conta</button>
+            <button type="button" class="w-1/2 bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition duration-300" onclick="validateAndOpenDeleteModal()">Apagar Conta</button>
             
             <button type="button" onclick="window.location.href='/users/account-config'" class="w-1/2 bg-yellow-500 hover:bg-yellow-600 text-black py-2 rounded-md transition duration-300 ml-2">
               Cancelar 
@@ -273,18 +273,19 @@
   </div>
 
   <script>
-    function openDeleteModal() {
+    function validateAndOpenDeleteModal() {
       const email = document.getElementById('email').value;
       const senha = document.getElementById('senha').value;
       const deleteCode = document.getElementById('deleteCode').value;
-  
-      if (email && senha && deleteCode) {
+    
+      if (email && senha && deleteCode === "<%= deleteCode %>") {
         errorMessage.textContent = '';
         document.getElementById('deleteModal').classList.remove('hidden');
       } else {
-        errorMessage.textContent = 'Preencha todos os campos antes de continuar.';
+        errorMessage.textContent = 'Preencha todos os campos corretamente e verifique o código de exclusão.';
       }
     }
+    
   
     function closeDeleteModal() {
       document.getElementById('deleteModal').classList.add('hidden');

@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Imovel } from './imovel.entity';
-import { Endereco } from '../enderecos/endereco.entity';
 import path, { extname } from 'path';
 import * as fs from 'fs';
 import { Photo } from 'src/photos/photo.entity';
 import { SelectQueryBuilder } from 'typeorm';
 import { FindManyOptions, Like } from 'typeorm';
 import { ImovelFiltersDTO } from 'src/users/filters.dto';
+
 
 
 @Injectable()
