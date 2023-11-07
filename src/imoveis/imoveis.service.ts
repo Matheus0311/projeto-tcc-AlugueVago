@@ -64,6 +64,8 @@ export class ImovelService {
     if (filters) {
     
     const startIndex = (page - 1) * itemsPerPage;
+    queryBuilder.orderBy('imovel.id', 'ASC');
+
 
     const [imoveis, total] = await queryBuilder
       .skip(startIndex)
